@@ -1,26 +1,68 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Switch, BrowserRouter, Route } from "react-router-dom";
+import { ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import theme from "./theme/theme";
+import { Navbar } from "./components/Navbar";
+import { LandingPage } from "./pages/LandingPage";
+import { UserPollsPage } from "./pages/UserPollsPage";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { CreateEditPollPage } from "./pages/CreateEditPollPage";
+import { AccountPage } from "./pages/AccountPage";
+import { AdminPage } from "./pages/AdminPage";
+import { PublicPollsPage } from "./pages/PublicPollsPage";
 
-function App() {
+export const App = () => {
+  const isAuthenticated = true;
+  const isAdmin = true;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Navbar />
+        <Switch>
+          {isAuthenticated ? (
+            <AuthenticatedAppRoutes />
+          ) : (
+            <UnauthenticatedAppRoutes />
+          )}
+        </Switch>
+        <Switch>{isAdmin ? <AdminAppRoutes /> : null}</Switch>
+      </ThemeProvider>
+    </BrowserRouter>
   );
-}
+};
+
+const UnauthenticatedAppRoutes = () => {
+  return (
+    <React.Fragment>
+      <Route exact path="/" component={LandingPage} />
+      <Route exact path="/login" component={LoginPage} />
+      <Route exact path="/register" component={RegisterPage} />
+    </React.Fragment>
+  );
+};
+
+const AuthenticatedAppRoutes = () => {
+  return (
+    <React.Fragment>
+      <Route exact path="/polls" component={UserPollsPage} />
+      <Route path="/create" component={CreateEditPollPage} />
+      <Route path="/polls/:pollId" component={CreateEditPollPage} />
+      <Route path="/public" component={PublicPollsPage} />
+      <Route path="/account" component={AccountPage} />
+    </React.Fragment>
+  );
+};
+
+const AdminAppRoutes = () => {
+  return (
+    <React.Fragment>
+      <Route path="/admin" component={AdminPage} />
+    </React.Fragment>
+  );
+};
 
 export default App;
