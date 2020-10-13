@@ -1,9 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export const AccountPage = () => {
-  return (
-    <div>
-      AccountPage
-    </div>
-  )
-}
+  return <div>AccountPage</div>;
+};
