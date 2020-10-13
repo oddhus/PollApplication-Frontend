@@ -1,9 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export const CreateEditPollPage = () => {
-  return (
-    <div>
-      CreateEditPollPAge
-    </div>
-  )
-}
+  return <div>CreateEditPollPAge</div>;
+};
