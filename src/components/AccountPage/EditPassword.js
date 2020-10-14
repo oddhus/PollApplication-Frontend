@@ -7,7 +7,7 @@ export const EditPassword = ({ control, errors, watch }) => {
   password.current = watch("password", "");
   return (
     <React.Fragment>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={8}>
         <Controller
           as={TextField}
           rules={{
@@ -30,7 +30,7 @@ export const EditPassword = ({ control, errors, watch }) => {
           helperText={errors.password ? errors.password.message : ""}
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={8}>
         <Controller
           as={TextField}
           rules={{
