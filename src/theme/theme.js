@@ -24,6 +24,11 @@ const theme = createMuiTheme({
       fontSize: "2rem",
       lineHeight: 1.5,
     },
+    h4: {
+      color: grey.A700,
+      fontWeight: 400,
+      lineHeight: 1.5,
+    },
     subtitle1: {
       color: grey.A700,
       fontWeight: 700,
