@@ -16,6 +16,7 @@ const theme = createMuiTheme({
     },
   },
   typography: {
+    fontFamily: ["Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(","),
     h2: {
       color: "white",
       fontStyle: "italic",
