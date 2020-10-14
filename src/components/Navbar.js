@@ -15,7 +15,6 @@ import {
   ListItemText,
   List,
   Typography,
-  CircularProgress,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useHistory } from "react-router-dom";
