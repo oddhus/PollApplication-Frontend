@@ -56,8 +56,8 @@ export const LandingPage = () => {
                 rules={{
                   required: "Pin code is required",
                   pattern: {
-                    value: /^[0-9]{1,6}$/,
-                    message: "Must contain 6 digits",
+                    value: /^[a-zA-Z0-9]{6}$/,
+                    message: "Must contain 6 chars",
                   },
                 }}
                 control={control}
