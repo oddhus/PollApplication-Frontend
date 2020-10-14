@@ -7,13 +7,13 @@ PollApp
 ├── public
 ├── src
 │   ├── components
-│   │   └── ...shared
+│   │   ├── shared
+│   │   └── AdminPage
+│   │       └── ...
 │   ├── pages
 │   │   ├── AccountPage.js
 │   │   ├── ...
-│   │   └── AdminPage
-│   │       ├── components...
-│   │       └── index.js
+│   │   └── AdminPage.js
 │   ├── routes
 │   │   └── routes.js
 │   ├── tests
