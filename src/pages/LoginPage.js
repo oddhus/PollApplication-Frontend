@@ -11,8 +11,8 @@ export const LoginPage = () => {
   return (
       <Container className={classes.container} maxWidth="xs">
           <form onSubmit={handleSubmit(onSubmit)}>
-              <Grid><TextField label="username" name="usernameLoginField" ref={register( {required: true})} /></Grid>
-              <Grid><TextField label="password" name="passwordLoginField" ref={register({ required: true })} type="password" /></Grid>
+              <Grid><TextField label="Username" name="usernameLoginField" inputRef={register( {required: true})} /></Grid>
+              <Grid><TextField label="Password" name="passwordLoginField" inputRef={register({ required: true })} type="password" /></Grid>
               {errors.usernameLoginField && <span>Du må skrive inn brukernavn!</span>}
               {errors.passwordLoginField && <span>Du må skrive inn passord!</span>}
               <input type="submit" />
