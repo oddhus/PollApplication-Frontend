@@ -84,9 +84,17 @@ export const LandingPage = () => {
                 as={TextField}
                 rules={{
                   required: "Pin code is required",
+                  minLength: {
+                    value: 6,
+                    message: "Minimum pin code length is 6",
+                  },
+                  maxLength: {
+                    value: 6,
+                    message: "Maximum pin code length is 6",
+                  },
                   pattern: {
-                    value: /^[a-zA-Z0-9]{6}$/,
-                    message: "Must contain 6 chars",
+                    value: /^[a-zA-Z0-9]*/,
+                    message: "Only chars and digits allowed",
                   },
                 }}
                 control={control}
