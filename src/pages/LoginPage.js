@@ -1,6 +1,7 @@
 import React from 'react'
+import {ThemeButton} from "../components/ThemeButton";
 import { useForm } from "react-hook-form";
-import {TextField, Container, Grid, Button} from "@material-ui/core";
+import {TextField, Container, Grid} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
 export const LoginPage = () => {
@@ -20,7 +21,7 @@ export const LoginPage = () => {
                   {errors.passwordLoginField && <span>Du må skrive inn passord!</span>}
               </Grid>
               <Grid>
-                  <Button variant="contained" color="primary" className={classes.button} type="submit">Submit</Button>
+                   <ThemeButton value={"Log in"} />
               </Grid>
           </form>
       </Container>
