@@ -9,8 +9,8 @@ import {
 } from "./routes/routes";
 
 export const App = () => {
-  const isAuthenticated = true;
-  const isAdmin = true;
+  const isAuthenticated = false;
+  const isAdmin = false;
 
   return (
     <BrowserRouter>
