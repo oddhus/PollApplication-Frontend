@@ -1,8 +1,15 @@
-import React from "react";
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  Button,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { useForm, Controller } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
+import { StatusBar } from "../components/StatusBar";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,16 +28,38 @@ const useStyles = makeStyles(() => ({
 
 export const LandingPage = () => {
   const classes = useStyles();
-  const { control, handleSubmit, errors } = useForm();
+  const {
+    control,
+    handleSubmit,
+    errors,
+    formState: { isSubmitting },
+  } = useForm();
   const history = useHistory();
+  const [openStatus, setOpenStatus] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
 
   const onSubmit = async (data) => {
+    //Just a delay when testing
+    await new Promise((resolve) => {
+      setTimeout(() => resolve(), 1000);
+    });
+
     console.log(data);
-    //history.push(`/vote/${data.pin}`)
+    // on success
+    // history.push(`/vote/${data.pin}`)
+
+    // on failure
+    // setStatusMessage(response)
+    setOpenStatus(true);
   };
 
   return (
     <div className={classes.root}>
+      <StatusBar open={openStatus} setOpen={setOpenStatus} severity="error">
+        {statusMessage.length !== 0
+          ? statusMessage
+          : "Something went wrong, could not find poll"}
+      </StatusBar>
       <Grid
         container
         justify="center"
@@ -79,7 +108,11 @@ export const LandingPage = () => {
                 variant="contained"
                 color="primary"
               >
-                Find
+                {isSubmitting ? (
+                  <CircularProgress size={20} color="secondary" />
+                ) : (
+                  "Find"
+                )}
               </Button>
             </Grid>
           </form>
