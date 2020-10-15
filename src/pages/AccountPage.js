@@ -26,6 +26,7 @@ const DUMMY_USER = {
 
 export const AccountPage = () => {
   const user = DUMMY_USER;
+  const classes = useStyles();
   const [editEmail, setEditEmail] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
@@ -54,11 +55,11 @@ export const AccountPage = () => {
     await new Promise((resolve) => {
       setTimeout(() => resolve(), 1000);
     });
-    //success
+    // on success
     setStatusMessage("Updated your settings");
     setOpenStatus(true);
 
-    // error
+    // on error
     // setStatusMessage("Failed to update your settings");
     // setIsSuccess("error");
     // setOpenStatus(true);
@@ -66,7 +67,72 @@ export const AccountPage = () => {
     console.log(data);
   };
 
-  const classes = useStyles();
+  const accountEmail = (
+    <Grid container spacing={2} direction="column">
+      <Grid item container>
+        <Box borderBottom={1} className={classes.headerContainer}>
+          <Typography variant="subtitle1">Email</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={12} sm={8}>
+        {editEmail ? (
+          <EditEmail control={control} errors={errors} />
+        ) : (
+          <Typography variant="body1">{user.email}</Typography>
+        )}
+      </Grid>
+      <Grid item container spacing={1}>
+        <Grid item>
+          <Button
+            disabled={editPassword}
+            onClick={() => setEditEmail(!editEmail)}
+            variant="outlined"
+          >
+            {editEmail ? "Cancel" : "Change Email"}
+          </Button>
+        </Grid>
+        {editEmail && (
+          <Grid item>
+            <Button variant="outlined" type="submit" color="primary">
+              {isSubmitting ? <CircularProgress size={20} /> : "Save"}
+            </Button>
+          </Grid>
+        )}
+      </Grid>
+    </Grid>
+  );
+
+  const accountPassword = (
+    <Grid item container direction="column" spacing={2}>
+      <Grid item container>
+        <Box borderBottom={1} className={classes.headerContainer}>
+          <Typography variant="subtitle1">Password</Typography>
+        </Box>
+      </Grid>
+      {editPassword && (
+        <EditPassword control={control} errors={errors} watch={watch} />
+      )}
+      <Grid item container direction="row" spacing={1}>
+        <Grid item>
+          <Button
+            disabled={editEmail}
+            onClick={() => setEditPassword(!editPassword)}
+            variant="outlined"
+          >
+            {editPassword ? "Cancel" : "Change Password"}
+          </Button>
+        </Grid>
+        {editPassword && (
+          <Grid item>
+            <Button variant="outlined" type="submit" color="primary">
+              {isSubmitting ? <CircularProgress size={20} /> : "Save"}
+            </Button>
+          </Grid>
+        )}
+      </Grid>
+    </Grid>
+  );
+
   return (
     <React.Fragment>
       <StatusBar open={openStatus} setOpen={setOpenStatus} severity={isSuccess}>
@@ -79,74 +145,10 @@ export const AccountPage = () => {
               <Typography variant="h4">My account</Typography>
             </Box>
           </Grid>
-          <Grid item>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Grid container spacing={2} direction="column">
-                <Grid item container>
-                  <Box borderBottom={1} className={classes.headerContainer}>
-                    <Typography variant="subtitle1">Email</Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={8}>
-                  {editEmail ? (
-                    <EditEmail control={control} errors={errors} />
-                  ) : (
-                    <Typography variant="body1">{user.email}</Typography>
-                  )}
-                </Grid>
-                <Grid item container spacing={1}>
-                  <Grid item>
-                    <Button
-                      disabled={editPassword}
-                      onClick={() => setEditEmail(!editEmail)}
-                      variant="outlined"
-                    >
-                      {editEmail ? "Cancel" : "Change Email"}
-                    </Button>
-                  </Grid>
-                  {editEmail && (
-                    <Grid item>
-                      <Button variant="outlined" type="submit" color="primary">
-                        {isSubmitting ? <CircularProgress size={20} /> : "Save"}
-                      </Button>
-                    </Grid>
-                  )}
-                </Grid>
-              </Grid>
-              <Grid item container direction="column" spacing={2}>
-                <Grid item container>
-                  <Box borderBottom={1} className={classes.headerContainer}>
-                    <Typography variant="subtitle1">Password</Typography>
-                  </Box>
-                </Grid>
-                {editPassword && (
-                  <EditPassword
-                    control={control}
-                    errors={errors}
-                    watch={watch}
-                  />
-                )}
-                <Grid item container direction="row" spacing={1}>
-                  <Grid item>
-                    <Button
-                      disabled={editEmail}
-                      onClick={() => setEditPassword(!editPassword)}
-                      variant="outlined"
-                    >
-                      {editPassword ? "Cancel" : "Change Password"}
-                    </Button>
-                  </Grid>
-                  {editPassword && (
-                    <Grid item>
-                      <Button variant="outlined" type="submit" color="primary">
-                        {isSubmitting ? <CircularProgress size={20} /> : "Save"}
-                      </Button>
-                    </Grid>
-                  )}
-                </Grid>
-              </Grid>
-            </form>
-          </Grid>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {accountEmail}
+            {accountPassword}
+          </form>
         </Grid>
       </Grid>
     </React.Fragment>
