@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { grey } from "@material-ui/core/colors";
 import { StatusBar } from "../components/StatusBar";
 import { AlertDialog } from "../components/AlertDialog";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   headerContainer: {
@@ -41,6 +42,7 @@ export const AccountPage = () => {
   const [isSuccess, setIsSuccess] = useState("success");
   const [statusMessage, setStatusMessage] = useState("");
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
+  const history = useHistory();
 
   const {
     errors,
@@ -60,37 +62,37 @@ export const AccountPage = () => {
   }, [user, reset]);
 
   const onSubmit = async (data) => {
-    //Just a delay when testing
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(), 1000);
+    //Just a delay when testing. To be replaced with request to server
+    const response = await new Promise((resolve) => {
+      setTimeout(() => resolve(true), 1000);
     });
-    // on success
-    setStatusMessage("Updated your settings");
-    setOpenStatus(true);
-
-    // on error
-    // setStatusMessage("Failed to update your settings");
-    // setIsSuccess("error");
-    // setOpenStatus(true);
-
     console.log(data);
+    if (response) {
+      setStatusMessage(`${data.password ? "Password" : "Email"} updated!`);
+      setOpenStatus(true);
+      setEditPassword(false);
+      setEditEmail(false);
+    } else {
+      setStatusMessage("Failed to update your settings");
+      setIsSuccess("error");
+      setOpenStatus(true);
+    }
   };
 
-  const onDelete = async (data) => {
-    //Just a delay when testing
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(), 1000);
+  const onDelete = async () => {
+    //Just a delay when testing. To be replaced with request to server
+    const response = await new Promise((resolve) => {
+      setTimeout(() => resolve(true), 1000);
     });
 
-    // on success
-    // console.log("deleted");
-    // setOpenAlertDialog(false);
-    // history.push("/")
-
-    // on failure
-    setStatusMessage("Failed to delete your account");
-    setIsSuccess("error");
-    setOpenStatus(true);
+    if (response) {
+      setOpenAlertDialog(false);
+      history.push("/");
+    } else {
+      setStatusMessage("Failed to delete your account");
+      setIsSuccess("error");
+      setOpenStatus(true);
+    }
   };
 
   const accountEmail = (
