@@ -40,17 +40,17 @@ export const LandingPage = () => {
 
   const onSubmit = async (data) => {
     //Just a delay when testing
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(), 1000);
+    const response = await new Promise((resolve) => {
+      setTimeout(() => resolve(false), 1000);
     });
 
     console.log(data);
-    // on success
-    // history.push(`/vote/${data.pin}`)
-
-    // on failure
-    // setStatusMessage(response)
-    setOpenStatus(true);
+    if (response) {
+      history.push(`/vote/${data.pin}`);
+    } else {
+      setStatusMessage(!!response.text ? response.text : "");
+      setOpenStatus(true);
+    }
   };
 
   return (
