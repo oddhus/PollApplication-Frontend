@@ -21,7 +21,7 @@ export const LoginPage = () => {
                       <TextField label="Username" name="usernameLoginField" inputRef={register( {required: true})} />
                       {errors.usernameLoginField && <span>Du må skrive inn brukernavn!</span>}
                   </Box>
-                  <Box marginTop={5}>
+                  <Box marginTop={2}>
                       <TextField label="Password" name="passwordLoginField" inputRef={register({ required: true })} type="password" />
                       {errors.passwordLoginField && <span>Du må skrive inn passord!</span>}
                   </Box>
