@@ -1,18 +1,18 @@
 import React from 'react'
 import { useForm } from "react-hook-form";
-import {TextField, Container} from "@material-ui/core";
+import {TextField, Container, Grid} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
 export const LoginPage = () => {
-    const { register, handleSubmit, watch, errors } = useForm();
+    const { register, handleSubmit, errors } = useForm();
     const onSubmit = data => console.log(data);
     const classes = useStyles();
 
   return (
       <Container className={classes.container} maxWidth="xs">
           <form onSubmit={handleSubmit(onSubmit)}>
-              <TextField name="usernameLoginField" defaultValue="Username" ref={register( {required: true})} />
-              <TextField name="passwordLoginField" ref={register({ required: true })} />
+              <Grid><TextField label="username" name="usernameLoginField" ref={register( {required: true})} /></Grid>
+              <Grid><TextField label="password" name="passwordLoginField" ref={register({ required: true })} type="password" /></Grid>
               {errors.usernameLoginField && <span>Du må skrive inn brukernavn!</span>}
               {errors.passwordLoginField && <span>Du må skrive inn passord!</span>}
               <input type="submit" />
