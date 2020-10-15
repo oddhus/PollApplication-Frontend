@@ -93,7 +93,7 @@ export const LandingPage = () => {
                     message: "Maximum pin code length is 6",
                   },
                   pattern: {
-                    value: /^[a-zA-Z0-9]*/,
+                    value: /^[a-zA-Z0-9]*$/,
                     message: "Only chars and digits allowed",
                   },
                 }}
