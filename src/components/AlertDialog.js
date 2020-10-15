@@ -57,7 +57,8 @@ AlertDialog.propTypes = {
   //severity: PropTypes.oneOf(["error", "warning", "info", "success"]).isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   button: PropTypes.string,
   buttonClass: PropTypes.string,
+  onClick: PropTypes.func,
 };
