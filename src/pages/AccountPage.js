@@ -12,11 +12,22 @@ import { EditEmail } from "../components/AccountPage/EditEmail";
 import { useForm } from "react-hook-form";
 import { grey } from "@material-ui/core/colors";
 import { StatusBar } from "../components/StatusBar";
+import { AlertDialog } from "../components/AlertDialog";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   headerContainer: {
     paddingTop: 10,
     color: grey.A700,
+  },
+  deleteButton: {
+    backgroundColor: theme.palette.error.main,
+    color: "white",
+    "&:hover": {
+      backgroundColor: theme.palette.error.dark,
+    },
+  },
+  deleteContainer: {
+    padding: 0,
   },
 }));
 
@@ -32,6 +43,7 @@ export const AccountPage = () => {
   const [openStatus, setOpenStatus] = useState(false);
   const [isSuccess, setIsSuccess] = useState("success");
   const [statusMessage, setStatusMessage] = useState("");
+  const [openAlertDialog, setOpenAlertDialog] = useState(false);
 
   const {
     errors,
@@ -65,6 +77,23 @@ export const AccountPage = () => {
     // setOpenStatus(true);
 
     console.log(data);
+  };
+
+  const onDelete = async (data) => {
+    //Just a delay when testing
+    await new Promise((resolve) => {
+      setTimeout(() => resolve(), 1000);
+    });
+
+    // on success
+    console.log("deleted");
+    setOpenAlertDialog(false);
+    // history.push("/")
+
+    // on failure
+    // setStatusMessage("Failed to delete your account");
+    // setIsSuccess("error");
+    // setOpenStatus(true);
   };
 
   const accountEmail = (
@@ -133,8 +162,43 @@ export const AccountPage = () => {
     </Grid>
   );
 
+  const accountDelete = (
+    <Grid
+      item
+      container
+      direction="column"
+      spacing={2}
+      className={classes.deleteContainer}
+    >
+      <Grid item container>
+        <Box borderBottom={1} className={classes.headerContainer}>
+          <Typography variant="subtitle1">Danger zone</Typography>
+        </Box>
+      </Grid>
+      <Grid item>
+        <Button
+          className={classes.deleteButton}
+          variant="contained"
+          onClick={() => setOpenAlertDialog(true)}
+        >
+          Delete account
+        </Button>
+      </Grid>
+    </Grid>
+  );
+
   return (
     <React.Fragment>
+      <AlertDialog
+        open={openAlertDialog}
+        setOpen={setOpenAlertDialog}
+        title={"Confirm delete"}
+        button={"Delete"}
+        buttonClass={classes.deleteButton}
+        onClick={onDelete}
+      >
+        This will permanently delete your account
+      </AlertDialog>
       <StatusBar open={openStatus} setOpen={setOpenStatus} severity={isSuccess}>
         {statusMessage}
       </StatusBar>
@@ -149,6 +213,7 @@ export const AccountPage = () => {
             {accountEmail}
             {accountPassword}
           </form>
+          {accountDelete}
         </Grid>
       </Grid>
     </React.Fragment>
