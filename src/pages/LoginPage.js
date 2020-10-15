@@ -6,7 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const LoginPage = () => {
     const { register, handleSubmit, errors } = useForm();
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => {
+        console.log(data);
+    }
     const classes = useStyles();
 
   return (
@@ -19,14 +21,16 @@ export const LoginPage = () => {
               >
                   <Box>
                       <TextField label="Username" name="usernameLoginField" inputRef={register( {required: true})} />
-                      {errors.usernameLoginField && <span>Du må skrive inn brukernavn!</span>}
                   </Box>
                   <Box marginTop={2}>
                       <TextField label="Password" name="passwordLoginField" inputRef={register({ required: true })} type="password" />
-                      {errors.passwordLoginField && <span>Du må skrive inn passord!</span>}
                   </Box>
                   <Box marginTop={5}>
                      <ThemeButton text={"log in"}/>
+                  </Box>
+                  <Box marginTop={5}>
+                      {errors.usernameLoginField && <span>Du må gi et brukernavn!  </span>}
+                      {errors.passwordLoginField && <span>Du må gi et passord!</span>}
                   </Box>
               </Grid>
           </form>
