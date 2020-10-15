@@ -112,8 +112,10 @@ export const AccountPage = () => {
       <Grid item container spacing={1}>
         <Grid item>
           <Button
-            disabled={editPassword}
-            onClick={() => setEditEmail(!editEmail)}
+            onClick={() => {
+              setEditEmail(!editEmail);
+              setEditPassword(false);
+            }}
             variant="outlined"
           >
             {editEmail ? "Cancel" : "Change Email"}
@@ -143,8 +145,10 @@ export const AccountPage = () => {
       <Grid item container direction="row" spacing={1}>
         <Grid item>
           <Button
-            disabled={editEmail}
-            onClick={() => setEditPassword(!editPassword)}
+            onClick={() => {
+              setEditPassword(!editPassword);
+              setEditEmail(false);
+            }}
             variant="outlined"
           >
             {editPassword ? "Cancel" : "Change Password"}
