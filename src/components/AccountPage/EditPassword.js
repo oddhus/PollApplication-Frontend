@@ -23,7 +23,7 @@ export const EditPassword = ({ control, errors, watch }) => {
           variant="outlined"
           required
           name="password"
-          label="Password"
+          label="New Password"
           type="password"
           fullWidth
           error={!!errors.password}
