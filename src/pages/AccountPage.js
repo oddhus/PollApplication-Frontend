@@ -26,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.error.dark,
     },
   },
-  deleteContainer: {
-    padding: 0,
-  },
 }));
 
 const DUMMY_USER = {
@@ -86,14 +83,14 @@ export const AccountPage = () => {
     });
 
     // on success
-    console.log("deleted");
-    setOpenAlertDialog(false);
+    // console.log("deleted");
+    // setOpenAlertDialog(false);
     // history.push("/")
 
     // on failure
-    // setStatusMessage("Failed to delete your account");
-    // setIsSuccess("error");
-    // setOpenStatus(true);
+    setStatusMessage("Failed to delete your account");
+    setIsSuccess("error");
+    setOpenStatus(true);
   };
 
   const accountEmail = (
@@ -168,9 +165,9 @@ export const AccountPage = () => {
       container
       direction="column"
       spacing={2}
-      className={classes.deleteContainer}
+      style={{ paddingLeft: 0, paddingTop: 40 }}
     >
-      <Grid item container>
+      <Grid item>
         <Box borderBottom={1} className={classes.headerContainer}>
           <Typography variant="subtitle1">Danger zone</Typography>
         </Box>
@@ -204,7 +201,7 @@ export const AccountPage = () => {
       </StatusBar>
       <Grid container justify="center">
         <Grid container item direction="column" spacing={3} xs={12} sm={6}>
-          <Grid item>
+          <Grid item style={{ paddingLeft: 0 }}>
             <Box borderBottom={1} className={classes.headerContainer}>
               <Typography variant="h4">My account</Typography>
             </Box>
