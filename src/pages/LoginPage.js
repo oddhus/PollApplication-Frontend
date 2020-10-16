@@ -28,14 +28,14 @@ export const LoginPage = () => {
             <TextField
               label="Username"
               name="username"
-              inputRef={register({ required: true })}
+              inputRef={register({ required: "Du må gi et brukernavn!" })}
             />
           </Grid>
           <Grid item>
             <TextField
               label="Password"
               name="password"
-              inputRef={register({ required: true })}
+              inputRef={register({ required: "Du må gi et passord!" })}
               type="password"
             />
           </Grid>
