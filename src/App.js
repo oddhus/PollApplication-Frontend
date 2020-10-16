@@ -7,23 +7,23 @@ import {
   AuthenticatedAppRoutes,
   UnauthenticatedAppRoutes,
 } from "./routes/routes";
+import useUser from "./data/use-user";
 
 export const App = () => {
-  const isAuthenticated = true;
-  const isAdmin = true;
+  const { user, loading } = useUser();
 
   return (
     <BrowserRouter>
       <Navbar />
       <Container maxWidth={"md"}>
         <Switch>
-          {isAuthenticated ? (
+          {!loading && user ? (
             <AuthenticatedAppRoutes />
           ) : (
             <UnauthenticatedAppRoutes />
           )}
         </Switch>
-        <Switch>{isAdmin ? <AdminAppRoutes /> : null}</Switch>
+        <Switch>{user && user.admin ? <AdminAppRoutes /> : null}</Switch>
       </Container>
     </BrowserRouter>
   );

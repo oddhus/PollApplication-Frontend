@@ -18,6 +18,8 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useHistory } from "react-router-dom";
+import useUser from "../data/use-user";
+import { logout } from "../mock/auth";
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -89,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Navbar = (props) => {
+export const Navbar = () => {
   const classes = useStyles();
   const theme = useTheme();
   const iOS =
@@ -100,9 +102,7 @@ export const Navbar = (props) => {
   const [value, setValue] = useState(0);
   const history = useHistory();
 
-  //Fetch auth status
-  const [auth, setAuth] = useState(true);
-  const [admin, setAdmin] = useState(true);
+  const { user, mutate, loading } = useUser();
 
   const guestRoutes = [
     { name: "Login", link: "/login", activeIndex: 0 },
@@ -123,24 +123,24 @@ export const Navbar = (props) => {
 
   let routes = [];
 
-  if (!auth) {
+  if (loading || !user) {
     routes = guestRoutes;
-  } else if (auth && !admin) {
+  } else if (user && !user.admin) {
     routes = userRoutes;
   } else {
     routes = adminRoutes;
   }
 
-  const logout = () => {
-    setAuth(false);
-    setAdmin(false);
+  const onLogout = () => {
+    logout();
+    mutate(null);
+    history.replace("/");
   };
 
   useEffect(() => {
     const pathname = window.location.pathname;
-    let selectedRoute = routes.find((route) => route.link === pathname);
-
-    setValue(!selectedRoute ? false : selectedRoute?.activeIndex);
+    const selectedRoute = routes.find((route) => route.link === pathname);
+    setValue(!selectedRoute ? false : selectedRoute.activeIndex);
   }, [routes]);
 
   const tabs = (
@@ -159,8 +159,8 @@ export const Navbar = (props) => {
           />
         ))}
       </Tabs>
-      {auth && (
-        <Button className={classes.button} onClick={logout}>
+      {!loading && user && (
+        <Button className={classes.button} onClick={onLogout}>
           Logout
         </Button>
       )}
@@ -197,10 +197,10 @@ export const Navbar = (props) => {
             </ListItem>
           ))}
         </List>
-        {auth && (
+        {!loading && user && (
           <Button
             className={classes.button}
-            onClick={logout}
+            onClick={onLogout}
             style={{ textTransform: "none" }}
           >
             <ListItemText>Logout</ListItemText>
@@ -224,7 +224,7 @@ export const Navbar = (props) => {
           <Toolbar>
             <Button
               onClick={() => {
-                setValue(0);
+                setValue(false);
                 history.push("/");
               }}
               disableRipple
