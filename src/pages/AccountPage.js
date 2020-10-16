@@ -39,7 +39,7 @@ export const AccountPage = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const history = useHistory();
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   const {
     errors,
@@ -100,7 +100,9 @@ export const AccountPage = () => {
         </Box>
       </Grid>
       <Grid item xs={12} sm={8}>
-        {editEmail ? (
+        {loading ? (
+          <CircularProgress />
+        ) : editEmail ? (
           <EditEmail control={control} errors={errors} />
         ) : (
           <Typography variant="body1">{user.email}</Typography>
