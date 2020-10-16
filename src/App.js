@@ -10,14 +10,14 @@ import {
 import useUser from "./data/use-user";
 
 export const App = () => {
-  const { loggedOut, user } = useUser();
+  const { user, loading } = useUser();
 
   return (
     <BrowserRouter>
       <Navbar />
       <Container maxWidth={"md"}>
         <Switch>
-          {!loggedOut ? (
+          {!loading && user ? (
             <AuthenticatedAppRoutes />
           ) : (
             <UnauthenticatedAppRoutes />

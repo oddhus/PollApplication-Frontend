@@ -102,7 +102,7 @@ export const Navbar = () => {
   const [value, setValue] = useState(0);
   const history = useHistory();
 
-  const { user, mutate, loggedOut } = useUser();
+  const { user, mutate, loading } = useUser();
 
   const guestRoutes = [
     { name: "Login", link: "/login", activeIndex: 0 },
@@ -123,7 +123,7 @@ export const Navbar = () => {
 
   let routes = [];
 
-  if (loggedOut) {
+  if (loading || !user) {
     routes = guestRoutes;
   } else if (user && !user.admin) {
     routes = userRoutes;
@@ -159,7 +159,7 @@ export const Navbar = () => {
           />
         ))}
       </Tabs>
-      {!loggedOut && (
+      {!loading && user && (
         <Button className={classes.button} onClick={onLogout}>
           Logout
         </Button>
@@ -197,7 +197,7 @@ export const Navbar = () => {
             </ListItem>
           ))}
         </List>
-        {!loggedOut && (
+        {!loading && user && (
           <Button
             className={classes.button}
             onClick={onLogout}
