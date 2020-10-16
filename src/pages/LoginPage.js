@@ -20,18 +20,11 @@ export const LoginPage = () => {
                     justify="space-between"
                     alignItems="center"
               >
-                  <Box>
-                      <TextField label="Username" name="usernameLoginField" inputRef={register( {required: true})} />
-                  </Box>
-                  <Box marginTop={2}>
-                      <TextField label="Password" name="passwordLoginField" inputRef={register({ required: true })} type="password" />
-                  </Box>
-                  <Box marginTop={5}>
-                     <ThemeButton text={"log in"}/>
-                  </Box>
-                  <Box marginTop={2}>
-                      <Link component={RouterLink} to={"/register"}>Create an account.</Link>
-                  </Box>
+                  <Box><TextField label="Username" name="usernameLoginField" inputRef={register( {required: true})} /></Box>
+                  <Box marginTop={2}><TextField label="Password" name="passwordLoginField" inputRef={register({ required: true })} type="password" /></Box>
+                  <Box marginTop={5}><ThemeButton text={"log in"}/></Box>
+                  <Box marginTop={2}><Link component={RouterLink} to={"/register"}>Create an account.</Link></Box>
+                  <Box> <Link component={RouterLink} to={"/login"}>Send me a new password.</Link></Box>
                   <Box marginTop={5}>
                       {errors.usernameLoginField && <span>Du må gi et brukernavn!  </span>}
                       {errors.passwordLoginField && <span>Du må gi et passord!</span>}
