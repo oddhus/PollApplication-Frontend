@@ -29,6 +29,8 @@ export const LoginPage = () => {
               label="Username"
               name="username"
               inputRef={register({ required: "Du må gi et brukernavn!" })}
+              error={!!errors.username}
+              helperText={errors.username ? errors.username.message : ""}
             />
           </Grid>
           <Grid item>
@@ -36,6 +38,8 @@ export const LoginPage = () => {
               label="Password"
               name="password"
               inputRef={register({ required: "Du må gi et passord!" })}
+              error={!!errors.password}
+              helperText={errors.password ? errors.password.message : ""}
               type="password"
             />
           </Grid>
@@ -58,10 +62,6 @@ export const LoginPage = () => {
             >
               Send me a new password.
             </Link>
-          </Grid>
-          <Grid item>
-            {errors.username && <span>Du må gi et brukernavn!</span>}
-            {errors.password && <span> Du må gi et passord!</span>}
           </Grid>
         </Grid>
       </form>
