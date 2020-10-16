@@ -10,6 +10,7 @@ import { useForm, Controller } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
+import { login } from "../mock/auth";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -39,6 +40,7 @@ export const LandingPage = () => {
   const [statusMessage, setStatusMessage] = useState("");
 
   const onSubmit = async (data) => {
+    login();
     //Just a delay when testing
     const response = await new Promise((resolve) => {
       setTimeout(() => resolve(false), 1000);
