@@ -24,10 +24,10 @@ export const LoginPage = () => {
                   <Box marginTop={2}><TextField label="Password" name="passwordLoginField" inputRef={register({ required: true })} type="password" /></Box>
                   <Box marginTop={5}><ThemeButton text={"log in"}/></Box>
                   <Box marginTop={2}><Link component={RouterLink} to={"/register"}>Create an account.</Link></Box>
-                  <Box> <Link component={RouterLink} to={"/login"}>Send me a new password.</Link></Box>
+                  <Box> <Link component={RouterLink} to={"/login"} onClick={() => alert(JSON.stringify("We sent you a new password to: mail"))}>Send me a new password.</Link></Box>
                   <Box marginTop={5}>
-                      {errors.usernameLoginField && <span>Du må gi et brukernavn!  </span>}
-                      {errors.passwordLoginField && <span>Du må gi et passord!</span>}
+                      {errors.usernameLoginField && <span>Du må gi et brukernavn!</span>}
+                      {errors.passwordLoginField && <span>     Du må gi et passord!</span>}
                   </Box>
               </Grid>
           </form>
