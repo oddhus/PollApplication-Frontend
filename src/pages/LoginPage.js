@@ -60,7 +60,13 @@ export const LoginPage = () => {
           </Grid>
           <Grid item>
             <ThemeButton
-              text={isSubmitting ? <CircularProgress size={20} /> : "Log in"}
+              text={
+                isSubmitting ? (
+                  <CircularProgress color="secondary" size={20} />
+                ) : (
+                  "Log in"
+                )
+              }
             />
           </Grid>
           <Grid item>
