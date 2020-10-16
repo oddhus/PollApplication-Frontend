@@ -1,7 +1,7 @@
 import React from "react";
 import { ThemeButton } from "../components/ThemeButton";
 import { useForm } from "react-hook-form";
-import { TextField, Container, Grid, Box, Link } from "@material-ui/core";
+import { TextField, Container, Grid, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
 import { login } from "../mock/auth";
@@ -18,35 +18,36 @@ export const LoginPage = () => {
     <Container className={classes.container} maxWidth="xs">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid
+          spacing={2}
           container
           direction="column"
           justify="space-between"
           alignItems="center"
         >
-          <Box>
+          <Grid item>
             <TextField
               label="Username"
               name="usernameLoginField"
               inputRef={register({ required: true })}
             />
-          </Box>
-          <Box marginTop={2}>
+          </Grid>
+          <Grid item>
             <TextField
               label="Password"
               name="passwordLoginField"
               inputRef={register({ required: true })}
               type="password"
             />
-          </Box>
-          <Box marginTop={5}>
+          </Grid>
+          <Grid item>
             <ThemeButton text={"log in"} />
-          </Box>
-          <Box marginTop={2}>
+          </Grid>
+          <Grid item>
             <Link component={RouterLink} to={"/register"}>
               Create an account.
             </Link>
-          </Box>
-          <Box>
+          </Grid>
+          <Grid item>
             {" "}
             <Link
               component={RouterLink}
@@ -57,11 +58,11 @@ export const LoginPage = () => {
             >
               Send me a new password.
             </Link>
-          </Box>
-          <Box marginTop={5}>
+          </Grid>
+          <Grid item>
             {errors.usernameLoginField && <span>Du må gi et brukernavn!</span>}
             {errors.passwordLoginField && <span> Du må gi et passord!</span>}
-          </Box>
+          </Grid>
         </Grid>
       </form>
     </Container>
