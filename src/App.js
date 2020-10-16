@@ -10,6 +10,7 @@ import {
 import useUser from "./data/use-user";
 
 export const App = () => {
+
   const { user, loading } = useUser();
 
   return (
