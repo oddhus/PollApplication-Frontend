@@ -14,6 +14,7 @@ import { grey } from "@material-ui/core/colors";
 import { StatusBar } from "../components/StatusBar";
 import { AlertDialog } from "../components/AlertDialog";
 import { useHistory } from "react-router-dom";
+import useUser from "../data/use-user";
 
 const useStyles = makeStyles((theme) => ({
   headerContainer: {
@@ -29,12 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DUMMY_USER = {
-  email: "test@test.com",
-};
-
 export const AccountPage = () => {
-  const user = DUMMY_USER;
   const classes = useStyles();
   const [editEmail, setEditEmail] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
@@ -43,6 +39,7 @@ export const AccountPage = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const history = useHistory();
+  const { user, loading } = useUser();
 
   const {
     errors,
@@ -103,7 +100,9 @@ export const AccountPage = () => {
         </Box>
       </Grid>
       <Grid item xs={12} sm={8}>
-        {editEmail ? (
+        {loading ? (
+          <CircularProgress />
+        ) : editEmail ? (
           <EditEmail control={control} errors={errors} />
         ) : (
           <Typography variant="body1">{user.email}</Typography>
