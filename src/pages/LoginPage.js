@@ -1,8 +1,9 @@
 import React from 'react'
 import {ThemeButton} from "../components/ThemeButton";
 import { useForm } from "react-hook-form";
-import {TextField, Container, Grid, Box} from "@material-ui/core";
+import {TextField, Container, Grid, Box, Link} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import { Link as RouterLink } from 'react-router-dom';
 
 export const LoginPage = () => {
     const { register, handleSubmit, errors } = useForm();
@@ -27,6 +28,9 @@ export const LoginPage = () => {
                   </Box>
                   <Box marginTop={5}>
                      <ThemeButton text={"log in"}/>
+                  </Box>
+                  <Box marginTop={2}>
+                      <Link component={RouterLink} to={"/register"}>Create an account.</Link>
                   </Box>
                   <Box marginTop={5}>
                       {errors.usernameLoginField && <span>Du må gi et brukernavn!  </span>}
