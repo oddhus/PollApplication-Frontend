@@ -1,16 +1,31 @@
 import React from "react";
 import { ThemeButton } from "../components/ThemeButton";
 import { useForm } from "react-hook-form";
-import { TextField, Container, Grid, Link } from "@material-ui/core";
+import {
+  TextField,
+  Container,
+  Grid,
+  Link,
+  CircularProgress,
+  Button,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
 import { login } from "../mock/auth";
 
 export const LoginPage = () => {
-  const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (data) => {
+  const {
+    register,
+    handleSubmit,
+    errors,
+    formState: { isSubmitting },
+  } = useForm();
+  const onSubmit = async (data) => {
     console.log(data);
     login();
+    const response = await new Promise((resolve) => {
+      setTimeout(() => resolve(true), 10000);
+    });
   };
   const classes = useStyles();
 
@@ -44,7 +59,9 @@ export const LoginPage = () => {
             />
           </Grid>
           <Grid item>
-            <ThemeButton text={"log in"} />
+            <ThemeButton
+              text={isSubmitting ? <CircularProgress size={20} /> : "Log in"}
+            />
           </Grid>
           <Grid item>
             <Link component={RouterLink} to={"/register"}>
