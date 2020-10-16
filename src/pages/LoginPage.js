@@ -4,11 +4,13 @@ import { useForm } from "react-hook-form";
 import {TextField, Container, Grid, Box, Link} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import {login} from "../mock/auth";
 
 export const LoginPage = () => {
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = data => {
         console.log(data);
+        login();
     }
     const classes = useStyles();
 
