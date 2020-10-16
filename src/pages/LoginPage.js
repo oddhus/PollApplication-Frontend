@@ -27,14 +27,14 @@ export const LoginPage = () => {
           <Grid item>
             <TextField
               label="Username"
-              name="usernameLoginField"
+              name="username"
               inputRef={register({ required: true })}
             />
           </Grid>
           <Grid item>
             <TextField
               label="Password"
-              name="passwordLoginField"
+              name="password"
               inputRef={register({ required: true })}
               type="password"
             />
@@ -60,8 +60,8 @@ export const LoginPage = () => {
             </Link>
           </Grid>
           <Grid item>
-            {errors.usernameLoginField && <span>Du må gi et brukernavn!</span>}
-            {errors.passwordLoginField && <span> Du må gi et passord!</span>}
+            {errors.username && <span>Du må gi et brukernavn!</span>}
+            {errors.password && <span> Du må gi et passord!</span>}
           </Grid>
         </Grid>
       </form>
