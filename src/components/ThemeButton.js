@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 export const ThemeButton = (props) => {
   return (
     <Button variant="contained" color="primary" type="submit">
-      {props.text}
+      {props.children}
     </Button>
   );
 };

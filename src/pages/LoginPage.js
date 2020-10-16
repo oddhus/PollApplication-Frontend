@@ -1,14 +1,8 @@
 import React from "react";
 import { ThemeButton } from "../components/ThemeButton";
+import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { useForm } from "react-hook-form";
-import {
-  TextField,
-  Container,
-  Grid,
-  Link,
-  CircularProgress,
-  Button,
-} from "@material-ui/core";
+import { TextField, Container, Grid, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
 import { login } from "../mock/auth";
@@ -59,15 +53,9 @@ export const LoginPage = () => {
             />
           </Grid>
           <Grid item>
-            <ThemeButton
-              text={
-                isSubmitting ? (
-                  <CircularProgress color="secondary" size={20} />
-                ) : (
-                  "Log in"
-                )
-              }
-            />
+            <ThemeButton>
+              {isSubmitting ? <ThemeCircularProgress /> : "Log in"}
+            </ThemeButton>
           </Grid>
           <Grid item>
             <Link component={RouterLink} to={"/register"}>
