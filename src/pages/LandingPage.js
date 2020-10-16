@@ -40,7 +40,6 @@ export const LandingPage = () => {
   const [statusMessage, setStatusMessage] = useState("");
 
   const onSubmit = async (data) => {
-    login();
     //Just a delay when testing
     const response = await new Promise((resolve) => {
       setTimeout(() => resolve(false), 1000);
