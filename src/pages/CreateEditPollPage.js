@@ -3,10 +3,10 @@ import { TextField, FormControlLabel, Checkbox, IconButton, Grid, Button } from 
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete'
+import { DurationPicker } from '../components/DurationPicker';
 
 const styles = theme => ({
   emailList: {
-    /*     maxWidth: 500, */
     marginTop: theme.spacing(2),
   },
   listItem: {
@@ -39,7 +39,7 @@ const initialState = {
   days: '',
   hours: '',
   minutes: '',
-  emailAdress: '',
+  email: '',
   emailAdresses: [],
   emailAdressErrorMessage: ''
 }
@@ -50,7 +50,7 @@ class CreateEditPollPage extends Component {
     this.state = initialState
   }
 
-  handleChange = e => {
+  handleCheckboxChange = e => {
     this.setState({ [e.target.name]: e.target.checked });
   };
 
@@ -59,41 +59,14 @@ class CreateEditPollPage extends Component {
     this.setState({ isPrivate: value })
   }
 
-  handleDaysChanged = e => {
-    if (e.target.value <= 1000 && e.target.value >= 0) {
-      this.setState({ days: e.target.value })
-    }
-    else if (e.target.value === '') {
-      this.setState({ days: '' })
-    }
-  }
-
-  handleHoursChange = e => {
-    if (e.target.value < 24 && e.target.value >= 0) {
-      this.setState({ hours: e.target.value })
-    }
-    else if (e.target.value === '') {
-      this.setState({ hours: '' })
-    }
-  }
-
-  handleMinutesChange = e => {
-    if (e.target.value < 60 && e.target.value >= 0) {
-      this.setState({ minutes: e.target.value })
-    }
-    else if (e.target.value === '') {
-      this.setState({ hours: '' })
-    }
-  }
-
   handleAddEmail = () => {
     let listOfEmails = this.state.emailAdresses
 
     if (this.validateEmail(this.state.emailAdress)) {
-      if (listOfEmails.indexOf(this.state.emailAdress) === -1) {
-        listOfEmails.push(this.state.emailAdress)
+      if (listOfEmails.indexOf(this.state.email) === -1) {
+        listOfEmails.push(this.state.email)
         this.setState({
-          emailAdress: '',
+          email: '',
           emailAdresses: listOfEmails
         })
       } else {
@@ -105,10 +78,34 @@ class CreateEditPollPage extends Component {
   }
 
   handleInputChange = e => {
-    this.setState({
-      emailAdress: e.target.value,
-      emailAdressErrorMessage: ''
-    })
+    console.log(e.target.id)
+    this.setState({ [e.target.id]: e.target.value });
+    if (e.target.id === 'email') {
+      this.setState({ emailAdressErrorMessage: '' })
+    }
+  }
+
+  handleDurationChanged = e => {
+    console.log(e)
+    this.setState({ [e.attr]: e.value })
+  }
+
+
+  handleSaveClicked = () => {
+    let job = {
+      title: this.state.title,
+      question: this.state.question,
+      pollDuration: this.calculateDuration(),
+      visibilityType: this.state.isPrivate === true ? 'PRIVATE' : 'PUBLIC',
+      emailAdresses: this.state.emailAdresses
+    }
+    console.log(job)
+  }
+
+  calculateDuration() {
+    let daysInMin = this.state.days * 24 * 60
+    let hoursInMin = this.state.hours * 60
+    return daysInMin + hoursInMin + this.state.minutes
   }
 
   resetState() {
@@ -116,8 +113,7 @@ class CreateEditPollPage extends Component {
   }
 
   validateEmail(input) {
-    /* return /^[A-ZÆØÅa-zæøå0-9._%+-]+@[A-ZÆØÅa-zæøå0-9.-]+\.[A-ZÆØÅa-zæøå]{2,6}$/.test(input) */
-    return true
+    return /^[A-ZÆØÅa-zæøå0-9._%+-]+@[A-ZÆØÅa-zæøå0-9.-]+\.[A-ZÆØÅa-zæøå]{2,6}$/.test(input)
   }
 
   deleteEmail(index) {
@@ -128,7 +124,6 @@ class CreateEditPollPage extends Component {
 
   render() {
     const { classes } = this.props
-
     const emailList = this.state.emailAdresses.map((emailAdress, index) =>
       <Grid
         container
@@ -140,9 +135,11 @@ class CreateEditPollPage extends Component {
           xs={8}
           sm={10}
           className={classes.listItem}
-          key={index}>
+          key={index}
+        >
           {emailAdress}
         </Grid>
+
         <Grid item>
           <IconButton
             className={classes.listItemDelete}
@@ -164,58 +161,73 @@ class CreateEditPollPage extends Component {
         alignItems="center"
         className={classes.formContainer}
         direction="column"
-      >
+        >
+
         <div className={classes.textInput}>
           <Grid item>
-            <TextField className={classes.textInput} id='standard-basic' label='Title'/>
+            <TextField
+              className={classes.textInput}
+              id='title'
+              label='Title'
+              onChange={this.handleInputChange}
+            />
             <Grid item>
-              <TextField className={classes.textInput} id='standard-basic' label='Question'/>
+              <TextField
+                className={classes.textInput}
+                id='question'
+                label='Question'
+                onChange={this.handleInputChange}
+              />
             </Grid>
             <FormControlLabel
-              control={<Checkbox color='primary' checked={this.state.setDuration} onChange={this.handleChange} name='setDuration' />}
+              control={
+                <Checkbox
+                  color='primary'
+                  checked={this.state.setDuration}
+                  onChange={this.handleCheckboxChange}
+                  name='setDuration'
+                />
+              }
               label='Set duration'
             />
           </Grid>
+
           <div hidden={!this.state.setDuration}>
-            <TextField
-              id='days'
-              label='DD'
-              type='number'
-              variant='outlined'
-              onChange={this.handleDaysChanged}
-              inputProps={{ min: '0', max: '1000', step: '1', value: this.state.days }}
-            />
-            <TextField
-              id='hours'
-              label='HH'
-              type='number'
-              variant='outlined'
-              onChange={this.handleHoursChange}
-              inputProps={{ min: '0', max: '23', step: '1', value: this.state.hours }}
-            />
-            <TextField
-              id='minutes'
-              label='MM'
-              type='number'
-              variant='outlined'
-              onChange={this.handleMinutesChange}
-              inputProps={{ min: '0', max: '59', step: '1', value: this.state.minutes }}
+            <DurationPicker
+              days={this.state.days}
+              hours={this.state.hours}
+              minutes={this.state.minutes}
+              onDaysChanged={this.handleDurationChanged}
+              onHoursChanged={this.handleDurationChanged}
+              onMinutesChanged={this.handleDurationChanged}
             />
           </div>
 
           <FormControlLabel
-            control={<Checkbox color='primary' name='setPublic' checked={!this.state.isPrivate} onChange={this.handleVisibilityChange} />}
+            control={<Checkbox
+              color='primary'
+              name='setPublic'
+              checked={!this.state.isPrivate}
+              onChange={this.handleVisibilityChange}
+            />
+            }
             label='Public'
           />
 
           <FormControlLabel
-            control={<Checkbox color='primary' name='setPrivate' checked={this.state.isPrivate} onChange={this.handleVisibilityChange} />}
+            control={<Checkbox
+              color='primary'
+              name='setPrivate'
+              checked={this.state.isPrivate}
+              onChange={this.handleVisibilityChange}
+            />
+            }
             label='Private'
           />
 
           <div hidden={!this.state.isPrivate}>
             <TextField
-              id='Email-adress'
+              id='email'
               label='Example@email.com'
               type='email'
               variant='outlined'
@@ -237,7 +249,14 @@ class CreateEditPollPage extends Component {
             </div>
           </div>
         </div>
-          <Button variant="contained" color='primary' className={classes.btn}  >Save</Button>
+
+        <Button
+          variant="contained"
+          color='primary'
+          className={classes.btn}
+          onClick={this.handleSaveClicked}>
+          Save
+          </Button>
       </Grid>
     )
   };
