@@ -37,7 +37,7 @@ export const LoginPage = () => {
             <TextField
               label="Username"
               name="username"
-              inputRef={register({ required: "Du må gi et brukernavn!" })}
+              inputRef={register({ required: "You have to give a username." })}
               error={!!errors.username}
               helperText={errors.username ? errors.username.message : ""}
             />
@@ -46,7 +46,7 @@ export const LoginPage = () => {
             <TextField
               label="Password"
               name="password"
-              inputRef={register({ required: "Du må gi et passord!" })}
+              inputRef={register({ required: "You have to give a password." })}
               error={!!errors.password}
               helperText={errors.password ? errors.password.message : ""}
               type="password"
