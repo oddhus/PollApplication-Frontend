@@ -22,9 +22,6 @@ export const RegisterPage = () => {
   const onSubmit = async (data) => {
     console.log(data);
     login();
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 10000);
-    });
   };
   const classes = useStyles();
 
@@ -66,7 +63,12 @@ export const RegisterPage = () => {
             <TextField
               label="Password"
               name="firstPassword"
-              inputRef={register({ required: "You have to give a password!" })}
+              inputRef={register({ required: "You have to give a password!",
+                  minLength: {
+                      value: 8,
+                      message: "Password must be of length 8.",
+                  },
+              })}
               error={!!errors.firstPassword}
               helperText={
                 errors.firstPassword ? errors.firstPassword.message : ""
@@ -83,6 +85,10 @@ export const RegisterPage = () => {
                 validate: (value) =>
                   value === firstPassword.current ||
                   "The passwords do not match",
+                  minLength: {
+                      value: 8,
+                      message: "Password must be of length 8.",
+                  },
               })}
               error={!!errors.secondPassword}
               helperText={

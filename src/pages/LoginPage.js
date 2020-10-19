@@ -17,9 +17,6 @@ export const LoginPage = () => {
   const onSubmit = async (data) => {
     console.log(data);
     login();
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 10000);
-    });
   };
   const classes = useStyles();
 
