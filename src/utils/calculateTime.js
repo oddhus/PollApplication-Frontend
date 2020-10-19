@@ -12,6 +12,5 @@ export function getDaysFromMinutes(minutes){
 }
 
 export function getHoursFromMinutes(minutes){
-    console.log(minutes)
     return Math.floor(minutes / 60) % 60
 }
