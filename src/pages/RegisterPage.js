@@ -66,10 +66,10 @@ export const RegisterPage = () => {
       </form>
     </Container>
   );
-
-  const useStyles = makeStyles((theme) => ({
-    container: {
-      padding: theme.spacing(3),
-    },
-  }));
 };
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    padding: theme.spacing(3),
+  },
+}));
