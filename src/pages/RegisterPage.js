@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { login } from "../mock/auth";
 import { Container, Grid, Link, TextField } from "@material-ui/core";
@@ -13,7 +13,12 @@ export const RegisterPage = () => {
     handleSubmit,
     errors,
     formState: { isSubmitting },
+    watch,
   } = useForm();
+
+  const firstPassword = useRef({});
+  firstPassword.current = watch("firstPassword", "");
+
   const onSubmit = async (data) => {
     console.log(data);
     login();
@@ -60,20 +65,29 @@ export const RegisterPage = () => {
           <Grid item>
             <TextField
               label="Password"
-              name="password"
+              name="firstPassword"
               inputRef={register({ required: "You have to give a password!" })}
-              error={!!errors.password}
-              helperText={errors.password ? errors.password.message : ""}
+              error={!!errors.firstPassword}
+              helperText={
+                errors.firstPassword ? errors.firstPassword.message : ""
+              }
               type="password"
             />
           </Grid>
           <Grid item>
             <TextField
-              label="Password"
+              label="Repeat password"
               name="secondPassword"
-              inputRef={register({ required: "You have to give a password!" })}
-              error={!!errors.password}
-              helperText={errors.password ? errors.password.message : ""}
+              inputRef={register({
+                required: "You have to give a password!",
+                validate: (value) =>
+                  value === firstPassword.current ||
+                  "The passwords do not match",
+              })}
+              error={!!errors.secondPassword}
+              helperText={
+                errors.secondPassword ? errors.secondPassword.message : ""
+              }
               type="password"
             />
           </Grid>
