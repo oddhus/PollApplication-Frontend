@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete'
 import { DurationPicker } from '../components/DurationPicker';
+import { getDaysFromMinutes, getHoursFromMinutes } from '../utils/calculateTime'
 
 const styles = theme => ({
   emailList: {
@@ -78,7 +79,6 @@ class CreateEditPollPage extends Component {
   }
 
   handleInputChange = e => {
-    console.log(e.target.id)
     this.setState({ [e.target.id]: e.target.value });
     if (e.target.id === 'email') {
       this.setState({ emailAdressErrorMessage: '' })
@@ -86,7 +86,6 @@ class CreateEditPollPage extends Component {
   }
 
   handleDurationChanged = e => {
-    console.log(e)
     this.setState({ [e.attr]: e.value })
   }
 
@@ -100,8 +99,12 @@ class CreateEditPollPage extends Component {
       emailAdresses: this.state.emailAdresses
     }
     console.log(job)
+    //let location = this.state.pollId !== ? 'polls/edit' : 'polls'
   }
 
+  /**
+   * Returns the total amount of minutes from the 'DD,HH,MM' inputs
+   */
   calculateDuration() {
     let daysInMin = this.state.days * 24 * 60
     let hoursInMin = this.state.hours * 60
@@ -122,8 +125,28 @@ class CreateEditPollPage extends Component {
     this.setState({ emailAdresses: emailAdresses })
   }
 
+  componentDidMount() {
+    // Seutp the correct state corresponding to if an existing poll should be edited or if a new one should be created.
+    if (this.props.location.state === undefined) {
+      this.resetState()
+    } else {
+      let state = this.props.location.state
+      if (this.props.location.state !== undefined) {
+        let duration = this.props.location.state.duration
+        state.days = getDaysFromMinutes(duration)
+        duration = duration - (state.days * 60 * 24)
+        state.hours = getHoursFromMinutes(duration)
+        state.minutes = duration - (state.hours * 60)
+        state.setDuration = true
+      }
+      console.log(state)
+      this.setState(state)
+    }
+  }
+
   render() {
     const { classes } = this.props
+
     const emailList = this.state.emailAdresses.map((emailAdress, index) =>
       <Grid
         container
@@ -161,7 +184,7 @@ class CreateEditPollPage extends Component {
         alignItems="center"
         className={classes.formContainer}
         direction="column"
-        >
+      >
 
         <div className={classes.textInput}>
           <Grid item>
@@ -170,6 +193,7 @@ class CreateEditPollPage extends Component {
               id='title'
               label='Title'
               onChange={this.handleInputChange}
+              inputProps={{ value: this.state.title }}
             />
             <Grid item>
               <TextField
@@ -177,6 +201,7 @@ class CreateEditPollPage extends Component {
                 id='question'
                 label='Question'
                 onChange={this.handleInputChange}
+                inputProps={{ value: this.state.question }}
               />
             </Grid>
             <FormControlLabel
@@ -261,4 +286,5 @@ class CreateEditPollPage extends Component {
     )
   };
 }
+
 export default withStyles(styles)(CreateEditPollPage);
