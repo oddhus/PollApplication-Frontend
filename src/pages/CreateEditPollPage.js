@@ -98,8 +98,7 @@ class CreateEditPollPage extends Component {
       visibilityType: this.state.isPrivate === true ? 'PRIVATE' : 'PUBLIC',
       emailAdresses: this.state.emailAdresses
     }
-    console.log(job)
-    //let location = this.state.pollId !== ? 'polls/edit' : 'polls'
+    //let location = this.props.match.params.pollId !== ? 'polls/edit/this.props.match.params.pollId' : 'polls'
   }
 
   /**
@@ -139,7 +138,6 @@ class CreateEditPollPage extends Component {
         state.minutes = duration - (state.hours * 60)
         state.setDuration = true
       }
-      console.log(state)
       this.setState(state)
     }
   }
