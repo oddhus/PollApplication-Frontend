@@ -6,11 +6,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     textAlign: 'center',
   },
+  paper: {
+    margin: theme.spacing(3),
+    paddingTop: theme.spacing(2)
+  },
   pollInfo: {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: theme.spacing(3),
-    paddingTop: theme.spacing(2)
   },
   title: {
   },
@@ -24,10 +26,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getData(props) {
-  if (props.location.state === undefined) {
-    return { pollOwner: 'Bob', duration: calculateTime(12345), question: 'Vue > React' } //FETCH POLL
-  }
-
   return { pollOwner: 'Hans', duration: calculateTime(127325), question: 'Pinaple on pizza?' } //SWAP WITH this.props.location.state
 
 }
@@ -42,7 +40,6 @@ function calculateTime(time) {
 
 export const VotePage = (props) => {
   const classes = useStyles();
-
   const data = getData(props)
 
   function sendVote(vote) {
