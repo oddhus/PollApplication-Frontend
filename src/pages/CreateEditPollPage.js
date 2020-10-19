@@ -62,8 +62,7 @@ class CreateEditPollPage extends Component {
 
   handleAddEmail = () => {
     let listOfEmails = this.state.emailAdresses
-
-    if (this.validateEmail(this.state.emailAdress)) {
+    if (this.validateEmail(this.state.email)) {
       if (listOfEmails.indexOf(this.state.email) === -1) {
         listOfEmails.push(this.state.email)
         this.setState({
@@ -255,7 +254,7 @@ class CreateEditPollPage extends Component {
               type='email'
               variant='outlined'
               onChange={this.handleInputChange}
-              value={this.state.emailAdress}
+              value={this.state.email}
               error={this.state.emailAdressErrorMessage !== ''}
               helperText={this.state.emailAdressErrorMessage}
             />
