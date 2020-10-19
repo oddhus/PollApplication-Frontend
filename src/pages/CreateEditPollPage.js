@@ -10,6 +10,14 @@ const styles = theme => ({
   emailList: {
     marginTop: theme.spacing(2),
   },
+  container: {
+    paddingTop: '5vh',
+    width: "100%",
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'left',
+    marginLeft: '15%'
+  },
   listItem: {
     background: '#D3D3D3',
     padding: 10,
@@ -21,14 +29,12 @@ const styles = theme => ({
     float: 'rigth'
   },
   textInput: {
-    width: "100%",
-  },
-  buttonRow: {
-    margin: '5vh',
+    width: "70%",
   },
   btn: {
     width: '25%',
-    marginTop: 25
+    marginTop: 25,
+    marginLeft: theme.spacing(-20)
   }
 });
 
@@ -153,7 +159,7 @@ class CreateEditPollPage extends Component {
       >
         <Grid item
           xs={8}
-          sm={10}
+          sm={9}
           className={classes.listItem}
           key={index}
         >
@@ -183,7 +189,7 @@ class CreateEditPollPage extends Component {
         direction="column"
       >
 
-        <div className={classes.textInput}>
+        <div className={classes.container}>
           <Grid item>
             <TextField
               className={classes.textInput}
@@ -224,28 +230,28 @@ class CreateEditPollPage extends Component {
               onMinutesChanged={this.handleDurationChanged}
             />
           </div>
-
-          <FormControlLabel
-            control={<Checkbox
-              color='primary'
-              name='setPublic'
-              checked={!this.state.isPrivate}
-              onChange={this.handleVisibilityChange}
+          <div className={classes.visibilityContainer}>
+            <FormControlLabel
+              control={<Checkbox
+                color='primary'
+                name='setPublic'
+                checked={!this.state.isPrivate}
+                onChange={this.handleVisibilityChange}
+              />
+              }
+              label='Public'
             />
-            }
-            label='Public'
-          />
-
-          <FormControlLabel
-            control={<Checkbox
-              color='primary'
-              name='setPrivate'
-              checked={this.state.isPrivate}
-              onChange={this.handleVisibilityChange}
+            <FormControlLabel
+              control={<Checkbox
+                color='primary'
+                name='setPrivate'
+                checked={this.state.isPrivate}
+                onChange={this.handleVisibilityChange}
+              />
+              }
+              label='Private'
             />
-            }
-            label='Private'
-          />
+          </div>
 
           <div hidden={!this.state.isPrivate}>
             <TextField
