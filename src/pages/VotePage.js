@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Typography, Button } from '@material-ui/core/';
+import { getDaysHoursMinFromMin } from '../utils/calculateTime'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,16 +27,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getData(props) {
-  return { pollOwner: 'Hans', duration: calculateTime(127325), question: 'Pinaple on pizza?' } //SWAP WITH this.props.location.state
+  return { pollOwner: 'Hans', duration: getDaysHoursMinFromMin(127325), question: 'Pinaple on pizza?' } //SWAP WITH this.props.location.state
 
-}
-
-function calculateTime(time) {
-  let days = Math.floor(time / 24 / 60)
-  time = time - (days * 60 * 24)
-  let hours = Math.floor(time / 60) % 60
-  let minutes = time - (hours * 60)
-  return days + " days " + hours + ' hours ' + minutes + " min";
 }
 
 export const VotePage = (props) => {
@@ -55,7 +48,7 @@ export const VotePage = (props) => {
         className={classes.paper}
         elevation={3}>
         <div className={classes.pollInfo}>
-          <Typography>{data.pollOwner + '\'s'}</Typography>
+          <Typography>{data.pollOwner + '\'s poll'}</Typography>
           <Typography>{'Time remaining: ' + data.duration}</Typography>
         </div>
 
