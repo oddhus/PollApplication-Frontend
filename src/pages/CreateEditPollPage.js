@@ -16,7 +16,10 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'left',
-    marginLeft: '15%'
+    marginLeft: '15%',
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: 0,
+    }
   },
   listItem: {
     background: '#D3D3D3',
