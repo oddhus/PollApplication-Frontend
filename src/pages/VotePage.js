@@ -14,8 +14,10 @@ const useStyles = makeStyles((theme) => ({
   pollInfo: {
     display: 'flex',
     justifyContent: 'space-between',
+    padding: theme.spacing(3)
   },
   title: {
+    marginTop: theme.spacing(5),
   },
   btnContainer: {
     marginTop: theme.spacing(5)
@@ -51,8 +53,7 @@ export const VotePage = (props) => {
           <Typography>{data.pollOwner + '\'s poll'}</Typography>
           <Typography>{'Time remaining: ' + data.duration}</Typography>
         </div>
-
-        <Typography variant='h4'>{data.question}</Typography>
+        <Typography variant='h4' className={classes.title}>{data.question}</Typography>
 
         <div className={classes.btnContainer}>
           <Button
