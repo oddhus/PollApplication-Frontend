@@ -1,0 +1,902 @@
+[
+    {
+      "pollId": 0,
+      "question": "Dogs are better than cats",
+      "name": "best poll",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 1,
+      "question": "Dogs are better than cats",
+      "name": "DONT VOTE!",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 2,
+      "question": "Vue > React",
+      "name": "best poll",
+      "duration": "213",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 3,
+      "question": "Banana on pizza",
+      "name": "best poll",
+      "duration": "32598",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PUBLIC",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 4,
+      "question": "Vue > React",
+      "name": "Cool Poll",
+      "duration": "32598",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 5,
+      "question": "Vue > React",
+      "name": "Cool Poll",
+      "duration": "9264618",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 6,
+      "question": "Banana on pizza",
+      "name": "VOTE HERE :D ",
+      "duration": "9264618",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 7,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "23141234",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 8,
+      "question": "Banana on pizza",
+      "name": "best poll",
+      "duration": "213",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 9,
+      "question": "Vue > React",
+      "name": "best poll",
+      "duration": "910237",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 10,
+      "question": "Dogs are better than cats",
+      "name": "VOTE HERE :D ",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 11,
+      "question": "Banana on pizza",
+      "name": "DONT VOTE!",
+      "duration": "213",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 12,
+      "question": "Vue > React",
+      "name": "VOTE HERE :D ",
+      "duration": "213",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 13,
+      "question": "Dogs are better than cats",
+      "name": "DONT VOTE!",
+      "duration": "32598",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 14,
+      "question": "Deno > Node",
+      "name": "VOTE HERE :D ",
+      "duration": "213",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 15,
+      "question": "Dogs are better than cats",
+      "name": "best poll",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 16,
+      "question": "Vue > React",
+      "name": "VOTE HERE :D ",
+      "duration": "213",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 17,
+      "question": "Deno > Node",
+      "name": "VOTE HERE :D ",
+      "duration": "32598",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 18,
+      "question": "Dogs are better than cats",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 19,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 20,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 21,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 22,
+      "question": "Pinapple on pizza",
+      "name": "best poll",
+      "duration": "213",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 23,
+      "question": "Deno > Node",
+      "name": "best poll",
+      "duration": "910237",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 24,
+      "question": "Vue > React",
+      "name": "Cool Poll",
+      "duration": "9264618",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 25,
+      "question": "Deno > Node",
+      "name": "best poll",
+      "duration": "9264618",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 26,
+      "question": "Deno > Node",
+      "name": "best poll",
+      "duration": "9264618",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 27,
+      "question": "Banana on pizza",
+      "name": "Cool Poll",
+      "duration": "32598",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 28,
+      "question": "Banana on pizza",
+      "name": "DONT VOTE!",
+      "duration": "32598",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 29,
+      "question": "Banana on pizza",
+      "name": "Cool Poll",
+      "duration": "32598",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 30,
+      "question": "Pinapple on pizza",
+      "name": "best poll",
+      "duration": "910237",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 31,
+      "question": "Pinapple on pizza",
+      "name": "best poll",
+      "duration": "910237",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 32,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "32598",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 33,
+      "question": "Pinapple on pizza",
+      "name": "VOTE HERE :D ",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PUBLIC",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 34,
+      "question": "Vue > React",
+      "name": "DONT VOTE!",
+      "duration": "32598",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 35,
+      "question": "Vue > React",
+      "name": "VOTE HERE :D ",
+      "duration": "213",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 36,
+      "question": "Banana on pizza",
+      "name": "DONT VOTE!",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PUBLIC",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 37,
+      "question": "Dogs are better than cats",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PUBLIC",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 38,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "9264618",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 39,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "213",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 40,
+      "question": "Vue > React",
+      "name": "Cool Poll",
+      "duration": "213",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 41,
+      "question": "Deno > Node",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 42,
+      "question": "Deno > Node",
+      "name": "VOTE HERE :D ",
+      "duration": "23141234",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 43,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 44,
+      "question": "Pinapple on pizza",
+      "name": "Cool Poll",
+      "duration": "9264618",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 45,
+      "question": "Deno > Node",
+      "name": "DONT VOTE!",
+      "duration": "32598",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 46,
+      "question": "Deno > Node",
+      "name": "best poll",
+      "duration": "9264618",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 47,
+      "question": "Vue > React",
+      "name": "best poll",
+      "duration": "32598",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 48,
+      "question": "Banana on pizza",
+      "name": "VOTE HERE :D ",
+      "duration": "910237",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 49,
+      "question": "Dogs are better than cats",
+      "name": "VOTE HERE :D ",
+      "duration": "910237",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PUBLIC",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 50,
+      "question": "Vue > React",
+      "name": "DONT VOTE!",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 51,
+      "question": "Deno > Node",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 52,
+      "question": "Vue > React",
+      "name": "VOTE HERE :D ",
+      "duration": "910237",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 53,
+      "question": "Deno > Node",
+      "name": "DONT VOTE!",
+      "duration": "213",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PUBLIC",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 54,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "213",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 55,
+      "question": "Vue > React",
+      "name": "best poll",
+      "duration": "213",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 56,
+      "question": "Dogs are better than cats",
+      "name": "VOTE HERE :D ",
+      "duration": "23141234",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 57,
+      "question": "Banana on pizza",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 58,
+      "question": "Pinapple on pizza",
+      "name": "best poll",
+      "duration": "23141234",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 59,
+      "question": "Dogs are better than cats",
+      "name": "Cool Poll",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 60,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "9264618",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 61,
+      "question": "Banana on pizza",
+      "name": "VOTE HERE :D ",
+      "duration": "213",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 62,
+      "question": "Deno > Node",
+      "name": "best poll",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 63,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "213",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 64,
+      "question": "Banana on pizza",
+      "name": "best poll",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 65,
+      "question": "Pinapple on pizza",
+      "name": "VOTE HERE :D ",
+      "duration": "9264618",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 66,
+      "question": "Dogs are better than cats",
+      "name": "DONT VOTE!",
+      "duration": "213",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 67,
+      "question": "Dogs are better than cats",
+      "name": "DONT VOTE!",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 68,
+      "question": "Banana on pizza",
+      "name": "best poll",
+      "duration": "32598",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 69,
+      "question": "Deno > Node",
+      "name": "VOTE HERE :D ",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 70,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "9264618",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 71,
+      "question": "Deno > Node",
+      "name": "VOTE HERE :D ",
+      "duration": "32598",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 72,
+      "question": "Pinapple on pizza",
+      "name": "best poll",
+      "duration": "32598",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 73,
+      "question": "Dogs are better than cats",
+      "name": "VOTE HERE :D ",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PUBLIC",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 74,
+      "question": "Banana on pizza",
+      "name": "VOTE HERE :D ",
+      "duration": "23141234",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 75,
+      "question": "Banana on pizza",
+      "name": "Cool Poll",
+      "duration": "32598",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 76,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 77,
+      "question": "Deno > Node",
+      "name": "VOTE HERE :D ",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 78,
+      "question": "Vue > React",
+      "name": "best poll",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PUBLIC",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 79,
+      "question": "Pinapple on pizza",
+      "name": "VOTE HERE :D ",
+      "duration": "910237",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 80,
+      "question": "Deno > Node",
+      "name": "VOTE HERE :D ",
+      "duration": "213",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 81,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "9264618",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 82,
+      "question": "Vue > React",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 83,
+      "question": "Pinapple on pizza",
+      "name": "Cool Poll",
+      "duration": "9264618",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 84,
+      "question": "Pinapple on pizza",
+      "name": "best poll",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 85,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "9264618",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 86,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "213",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "Admin"
+    },
+    {
+      "pollId": 87,
+      "question": "Deno > Node",
+      "name": "Cool Poll",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 88,
+      "question": "Deno > Node",
+      "name": "VOTE HERE :D ",
+      "duration": "23141234",
+      "start-time": "2020-12-24T10:20:21.15",
+      "visibilityType": "PUBLIC",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 89,
+      "question": "Vue > React",
+      "name": "best poll",
+      "duration": "213",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 90,
+      "question": "Dogs are better than cats",
+      "name": "VOTE HERE :D ",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 91,
+      "question": "Banana on pizza",
+      "name": "Cool Poll",
+      "duration": "23141234",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Gitchub"
+    },
+    {
+      "pollId": 92,
+      "question": "Vue > React",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2020-08-18T23:59:01.20",
+      "visibilityType": "PRIVATE",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 93,
+      "question": "Vue > React",
+      "name": "best poll",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "BeerPongMaster"
+    },
+    {
+      "pollId": 94,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "213",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 95,
+      "question": "Banana on pizza",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PRIVATE",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 96,
+      "question": "Pinapple on pizza",
+      "name": "DONT VOTE!",
+      "duration": "910237",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PRIVATE",
+      "owner": "CoolCat101"
+    },
+    {
+      "pollId": 97,
+      "question": "Banana on pizza",
+      "name": "DONT VOTE!",
+      "duration": "9264618",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Bjarne"
+    },
+    {
+      "pollId": 98,
+      "question": "Vue > React",
+      "name": "VOTE HERE :D ",
+      "duration": "213",
+      "start-time": "2015-02-05T19:22:25.31",
+      "visibilityType": "PUBLIC",
+      "owner": "Error404"
+    },
+    {
+      "pollId": 99,
+      "question": "Banana on pizza",
+      "name": "DONT VOTE!",
+      "duration": "213",
+      "start-time": "1997-07-16T19:20:30.45",
+      "visibilityType": "PUBLIC",
+      "owner": "BeerPongMaster"
+    }
+  ]

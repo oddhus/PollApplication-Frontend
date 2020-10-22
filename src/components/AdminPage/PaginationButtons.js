@@ -53,7 +53,7 @@ class PaginateButtons extends Component {
 
   componentDidMount() {
     this.setState({currentPage: 1});
-    this.props.onRef(this)
+    /* this.props.onRef(this) */
   }
 
   goToStart = () => {
@@ -98,9 +98,8 @@ class PaginateButtons extends Component {
    * Given that the current page is 6
    * The pagination control will look like the following:
    *
-   * (1) < {4 5} [6] {7 8} > (10)
+   * << {4 5} [6] {7 8} >>
    *
-   * (x) => terminal pages: first and last page(always visible)
    * [x] => represents current page
    * {...x} => represents page neighbours
    */
