@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
   pollContainer: {
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.up("sm")]: {
+      height: 60,
+    },
   },
   searchBarContainer: {
     paddingLeft: theme.spacing(1),
@@ -165,14 +168,14 @@ export function UserPollsPage() {
 
   const searchBar = (
     <Grid container spacing={2} className={classes.searchBarContainer}>
-      <Grid item xs={9} sm={6}>
+      <Grid item xs={8} sm={6}>
         <TextField
           fullWidth
           placeholder="Keyword"
           onChange={(e) => setKeyWord(e.target.value)}
         ></TextField>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         <Button variant="outlined">Search</Button>
       </Grid>
     </Grid>
@@ -184,12 +187,13 @@ export function UserPollsPage() {
         <Grid item key={poll.id} className={classes.pollContainer}>
           <Paper>
             <Grid item container direction="row">
-              <Grid item container direction="column" sm={8}>
+              <Grid item container direction="column" sm={6} md={8}>
                 <Grid>
                   <Typography
                     variant="h5"
                     className={classes.title}
                     color="textSecondary"
+                    noWrap
                   >
                     {poll.name}
                   </Typography>
@@ -198,6 +202,7 @@ export function UserPollsPage() {
                   <Typography
                     className={classes.question}
                     color="textSecondary"
+                    noWrap
                   >
                     {poll.question}
                   </Typography>
@@ -206,18 +211,24 @@ export function UserPollsPage() {
               <Grid
                 item
                 container
-                sm={4}
+                xs={12}
+                sm={6}
+                md={4}
                 alignContent="center"
                 justify="flex-end"
               >
                 <Grid item className={classes.buttonContainer}>
-                  <DangerButton onClick={() => setOpenDeleteAlert(true)}>
+                  <DangerButton
+                    size={xs ? "small" : "medium"}
+                    onClick={() => setOpenDeleteAlert(true)}
+                  >
                     Delete
                   </DangerButton>
                 </Grid>
                 {poll.category === 0 && (
                   <Grid item className={classes.buttonContainer}>
                     <Button
+                      size={xs ? "small" : "medium"}
                       variant="outlined"
                       color="secondary"
                       onClick={() => onEdit(poll.id)}
@@ -229,6 +240,7 @@ export function UserPollsPage() {
                 {poll.category === 0 && (
                   <Grid item className={classes.buttonContainer}>
                     <Button
+                      size={xs ? "small" : "medium"}
                       variant="contained"
                       color="primary"
                       onClick={() => onActivate(poll.id)}
@@ -240,6 +252,7 @@ export function UserPollsPage() {
                 {poll.category !== 0 && (
                   <Grid item className={classes.buttonContainer}>
                     <Button
+                      size={xs ? "small" : "medium"}
                       variant="contained"
                       color="primary"
                       onClick={() => onDisplayResults(poll.id, poll.question)}
