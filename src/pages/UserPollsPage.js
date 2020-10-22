@@ -228,7 +228,7 @@ export function UserPollsPage() {
         ) : (
           <Grid item>
             <PollList
-              data={data}
+              data={filteredPolls}
               onEdit={onEdit}
               onActivate={onActivate}
               isLoading={isLoading}
