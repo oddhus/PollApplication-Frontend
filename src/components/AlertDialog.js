@@ -6,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import PropTypes from "prop-types";
+import { DangerButton } from "./DangerButton";
 
 export function AlertDialog({
   open,
@@ -13,7 +14,6 @@ export function AlertDialog({
   title,
   children,
   button,
-  buttonClass,
   onClick,
 }) {
   const handleClose = () => {
@@ -38,15 +38,9 @@ export function AlertDialog({
           <Button onClick={handleClose} variant="outlined">
             Cancel
           </Button>
-          <Button
-            onClick={onClick}
-            color="primary"
-            variant="contained"
-            autoFocus
-            className={buttonClass}
-          >
+          <DangerButton onClick={onClick} autoFocus>
             {button}
-          </Button>
+          </DangerButton>
         </DialogActions>
       </Dialog>
     </div>
@@ -54,11 +48,9 @@ export function AlertDialog({
 }
 
 AlertDialog.propTypes = {
-  //severity: PropTypes.oneOf(["error", "warning", "info", "success"]).isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   button: PropTypes.string,
-  buttonClass: PropTypes.string,
   onClick: PropTypes.func,
 };
