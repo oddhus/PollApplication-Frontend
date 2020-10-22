@@ -19,6 +19,8 @@ import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import { ResultModal } from "../components/ResultModal";
 import { ResultChart } from "../components/ResultChart";
+import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
+import { ThemeButton } from "../components/ThemeButton";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -95,6 +97,7 @@ export function UserPollsPage() {
   const classes = useStyles();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const history = useHistory();
+
   const [tabValue, setTabValue] = useState(0);
   const [filteredPolls, setFilteredPolls] = useState([]);
   const [keyword, setKeyWord] = useState("");
@@ -105,6 +108,8 @@ export function UserPollsPage() {
   const [openResults, setOpenResults] = useState(false);
   const [selectedPollQuestion, setSelectedPollQuestion] = useState(null);
   const [selectedPollResults, setSelectedPollResult] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const data = DUMMY_DATA;
 
@@ -117,6 +122,7 @@ export function UserPollsPage() {
   };
 
   const onDelete = async (id) => {
+    setIsDeleting(true);
     const response = await new Promise((resolve) => {
       setTimeout(() => resolve(true), 1000);
     });
@@ -129,9 +135,11 @@ export function UserPollsPage() {
     }
     setOpenDeleteAlert(false);
     setOpenAlertDialog(true);
+    setIsDeleting(false);
   };
 
   const onActivate = async (id) => {
+    setIsLoading(true);
     const response = await new Promise((resolve) => {
       setTimeout(() => resolve(true), 1000);
     });
@@ -143,6 +151,7 @@ export function UserPollsPage() {
       setStatus("error");
     }
     setOpenAlertDialog(true);
+    setIsLoading(false);
   };
 
   const onEdit = (id) => {
@@ -150,8 +159,7 @@ export function UserPollsPage() {
   };
 
   const onDisplayResults = async (id, question) => {
-    console.log(id);
-    console.log(question);
+    setIsLoading(true);
     const response = await new Promise((resolve) => {
       setTimeout(() => resolve({ ok: true, data: { yes: 5, no: 1 } }), 1000);
     });
@@ -164,6 +172,7 @@ export function UserPollsPage() {
       setStatus("error");
       setOpenAlertDialog(true);
     }
+    setIsLoading(false);
   };
 
   const searchBar = (
@@ -239,26 +248,23 @@ export function UserPollsPage() {
                 )}
                 {poll.category === 0 && (
                   <Grid item className={classes.buttonContainer}>
-                    <Button
+                    <ThemeButton
+                      disabled={isLoading}
                       size={xs ? "small" : "medium"}
-                      variant="contained"
-                      color="primary"
                       onClick={() => onActivate(poll.id)}
                     >
-                      Activate
-                    </Button>
+                      {isLoading ? <ThemeCircularProgress /> : "Activate"}
+                    </ThemeButton>
                   </Grid>
                 )}
                 {poll.category !== 0 && (
                   <Grid item className={classes.buttonContainer}>
-                    <Button
+                    <ThemeButton
                       size={xs ? "small" : "medium"}
-                      variant="contained"
-                      color="primary"
                       onClick={() => onDisplayResults(poll.id, poll.question)}
                     >
-                      Results
-                    </Button>
+                      {isLoading ? <ThemeCircularProgress /> : "Results"}
+                    </ThemeButton>
                   </Grid>
                 )}
               </Grid>
@@ -291,6 +297,7 @@ export function UserPollsPage() {
         open={openDeleteAlert}
         setOpen={setOpenDeleteAlert}
         onClick={onDelete}
+        isLoading={isDeleting}
       >
         Are you sure you permanently want to delete this poll?
       </AlertDialog>
@@ -310,7 +317,7 @@ export function UserPollsPage() {
       </Paper>
       <Grid container direction="column" className={classes.container}>
         <Grid item>{searchBar}</Grid>
-        <Grid item>{polls}</Grid>
+        {!data ? <ThemeCircularProgress /> : <Grid item>{polls}</Grid>}
       </Grid>
     </React.Fragment>
   );

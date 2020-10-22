@@ -7,6 +7,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import PropTypes from "prop-types";
 import { DangerButton } from "./DangerButton";
+import { ThemeCircularProgress } from "./ThemeCircularProgress";
 
 export function AlertDialog({
   open,
@@ -15,6 +16,7 @@ export function AlertDialog({
   children,
   button,
   onClick,
+  isLoading,
 }) {
   const handleClose = () => {
     setOpen(false);
@@ -39,7 +41,7 @@ export function AlertDialog({
             Cancel
           </Button>
           <DangerButton onClick={onClick} autoFocus>
-            {button}
+            {isLoading ? <ThemeCircularProgress /> : button}
           </DangerButton>
         </DialogActions>
       </Dialog>
