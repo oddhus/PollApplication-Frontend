@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       width: 500,
     },
+    [theme.breakpoints.down("xs")]: {
+      width: 310,
+    },
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
