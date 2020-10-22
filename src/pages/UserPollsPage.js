@@ -7,6 +7,7 @@ import {
   Button,
   Grid,
   TextField,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
@@ -175,8 +176,20 @@ export function UserPollsPage() {
           onChange={(e) => setKeyWord(e.target.value)}
         ></TextField>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={4} md={3}>
         <Button variant="outlined">Search</Button>
+      </Grid>
+      <Grid
+        item
+        container
+        xs={12}
+        md={3}
+        alignContent="center"
+        justify="flex-end"
+      >
+        <Typography variant="subtitle1">
+          Number of polls: {filteredPolls.length}
+        </Typography>
       </Grid>
     </Grid>
   );
