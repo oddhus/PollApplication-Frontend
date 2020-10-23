@@ -12,6 +12,7 @@ import { DangerButton } from "../components/DangerButton";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { ThemeButton } from "../components/ThemeButton";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -19,6 +20,15 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(1),
     [theme.breakpoints.down("xs")]: {
       paddingBottom: theme.spacing(1),
+    },
+  },
+  finishedInfo: {
+    fontStyle: "italic",
+    paddingTop: 10,
+    paddingLeft: 20,
+    [theme.breakpoints.down("sm")]: {
+      paddingTop: 0,
+      paddingLeft: 10,
     },
   },
   pollContainer: {
@@ -97,15 +107,29 @@ export function PollItem({
       <Paper>
         <Grid item container direction="row">
           <Grid item container direction="column" sm={6} md={8}>
-            <Grid>
-              <Typography
-                variant="h5"
-                className={classes.title}
-                color="textSecondary"
-                noWrap
-              >
-                {poll.name}
-              </Typography>
+            <Grid item container>
+              <Grid item>
+                <Typography
+                  variant="h5"
+                  className={classes.title}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {poll.name}
+                </Typography>
+              </Grid>
+              {poll.category === 2 && (
+                <Grid item container sm={12} md={4} alignItems="center">
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    className={classes.finishedInfo}
+                  >
+                    Finished{" "}
+                    {moment(poll.startTime).add(poll.duration).fromNow()}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
             <Grid item>
               <Typography
