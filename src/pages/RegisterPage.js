@@ -4,10 +4,12 @@ import { login } from "../mock/auth";
 import { Container, Grid, Link, TextField } from "@material-ui/core";
 import { ThemeButton } from "../components/ThemeButton";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
 
 export const RegisterPage = () => {
+  const classes = useStyles();
   const {
     register,
     handleSubmit,
@@ -18,12 +20,19 @@ export const RegisterPage = () => {
 
   const firstPassword = useRef({});
   firstPassword.current = watch("firstPassword", "");
+  const history = useHistory();
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    login();
+  const onSubmit = async ({ username, email, password }) => {
+    const response = await axios.post(
+      "https://pollapplication-dat250-group5.herokuapp.com/auth/signup",
+      { username: email, password }
+    );
+    console.log(response);
+    if (register.ok) {
+      history.push("/polls");
+    }
+    console.log(response);
   };
-  const classes = useStyles();
 
   return (
     <Container className={classes.container} maxWidth="xs">

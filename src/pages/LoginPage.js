@@ -4,21 +4,29 @@ import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { useForm } from "react-hook-form";
 import { TextField, Container, Grid, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link as RouterLink } from "react-router-dom";
-import { login } from "../mock/auth";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+import axios from "axios";
 
 export const LoginPage = () => {
+  const classes = useStyles();
   const {
     register,
     handleSubmit,
     errors,
     formState: { isSubmitting },
   } = useForm();
-  const onSubmit = async (data) => {
-    console.log(data);
-    login();
+  const history = useHistory();
+
+  const onSubmit = async ({ username, password }) => {
+    const response = await axios.post(
+      "https://pollapplication-dat250-group5.herokuapp.com/auth/signin",
+      { username, password }
+    );
+    if (register.ok) {
+      history.push("/polls");
+    }
+    console.log(response);
   };
-  const classes = useStyles();
 
   return (
     <Container className={classes.container} maxWidth="xs">
