@@ -14,7 +14,6 @@ import {
 import { AlertDialog } from "../components/AlertDialog";
 import moment from "moment";
 import { categorizePolls, filterPolls } from "../utils/categorizePolls";
-import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import { ResultModal } from "../components/ResultModal";
 import { ResultChart } from "../components/ResultChart";
@@ -78,7 +77,6 @@ export function UserPollsPage() {
   const theme = useTheme();
   const classes = useStyles();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const history = useHistory();
 
   const [tabValue, setTabValue] = useState(0);
   const [filteredPolls, setFilteredPolls] = useState([]);
@@ -90,7 +88,6 @@ export function UserPollsPage() {
   const [openResults, setOpenResults] = useState(false);
   const [selectedPollQuestion, setSelectedPollQuestion] = useState(null);
   const [selectedPollResults, setSelectedPollResult] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   // const [offset, setOffset] = useState(0);
@@ -99,7 +96,7 @@ export function UserPollsPage() {
   // const [pageCount, setPageCount] = useState(0);
   // const [currentPages, setCurrentPages] = useState([]);
 
-  const data = DUMMY_DATA2;
+  const data = DUMMY_DATA;
 
   useEffect(() => {
     setFilteredPolls(filterPolls(categorizePolls(data, tabValue), keyword));
@@ -128,43 +125,6 @@ export function UserPollsPage() {
     setOpenDeleteAlert(false);
     setOpenAlertDialog(true);
     setIsDeleting(false);
-  };
-
-  const onActivate = async (id) => {
-    setIsLoading(true);
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
-    if (response.ok) {
-      setStatusMessage("Poll activated");
-      setStatus("success");
-    } else {
-      setStatusMessage("Could not activate the poll. Please try again later");
-      setStatus("error");
-    }
-    setOpenAlertDialog(true);
-    setIsLoading(false);
-  };
-
-  const onEdit = (id) => {
-    history.push(`/polls/${id}`);
-  };
-
-  const onDisplayResults = async (id, question) => {
-    setIsLoading(true);
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve({ ok: true, data: { yes: 5, no: 1 } }), 1000);
-    });
-    if (response.ok) {
-      setSelectedPollResult([response.data]);
-      setSelectedPollQuestion(question);
-      setOpenResults(true);
-    } else {
-      setStatusMessage("Could not retrieve results. Please try again later");
-      setStatus("error");
-      setOpenAlertDialog(true);
-    }
-    setIsLoading(false);
   };
 
   const searchBar = (
@@ -242,11 +202,13 @@ export function UserPollsPage() {
           <Grid item>
             <PollList
               data={filteredPolls}
-              onEdit={onEdit}
-              onActivate={onActivate}
-              isLoading={isLoading}
-              onDisplayResults={onDisplayResults}
               setOpenDeleteAlert={setOpenDeleteAlert}
+              setSelectedPollResult={setSelectedPollResult}
+              setSelectedPollQuestion={setSelectedPollQuestion}
+              setOpenResults={setOpenResults}
+              setStatusMessage={setStatusMessage}
+              setStatus={setStatus}
+              setOpenAlertDialog={setOpenAlertDialog}
             />
           </Grid>
         )}
