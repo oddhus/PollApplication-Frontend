@@ -63,11 +63,12 @@ export const RegisterPage = () => {
             <TextField
               label="Password"
               name="firstPassword"
-              inputRef={register({ required: "You have to give a password!",
-                  minLength: {
-                      value: 8,
-                      message: "Password must be of length 8.",
-                  },
+              inputRef={register({
+                required: "You have to give a password!",
+                minLength: {
+                  value: 8,
+                  message: "Password must be of length 8.",
+                },
               })}
               error={!!errors.firstPassword}
               helperText={
@@ -85,10 +86,10 @@ export const RegisterPage = () => {
                 validate: (value) =>
                   value === firstPassword.current ||
                   "The passwords do not match",
-                  minLength: {
-                      value: 8,
-                      message: "Password must be of length 8.",
-                  },
+                minLength: {
+                  value: 8,
+                  message: "Password must be of length 8.",
+                },
               })}
               error={!!errors.secondPassword}
               helperText={
@@ -98,7 +99,7 @@ export const RegisterPage = () => {
             />
           </Grid>
           <Grid item>
-            <ThemeButton>
+            <ThemeButton type="submit">
               {isSubmitting ? <ThemeCircularProgress /> : "Registrer"}
             </ThemeButton>
           </Grid>
