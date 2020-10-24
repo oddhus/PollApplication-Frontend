@@ -10,7 +10,6 @@ import moment from "moment";
  */
 
 export function categorizePolls(polls, category) {
-  console.log("cate: ", category);
   return polls
     .map((poll) => {
       if (!poll.startTime) {

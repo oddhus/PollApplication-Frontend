@@ -6,6 +6,7 @@ import { TextField, Container, Grid, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import axios from "axios";
+import useUser from "../queries/use-user";
 
 export const LoginPage = () => {
   const classes = useStyles();
@@ -17,15 +18,14 @@ export const LoginPage = () => {
   } = useForm();
   const history = useHistory();
 
+  const { mutate } = useUser();
+
   const onSubmit = async ({ username, password }) => {
-    const response = await axios.post(
-      "https://pollapplication-dat250-group5.herokuapp.com/auth/signin",
-      { username, password }
-    );
-    if (register.ok) {
+    const response = await axios.post("/auth/signin", { username, password });
+    if (response.status === 200) {
+      mutate({ ...response.data });
       history.push("/polls");
     }
-    console.log(response);
   };
 
   return (

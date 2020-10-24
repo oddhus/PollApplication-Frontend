@@ -22,16 +22,15 @@ export const RegisterPage = () => {
   firstPassword.current = watch("firstPassword", "");
   const history = useHistory();
 
-  const onSubmit = async ({ username, email, password }) => {
-    const response = await axios.post(
-      "https://pollapplication-dat250-group5.herokuapp.com/auth/signup",
-      { username: email, password }
-    );
-    console.log(response);
-    if (register.ok) {
+  const onSubmit = async ({ username, email, firstPassword }) => {
+    const response = await axios.post("/auth/signup", {
+      username: email,
+      password: firstPassword,
+    });
+
+    if (response.status === 200) {
       history.push("/polls");
     }
-    console.log(response);
   };
 
   return (

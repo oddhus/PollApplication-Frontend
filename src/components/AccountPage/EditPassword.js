@@ -4,7 +4,7 @@ import { Controller } from "react-hook-form";
 
 export const EditPassword = ({ control, errors, watch }) => {
   const password = useRef({});
-  password.current = watch("password", "");
+  password.current = watch("newPassword", "");
   return (
     <React.Fragment>
       <Grid item xs={12} sm={8}>
@@ -22,12 +22,12 @@ export const EditPassword = ({ control, errors, watch }) => {
           size="small"
           variant="outlined"
           required
-          name="oldpassword"
+          name="oldPassword"
           label="Old Password"
           type="password"
           fullWidth
-          error={!!errors.oldpassword}
-          helperText={errors.oldpassword ? errors.oldpassword.message : ""}
+          error={!!errors.oldPassword}
+          helperText={errors.oldPassword ? errors.oldPassword.message : ""}
         />
       </Grid>
       <Grid item xs={12} sm={8}>
@@ -45,12 +45,12 @@ export const EditPassword = ({ control, errors, watch }) => {
           size="small"
           variant="outlined"
           required
-          name="password"
+          name="newPassword"
           label="New Password"
           type="password"
           fullWidth
-          error={!!errors.password}
-          helperText={errors.password ? errors.password.message : ""}
+          error={!!errors.newPassword}
+          helperText={errors.newPassword ? errors.newPassword.message : ""}
         />
       </Grid>
       <Grid item xs={12} sm={8}>

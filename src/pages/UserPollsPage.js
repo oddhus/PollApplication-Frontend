@@ -19,10 +19,16 @@ import { ResultModal } from "../components/ResultModal";
 import { ResultChart } from "../components/ResultChart";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { PollList } from "../components/PollList";
+import useSWR from "swr";
+import useMyPolls from "../queries/use-polls";
+import useUser from "../queries/use-user";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: 20,
+  },
+  notFound: {
+    paddingTop: theme.spacing(3),
   },
   searchBarContainer: {
     paddingLeft: theme.spacing(1),
@@ -96,11 +102,14 @@ export function UserPollsPage() {
   // const [pageCount, setPageCount] = useState(0);
   // const [currentPages, setCurrentPages] = useState([]);
 
-  const data = DUMMY_DATA;
+  const { user } = useUser();
+  const { polls, loading, error } = useMyPolls(user.id);
 
   useEffect(() => {
-    setFilteredPolls(filterPolls(categorizePolls(data, tabValue), keyword));
-  }, [tabValue, data, keyword]);
+    if (polls) {
+      setFilteredPolls(filterPolls(categorizePolls(polls, tabValue), keyword));
+    }
+  }, [tabValue, polls, keyword]);
 
   // useEffect(() => {
   //   setPageCount(Math.ceil(data.length / pollsPerPage));
@@ -115,7 +124,7 @@ export function UserPollsPage() {
     const response = await new Promise((resolve) => {
       setTimeout(() => resolve(true), 1000);
     });
-    if (response.ok) {
+    if (response.data) {
       setStatusMessage("Poll deleted!");
       setStatus("success");
     } else {
@@ -196,8 +205,12 @@ export function UserPollsPage() {
       </Paper>
       <Grid container direction="column" className={classes.container}>
         <Grid item>{searchBar}</Grid>
-        {!data ? (
+        {loading ? (
           <ThemeCircularProgress />
+        ) : filterPolls ? (
+          <Grid item container justify="center" className={classes.notFound}>
+            <Typography variant="h5">Found no polls...</Typography>
+          </Grid>
         ) : (
           <Grid item>
             <PollList

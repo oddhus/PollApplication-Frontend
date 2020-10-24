@@ -18,8 +18,8 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useHistory } from "react-router-dom";
-import useUser from "../data/use-user";
-import { logout } from "../mock/auth";
+import useUser from "../queries/use-user";
+import axios from "axios";
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -131,9 +131,9 @@ export const Navbar = () => {
     routes = adminRoutes;
   }
 
-  const onLogout = () => {
-    logout();
-    mutate(null);
+  const onLogout = async () => {
+    await axios.post("/auth/logout", {}, { withCredentials: true });
+    mutate("api_user", null);
     history.replace("/");
   };
 

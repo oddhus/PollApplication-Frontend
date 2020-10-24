@@ -7,10 +7,9 @@ import {
   AuthenticatedAppRoutes,
   UnauthenticatedAppRoutes,
 } from "./routes/routes";
-import useUser from "./data/use-user";
+import useUser from "./queries/use-user";
 
 export const App = () => {
-
   const { user, loading } = useUser();
 
   return (
