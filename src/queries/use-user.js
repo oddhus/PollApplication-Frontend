@@ -22,7 +22,9 @@ export const getMe = async (url) => {
 export default function useUser() {
   const { data, mutate, error } = useSWR("/users/me", getMe, {
     refreshInterval: 0,
-    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+    revalidateOnFocus: true,
+    revalidateOnMount: false,
   });
 
   const loading = !data && !error;
