@@ -30,8 +30,6 @@ export default function useUser() {
   const loading = !data && !error;
   const loggedOut = !data || error;
 
-  //console.log(error && error.status === 401);
-
   return {
     loading,
     loggedOut,
