@@ -133,7 +133,7 @@ export const Navbar = () => {
 
   const onLogout = async () => {
     await axios.post("/auth/logout", {}, { withCredentials: true });
-    mutate("api_user", null);
+    mutate(null);
     history.replace("/");
   };
 
