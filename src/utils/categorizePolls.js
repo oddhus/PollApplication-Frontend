@@ -1,7 +1,7 @@
 import moment from "moment";
 
 /**
- * Categorizes polls in three different categories: 0,1,2. And returns the category you want.
+ * Categorizes polls in three different categories: 0,1,2
  * 0: Have not started
  * 1: Ongoing
  * 2: Finished
