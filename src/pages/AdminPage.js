@@ -6,6 +6,7 @@ import Tab from "@material-ui/core/Tab";
 import dummyUsers from "../data/dummyUsers.json"
 import dummyPolls from "../data/dummyPolls.json"
 import { Typography } from "@material-ui/core";
+import { getDaysHoursMinFroSec } from "../utils/calculateTime"
 
 const userTitles = "Username, User nr"
 const pollTitles = "Question, Name, Duration, Start-time, Visibility Type, Owner"
@@ -27,11 +28,6 @@ class AdminPage extends Component {
     let lastElement = elements > listSize ? listSize : elements
     let firstElement = elements < 0 ? 0 : elements - this.state.prPage
 
-    console.log('elements: ' + elements)
-    console.log('listSize: ' + listSize)
-    console.log('lastElement: ' + lastElement)
-    console.log('firstElement: ' + firstElement)
-
     this.setState({
       firstElement: firstElement,
       lastElement: lastElement
@@ -51,40 +47,52 @@ class AdminPage extends Component {
       dummyUsers.slice(this.state.firstElement, this.state.lastElement) : dummyPolls.slice(this.state.firstElement, this.state.lastElement)
   }
 
-  setupData() {
-    console.log('START')
-    let objList = []
-    let i = 0
+  /*   setupData() {
+      console.log('START')
+      let objList = []
+      let i = 0
+  
+      let questionList = ["Vue > React", "Deno > Node", "Pinapple on pizza", "Banana on pizza", "Dogs are better than cats"]
+      let visibilityType = ["PUBLIC", "PRIVATE"]
+      let ownerList = ["Bjarne", "Admin", "CoolCat101", "Error404", "Gitchub", "BeerPongMaster"]
+      let pollNameList = ["Cool Poll", "best poll", "VOTE HERE :D ", "DONT VOTE!"]
+      let startTimeList = ["1997-07-16T19:20:30.45", "2015-02-05T19:22:25.31", "2020-08-18T23:59:01.20", "2020-12-24T10:20:21.15"]
+      let durationList = ["213", "23141234", "32598", "910237", "9264618"]
+  
+      while (i < 100) {
+        let obj = {}
+        obj['pollId'] = i
+        obj['question'] = questionList[Math.floor(Math.random() * questionList.length)]
+        obj['name'] = pollNameList[Math.floor(Math.random() * pollNameList.length)]
+        obj['duration'] = durationList[Math.floor(Math.random() * durationList.length)]
+        obj['start-time'] = startTimeList[Math.floor(Math.random() * startTimeList.length)]
+        obj['visibilityType'] = visibilityType[Math.floor(Math.random() * visibilityType.length)]
+        obj['owner'] = ownerList[Math.floor(Math.random() * ownerList.length)]
+        objList.push(obj)
+        i++
+      }
+      console.log(objList)
+    } */
 
-    let questionList = ["Vue > React", "Deno > Node", "Pinapple on pizza", "Banana on pizza", "Dogs are better than cats"]
-    let visibilityType = ["PUBLIC", "PRIVATE"]
-    let ownerList = ["Bjarne", "Admin", "CoolCat101", "Error404", "Gitchub", "BeerPongMaster"]
-    let pollNameList = ["Cool Poll", "best poll", "VOTE HERE :D ", "DONT VOTE!"]
-    let startTimeList = ["1997-07-16T19:20:30.45", "2015-02-05T19:22:25.31", "2020-08-18T23:59:01.20", "2020-12-24T10:20:21.15"]
-    let durationList = ["213", "23141234", "32598", "910237", "9264618"]
-
-    while (i < 100) {
-      let obj = {}
-      obj['pollId'] = i
-      obj['question'] = questionList[Math.floor(Math.random() * questionList.length)]
-      obj['name'] = pollNameList[Math.floor(Math.random() * pollNameList.length)]
-      obj['duration'] = durationList[Math.floor(Math.random() * durationList.length)]
-      obj['start-time'] = startTimeList[Math.floor(Math.random() * startTimeList.length)]
-      obj['visibilityType'] = visibilityType[Math.floor(Math.random() * visibilityType.length)]
-      obj['owner'] = ownerList[Math.floor(Math.random() * ownerList.length)]
-      objList.push(obj)
-      i++
+  fixTime(dataset) {
+    let newDataset = []
+    let object0 = dataset[0]
+    if (object0['duration'] !== undefined) {
+      for (const obj of dataset) {
+        obj['duration'] = getDaysHoursMinFroSec(parseInt(obj['duration']))
+        newDataset.push(obj)
+      }
     }
-    console.log(objList)
+    console.log(newDataset)
   }
 
+  componentDidMount(){
+    this.fixTime(dummyPolls)
+  }
 
   render() {
     return (
       <div>
-        <Typography>
-          Showing {this.state.lastElement} / {this.state.tabValue === 0 ? dummyUsers.length : dummyPolls.length}
-        </Typography>
         <Tabs
           value={this.state.tabValue}
           onChange={this.handleChange}
@@ -95,6 +103,9 @@ class AdminPage extends Component {
           <Tab label="Users" />
           <Tab label="Polls" />
         </Tabs>
+        <Typography>
+          Showing {this.state.lastElement} / {this.state.tabValue === 0 ? dummyUsers.length : dummyPolls.length}
+        </Typography>
         <Table
           coloumnTitles={this.state.tabValue === 0 ? userTitles : pollTitles}
           data={this.getList()} />

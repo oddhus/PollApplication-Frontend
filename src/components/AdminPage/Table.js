@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
+import Popover from '@material-ui/core/Popover';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import PopupState, { bindToggle, bindPopover } from 'material-ui-popup-state';
 
 
 const CustomTableCell = withStyles(theme => ({
@@ -15,7 +20,7 @@ const CustomTableCell = withStyles(theme => ({
     color: theme.palette.common.black,
   },
   body: {
-    fontSize: 14,
+    fontSize: 15,
   },
 }))(TableCell);
 
@@ -31,23 +36,61 @@ const styles = theme => ({
       backgroundColor: theme.palette.background.white,
     },
   },
+  deleteBtn: {
+    backgroundColor: "#f44336",
+    marginLeft: theme.spacing(2)
+  },
+  viewBtn: {
+    marginRight: theme.spacing(2)
+  },
+  popOver: {
+    textAlign: "center"
+  },
+  pollName: {
+    fontSize: 20,
+    fontWeigth: "bold",
+    marginBottom: theme.spacing(2)
+  }
 });
 
 
 function setupTableBody(classes, data) {
   let i = 0;
-
   return data.map(row => (
-    <TableRow className={classes.row} key={row.log_id}>
-      {Object.keys(row).slice(1).map(name => (
-        <CustomTableCell key={i++}>{row[name]}</CustomTableCell>
-      ))}
-    </TableRow>
+    <PopupState variant="popover" popupId="popup-popover">
+      {(popupState) => (
+        <TableRow {...bindToggle(popupState)} className={classes.row} key={row.id}>
+          {Object.keys(row).slice(1).map(name => (
+            <CustomTableCell key={i++}>{row[name]}</CustomTableCell>
+          ))}
+          <Popover
+            {...bindPopover(popupState)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+          >
+            <Box p={2} className={classes.popOver}>
+              <Typography className={classes.pollName}>{row.username === undefined ? row.pollName : row.username}</Typography>
+              <Typography className={classes.pollName}>{row.id}</Typography>
+
+              {row.pollName ? <Button className={classes.viewBtn} variant="contained" color="primary">View</Button> : null}
+              <Button variant="contained" color="secondary">Edit</Button>
+              <Button className={classes.deleteBtn} variant="contained">Delete</Button>
+            </Box>
+          </Popover>
+        </TableRow>
+      )}
+    </PopupState>
   ))
 }
 
 function CustomizableTable(props) {
-  const {classes, coloumnTitles, data} = props;
+  const { classes, coloumnTitles, data } = props;
 
   let rowNames = coloumnTitles.split(', ').map(columnTitle =>
     <CustomTableCell key={columnTitle}>{columnTitle}</CustomTableCell>);
