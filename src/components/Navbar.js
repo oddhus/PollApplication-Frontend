@@ -102,7 +102,7 @@ export const Navbar = () => {
   const [value, setValue] = useState(0);
   const history = useHistory();
 
-  const { user, mutate, loading } = useUser();
+  const { user, mutate, loggedOut } = useUser();
 
   const guestRoutes = [
     { name: "Login", link: "/login", activeIndex: 0 },
@@ -123,7 +123,7 @@ export const Navbar = () => {
 
   let routes = [];
 
-  if (loading || !user) {
+  if (loggedOut) {
     routes = guestRoutes;
   } else if (user && !user.admin) {
     routes = userRoutes;
@@ -143,6 +143,13 @@ export const Navbar = () => {
     setValue(!selectedRoute ? false : selectedRoute.activeIndex);
   }, [routes]);
 
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    if (loggedOut && !guestRoutes.find((route) => route.link === pathname)) {
+      history.replace("/");
+    }
+  });
+
   const tabs = (
     <React.Fragment>
       <Tabs
@@ -159,7 +166,7 @@ export const Navbar = () => {
           />
         ))}
       </Tabs>
-      {!loading && user && (
+      {!loggedOut && (
         <Button className={classes.button} onClick={onLogout}>
           Logout
         </Button>
@@ -197,7 +204,7 @@ export const Navbar = () => {
             </ListItem>
           ))}
         </List>
-        {!loading && user && (
+        {!loggedOut && (
           <Button
             className={classes.button}
             onClick={onLogout}
