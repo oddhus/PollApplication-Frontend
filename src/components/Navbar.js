@@ -148,7 +148,7 @@ export const Navbar = () => {
     if (loggedOut && !guestRoutes.find((route) => route.link === pathname)) {
       history.replace("/");
     }
-  });
+  }, [loggedOut, history, guestRoutes]);
 
   const tabs = (
     <React.Fragment>

@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { AlertDialog } from "../components/AlertDialog";
 import moment from "moment";
-import { categorizePolls, filterPolls } from "../utils/categorizePolls";
+import { filterCategory, filterPolls } from "../utils/categorizePolls";
 import { StatusBar } from "../components/StatusBar";
 import { ResultModal } from "../components/ResultModal";
 import { ResultChart } from "../components/ResultChart";
@@ -22,7 +22,6 @@ import { PollList } from "../components/PollList";
 import useMyPolls from "../queries/use-polls";
 import useUser from "../queries/use-user";
 import axios from "axios";
-import { mutate } from "swr";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -99,11 +98,11 @@ export function UserPollsPage() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { user } = useUser();
-  const { polls, loading, mutate, error } = useMyPolls(user.id);
+  const { polls, loading, mutate } = useMyPolls(user.id);
 
   useEffect(() => {
     if (polls) {
-      setFilteredPolls(filterPolls(categorizePolls(polls, tabValue), keyword));
+      setFilteredPolls(filterPolls(filterCategory(polls, tabValue), keyword));
     }
   }, [tabValue, polls, keyword, loading]);
 

@@ -1,14 +1,14 @@
 import useSWR from "swr";
 import axios from "axios";
+import { categorizePolls } from "../utils/categorizePolls";
 
 const getPolls = async (url) => {
   try {
     const response = await axios.get(url);
     if (response.status === 200) {
-      return response.data;
+      return categorizePolls(response.data);
     }
   } catch (err) {
-    console.log(err);
     const error = new Error("Not authorized!");
     error.status = err.response.status;
     throw error;

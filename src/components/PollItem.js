@@ -15,6 +15,9 @@ import { useHistory } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import usePollResult from "../queries/use-results";
+import useSWR from "swr";
+import useUser from "../queries/use-user";
+import useMyPolls from "../queries/use-polls";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -69,15 +72,26 @@ export function PollItem({
   const [isLoading, setIsLoading] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(false);
 
-  const { data, error } = usePollResult(shouldFetch, poll.id);
+  const { user } = useUser();
+  const { mutate } = useMyPolls(user.id);
 
   const onActivate = async (id) => {
     setIsLoading(true);
-    const response = await axios.patch(`/polls/${id}`, {});
-    if (response.data) {
-      setStatusMessage("Poll activated");
-      setStatus("success");
-    } else {
+    try {
+      const response = await axios.patch(`/polls/${id}`, {});
+      if (response.data) {
+        mutate((polls) =>
+          polls.map((poll) =>
+            poll.id === id ? { ...poll, category: 1 } : poll
+          )
+        );
+        setStatusMessage("Poll activated");
+        setStatus("success");
+      } else {
+        setStatusMessage("Could not activate the poll. Please try again later");
+        setStatus("error");
+      }
+    } catch (error) {
       setStatusMessage("Could not activate the poll. Please try again later");
       setStatus("error");
     }
@@ -119,7 +133,7 @@ export function PollItem({
                   color="textSecondary"
                   noWrap
                 >
-                  {poll.name}
+                  {poll.pollName}
                 </Typography>
               </Grid>
               {poll.category === 2 && (

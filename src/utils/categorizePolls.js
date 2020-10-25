@@ -9,23 +9,25 @@ import moment from "moment";
  * @param category Returns polls of desired category
  */
 
-export function categorizePolls(polls, category) {
-  return polls
-    .map((poll) => {
-      if (!poll.startTime) {
-        poll.category = 0;
-        return poll;
-      } else if (
-        moment(poll.startTime).add(poll.duration, "seconds").isAfter(moment())
-      ) {
-        poll.category = 1;
-        return poll;
-      } else {
-        poll.category = 2;
-        return poll;
-      }
-    })
-    .filter((poll) => poll.category === category);
+export function categorizePolls(polls) {
+  return polls.map((poll) => {
+    if (!poll.startTime) {
+      poll.category = 0;
+      return poll;
+    } else if (
+      moment(poll.startTime).add(poll.duration, "seconds").isAfter(moment())
+    ) {
+      poll.category = 1;
+      return poll;
+    } else {
+      poll.category = 2;
+      return poll;
+    }
+  });
+}
+
+export function filterCategory(polls, category) {
+  return polls.filter((poll) => poll.category === category);
 }
 
 export function filterPolls(polls, keyword) {
