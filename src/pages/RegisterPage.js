@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
-import { login } from "../mock/auth";
 import { Container, Grid, Link, TextField } from "@material-ui/core";
 import { ThemeButton } from "../components/ThemeButton";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import useUser from "../queries/use-user";
 
 export const RegisterPage = () => {
   const classes = useStyles();
@@ -21,6 +21,7 @@ export const RegisterPage = () => {
   const firstPassword = useRef({});
   firstPassword.current = watch("firstPassword", "");
   const history = useHistory();
+  const { mutate } = useUser();
 
   const onSubmit = async ({ username, email, firstPassword }) => {
     const response = await axios.post("/auth/signup", {
@@ -29,6 +30,7 @@ export const RegisterPage = () => {
     });
 
     if (response.status === 200) {
+      mutate({ ...response.data });
       history.push("/polls");
     }
   };
