@@ -11,11 +11,11 @@ import {
 import { DangerButton } from "../components/DangerButton";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { ThemeButton } from "../components/ThemeButton";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import useUser from "../queries/use-user";
-import useMyPolls from "../queries/use-polls";
+import useMyPolls from "../queries/use-mypolls";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: 0,
       paddingLeft: 10,
     },
+  },
+  linkContainer: {
+    textDecoration: "none",
   },
   pollContainer: {
     marginBottom: theme.spacing(2),
@@ -125,7 +128,13 @@ export function PollItem({
       <Paper>
         <Grid item container direction="row">
           <Grid item container direction="column" sm={6} md={8}>
-            <Grid item container>
+            <Grid
+              item
+              container
+              component={Link}
+              to={{ pathname: `/result/${poll.id}`, query: poll }}
+              className={classes.linkContainer}
+            >
               <Grid item>
                 <Typography
                   variant="h5"

@@ -143,4 +143,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(3),
   },
+  error: {
+    color: theme.palette.error.main,
+  },
 }));

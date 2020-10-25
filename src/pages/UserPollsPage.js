@@ -12,14 +12,13 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { AlertDialog } from "../components/AlertDialog";
-import moment from "moment";
 import { filterCategory, filterPolls } from "../utils/categorizePolls";
 import { StatusBar } from "../components/StatusBar";
 import { ResultModal } from "../components/ResultModal";
 import { ResultChart } from "../components/ResultChart";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { PollList } from "../components/PollList";
-import useMyPolls from "../queries/use-polls";
+import useMyPolls from "../queries/use-mypolls";
 import useUser from "../queries/use-user";
 import axios from "axios";
 
@@ -36,48 +35,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
   },
 }));
-
-let DUMMY_DATA2 = [];
-for (let index = 0; index < 100; index++) {
-  DUMMY_DATA2[index] = {
-    id: index,
-    name: "Another Not activated",
-    question: "Use the keyword gruppe 5?",
-    startTime: undefined,
-    duration: 10000,
-  };
-}
-
-const DUMMY_DATA = [
-  {
-    id: 123,
-    name: "My awesome poll",
-    question: "Pineapple pizza?",
-    startTime: moment().subtract(2, "days").get(),
-    duration: 1000,
-  },
-  {
-    id: 1234,
-    name: "My awesome poll",
-    question: "Do you prefer React?",
-    startTime: moment(),
-    duration: 10000,
-  },
-  {
-    id: 12345,
-    name: "Not activated",
-    question: "Do you prefer Vue?",
-    startTime: undefined,
-    duration: 10000,
-  },
-  {
-    id: 123456,
-    name: "Another Not activated",
-    question: "Use the keyword gruppe 5?",
-    startTime: undefined,
-    duration: 10000,
-  },
-];
 
 export function UserPollsPage() {
   const theme = useTheme();
@@ -122,8 +79,7 @@ export function UserPollsPage() {
         setStatusMessage("Poll deleted!");
         setStatus("success");
       } else {
-        setStatusMessage("Could not delete the poll. Please try again later");
-        setStatus("error");
+        throw new Error();
       }
     } catch (error) {
       setStatusMessage("Could not delete the poll. Please try again later");

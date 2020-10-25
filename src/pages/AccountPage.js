@@ -60,19 +60,21 @@ export const AccountPage = () => {
   }, [user, reset]);
 
   const onSubmit = async ({ email, newPassword, oldPassword }) => {
-    const response = await axios.patch(`/users/${user.id}`, {
-      username: email,
-      newPassword,
-      oldPassword,
-    });
-
-    if (response.data) {
-      mutate({ ...user, ...(email && { username: email }) });
-      setStatusMessage(`${newPassword ? "Password" : "Email"} updated!`);
-      setOpenStatus(true);
-      setEditPassword(false);
-      setEditEmail(false);
-    } else {
+    try {
+      const response = await axios.patch(`/users/${user.id}`, {
+        username: email,
+        newPassword,
+        oldPassword,
+      });
+      if (response.data) {
+        mutate({ ...user, ...(email && { username: email }) });
+        setStatusMessage(`${newPassword ? "Password" : "Email"} updated!`);
+        setOpenStatus(true);
+        setEditPassword(false);
+        setEditEmail(false);
+      }
+      throw new Error();
+    } catch (error) {
       setStatusMessage("Failed to update your settings");
       setIsSuccess("error");
       setOpenStatus(true);
@@ -80,12 +82,16 @@ export const AccountPage = () => {
   };
 
   const onDelete = async () => {
-    const response = await axios.delete(`/users/${user.id}`);
-    if (response.data) {
-      mutate(null);
-      setOpenAlertDialog(false);
-      history.push("/");
-    } else {
+    try {
+      const response = await axios.delete(`/users/${user.id}`);
+      if (response.data) {
+        mutate(null);
+        setOpenAlertDialog(false);
+        history.push("/");
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
       setStatusMessage("Failed to delete your account");
       setIsSuccess("error");
       setOpenStatus(true);
