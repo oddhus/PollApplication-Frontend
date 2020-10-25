@@ -115,7 +115,10 @@ export function UserPollsPage() {
     try {
       const response = await axios.delete(`/polls/${pollToDelete}`);
       if (response.data) {
-        mutate();
+        mutate((polls) => {
+          const index = polls.findIndex((poll) => poll.id === pollToDelete);
+          return [...polls.slice(index)];
+        });
         setStatusMessage("Poll deleted!");
         setStatus("success");
       } else {
