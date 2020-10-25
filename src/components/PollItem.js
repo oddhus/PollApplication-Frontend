@@ -13,6 +13,8 @@ import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { ThemeButton } from "../components/ThemeButton";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
+import axios from "axios";
+import usePollResult from "../queries/use-results";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -55,6 +57,7 @@ export function PollItem({
   setSelectedPollResult,
   setSelectedPollQuestion,
   setOpenResults,
+  setPollToDelete,
   setStatusMessage,
   setStatus,
   setOpenAlertDialog,
@@ -64,13 +67,14 @@ export function PollItem({
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  const { data, error } = usePollResult(shouldFetch, poll.id);
 
   const onActivate = async (id) => {
     setIsLoading(true);
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
-    if (response.ok) {
+    const response = await axios.patch(`/polls/${id}`, {});
+    if (response.data) {
       setStatusMessage("Poll activated");
       setStatus("success");
     } else {
@@ -153,7 +157,10 @@ export function PollItem({
             <Grid item className={classes.buttonContainer}>
               <DangerButton
                 size={xs ? "small" : "medium"}
-                onClick={() => setOpenDeleteAlert(true)}
+                onClick={() => {
+                  setPollToDelete(poll.id);
+                  setOpenDeleteAlert(true);
+                }}
               >
                 Delete
               </DangerButton>

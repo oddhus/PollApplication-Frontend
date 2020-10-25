@@ -19,9 +19,10 @@ import { ResultModal } from "../components/ResultModal";
 import { ResultChart } from "../components/ResultChart";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { PollList } from "../components/PollList";
-import useSWR from "swr";
 import useMyPolls from "../queries/use-polls";
 import useUser from "../queries/use-user";
+import axios from "axios";
+import { mutate } from "swr";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -91,48 +92,44 @@ export function UserPollsPage() {
   const [status, setStatus] = useState("success");
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+  const [pollToDelete, setPollToDelete] = useState(null);
   const [openResults, setOpenResults] = useState(false);
   const [selectedPollQuestion, setSelectedPollQuestion] = useState(null);
   const [selectedPollResults, setSelectedPollResult] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // const [offset, setOffset] = useState(0);
-  // const [pageNumber, setPageNumber] = useState(1);
-  // const [pollsPerPage, setPollsPerPage] = useState(5);
-  // const [pageCount, setPageCount] = useState(0);
-  // const [currentPages, setCurrentPages] = useState([]);
-
   const { user } = useUser();
-  const { polls, loading, error } = useMyPolls(user.id);
+  const { polls, loading, mutate, error } = useMyPolls(user.id);
 
   useEffect(() => {
     if (polls) {
       setFilteredPolls(filterPolls(categorizePolls(polls, tabValue), keyword));
     }
-  }, [tabValue, polls, keyword]);
-
-  // useEffect(() => {
-  //   setPageCount(Math.ceil(data.length / pollsPerPage));
-  // }, [data, pollsPerPage]);
+  }, [tabValue, polls, keyword, loading]);
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  const onDelete = async (id) => {
+  const onDelete = async () => {
     setIsDeleting(true);
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
-    if (response.data) {
-      setStatusMessage("Poll deleted!");
-      setStatus("success");
-    } else {
+    try {
+      const response = await axios.delete(`/polls/${pollToDelete}`);
+      if (response.data) {
+        mutate();
+        setStatusMessage("Poll deleted!");
+        setStatus("success");
+      } else {
+        setStatusMessage("Could not delete the poll. Please try again later");
+        setStatus("error");
+      }
+    } catch (error) {
       setStatusMessage("Could not delete the poll. Please try again later");
       setStatus("error");
     }
     setOpenDeleteAlert(false);
     setOpenAlertDialog(true);
+    setPollToDelete(null);
     setIsDeleting(false);
   };
 
@@ -207,7 +204,7 @@ export function UserPollsPage() {
         <Grid item>{searchBar}</Grid>
         {loading ? (
           <ThemeCircularProgress />
-        ) : filterPolls ? (
+        ) : filteredPolls.length === 0 ? (
           <Grid item container justify="center" className={classes.notFound}>
             <Typography variant="h5">Found no polls...</Typography>
           </Grid>
@@ -219,6 +216,7 @@ export function UserPollsPage() {
               setSelectedPollResult={setSelectedPollResult}
               setSelectedPollQuestion={setSelectedPollQuestion}
               setOpenResults={setOpenResults}
+              setPollToDelete={setPollToDelete}
               setStatusMessage={setStatusMessage}
               setStatus={setStatus}
               setOpenAlertDialog={setOpenAlertDialog}

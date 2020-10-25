@@ -8,6 +8,7 @@ export function PollList({
   setSelectedPollResult,
   setSelectedPollQuestion,
   setOpenResults,
+  setPollToDelete,
   setStatusMessage,
   setStatus,
   setOpenAlertDialog,
@@ -22,6 +23,7 @@ export function PollList({
           setSelectedPollResult={setSelectedPollResult}
           setSelectedPollQuestion={setSelectedPollQuestion}
           setOpenResults={setOpenResults}
+          setPollToDelete={setPollToDelete}
           setStatusMessage={setStatusMessage}
           setStatus={setStatus}
           setOpenAlertDialog={setOpenAlertDialog}

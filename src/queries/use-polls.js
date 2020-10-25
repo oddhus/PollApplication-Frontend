@@ -5,11 +5,10 @@ const getPolls = async (url) => {
   try {
     const response = await axios.get(url);
     if (response.status === 200) {
-      return {
-        polls: response.data.json(),
-      };
+      return response.data;
     }
   } catch (err) {
+    console.log(err);
     const error = new Error("Not authorized!");
     error.status = err.response.status;
     throw error;
