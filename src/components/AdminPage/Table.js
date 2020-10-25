@@ -54,7 +54,7 @@ const styles = theme => ({
 });
 
 
-function setupTableBody(classes, data) {
+function setupTableBody(classes, data, onClickView, onClickEdit, onClickDelete) {
   let i = 0;
   return data.map(row => (
     <PopupState variant="popover" popupId="popup-popover">
@@ -78,9 +78,9 @@ function setupTableBody(classes, data) {
               <Typography className={classes.pollName}>{row.username === undefined ? row.pollName : row.username}</Typography>
               <Typography className={classes.pollName}>{row.id}</Typography>
 
-              {row.pollName ? <Button className={classes.viewBtn} variant="contained" color="primary">View</Button> : null}
-              <Button variant="contained" color="secondary">Edit</Button>
-              <Button className={classes.deleteBtn} variant="contained">Delete</Button>
+              {row.pollName ? <Button onClick={() => onClickView(row.id)} className={classes.viewBtn} variant="contained" color="primary">View</Button> : null}
+              <Button onClick={() => onClickEdit(row.id)} variant="contained" color="secondary">Edit</Button>
+              <Button onClick={() => onClickDelete(row.id)} className={classes.deleteBtn} variant="contained">Delete</Button>
             </Box>
           </Popover>
         </TableRow>
@@ -90,7 +90,7 @@ function setupTableBody(classes, data) {
 }
 
 function CustomizableTable(props) {
-  const { classes, coloumnTitles, data } = props;
+  const { classes, coloumnTitles, data, onClickView, onClickEdit, onClickDelete } = props;
 
   let rowNames = coloumnTitles.split(', ').map(columnTitle =>
     <CustomTableCell key={columnTitle}>{columnTitle}</CustomTableCell>);
@@ -104,7 +104,7 @@ function CustomizableTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {setupTableBody(classes, data)}
+          {setupTableBody(classes, data, onClickView, onClickEdit, onClickDelete)}
         </TableBody>
       </Table>
     </Paper>
