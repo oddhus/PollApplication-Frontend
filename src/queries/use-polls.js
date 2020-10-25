@@ -2,17 +2,18 @@ import useSWR from "swr";
 import axios from "axios";
 
 const getPolls = async (url) => {
-  const response = await axios.get(url);
-
-  if (response.status === 200) {
-    return {
-      polls: response.data.json(),
-    };
+  try {
+    const response = await axios.get(url);
+    if (response.status === 200) {
+      return {
+        polls: response.data.json(),
+      };
+    }
+  } catch (err) {
+    const error = new Error("Not authorized!");
+    error.status = err.response.status;
+    throw error;
   }
-
-  const error = new Error("Not authorized!");
-  error.status = 403;
-  throw error;
 };
 
 export default function useMyPolls(id) {

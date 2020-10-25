@@ -1,30 +1,34 @@
 import useSWR from "swr";
 import axios from "axios";
 
-const getMe = async () => {
-  const response = await axios.get("/users/me");
-
-  if (response.status === 200) {
-    return {
-      id: response.data.id,
-      email: response.data.username,
-      admin: response.data.isAdmin,
-      roles: response.data.roles,
-    };
+export const getMe = async (url) => {
+  try {
+    const response = await axios.get(url);
+    if (response.status === 200) {
+      return {
+        id: response.data.id,
+        email: response.data.username,
+        admin: response.data.isAdmin,
+        roles: response.data.roles,
+      };
+    }
+  } catch (err) {
+    const error = new Error("Not authorized!");
+    error.status = err.response.status;
+    throw error;
   }
-
-  const error = new Error("Not authorized!");
-  error.status = 403;
-  throw error;
 };
 
 export default function useUser() {
-  const { data, mutate, error } = useSWR("api_user", getMe, {
+  const { data, mutate, error } = useSWR("/users/me", getMe, {
     refreshInterval: 0,
+    revalidateOnFocus: false,
   });
 
   const loading = !data && !error;
-  const loggedOut = error && error.status === 403;
+  const loggedOut = !data || error;
+
+  //console.log(error && error.status === 401);
 
   return {
     loading,
