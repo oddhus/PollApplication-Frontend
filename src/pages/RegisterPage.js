@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Container, Grid, Link, TextField } from "@material-ui/core";
 import { ThemeButton } from "../components/ThemeButton";
@@ -21,17 +21,27 @@ export const RegisterPage = () => {
   const firstPassword = useRef({});
   firstPassword.current = watch("firstPassword", "");
   const history = useHistory();
+  const [errorMessage, setErrorMessage] = useState("");
   const { mutate } = useUser();
 
   const onSubmit = async ({ username, email, firstPassword }) => {
-    const response = await axios.post("/auth/signup", {
-      username: email,
-      password: firstPassword,
-    });
-
-    if (response.status === 200) {
-      mutate({ ...response.data });
-      history.push("/polls");
+    try {
+      const response = await axios.post("/auth/signup", {
+        username: email,
+        password: firstPassword,
+      });
+      if (response.status === 200) {
+        mutate({ ...response.data });
+        history.push("/polls");
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      setErrorMessage(
+        error.response
+          ? error.response.data
+          : "Could not complete the registration"
+      );
     }
   };
 
@@ -108,6 +118,11 @@ export const RegisterPage = () => {
               type="password"
             />
           </Grid>
+          {errorMessage && (
+            <Grid item className={classes.error}>
+              {errorMessage}
+            </Grid>
+          )}
           <Grid item>
             <ThemeButton type="submit">
               {isSubmitting ? <ThemeCircularProgress /> : "Registrer"}
