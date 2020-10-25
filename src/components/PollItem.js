@@ -14,8 +14,6 @@ import { ThemeButton } from "../components/ThemeButton";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
-import usePollResult from "../queries/use-results";
-import useSWR from "swr";
 import useUser from "../queries/use-user";
 import useMyPolls from "../queries/use-polls";
 
@@ -70,7 +68,6 @@ export function PollItem({
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
-  const [shouldFetch, setShouldFetch] = useState(false);
 
   const { user } = useUser();
   const { mutate } = useMyPolls(user.id);
@@ -88,11 +85,14 @@ export function PollItem({
         setStatusMessage("Poll activated");
         setStatus("success");
       } else {
-        setStatusMessage("Could not activate the poll. Please try again later");
-        setStatus("error");
+        throw new Error();
       }
     } catch (error) {
-      setStatusMessage("Could not activate the poll. Please try again later");
+      setStatusMessage(
+        error.response
+          ? error.response.data.error
+          : "Could not activate the poll. Please try again later"
+      );
       setStatus("error");
     }
     setOpenAlertDialog(true);
