@@ -1,13 +1,15 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { login } from "../mock/auth";
 import { Container, Grid, Link, TextField } from "@material-ui/core";
 import { ThemeButton } from "../components/ThemeButton";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
+import useUser from "../queries/use-user";
 
 export const RegisterPage = () => {
+  const classes = useStyles();
   const {
     register,
     handleSubmit,
@@ -18,12 +20,30 @@ export const RegisterPage = () => {
 
   const firstPassword = useRef({});
   firstPassword.current = watch("firstPassword", "");
+  const history = useHistory();
+  const [errorMessage, setErrorMessage] = useState("");
+  const { mutate } = useUser();
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    login();
+  const onSubmit = async ({ username, email, firstPassword }) => {
+    try {
+      const response = await axios.post("/auth/signup", {
+        username: email,
+        password: firstPassword,
+      });
+      if (response.status === 200) {
+        mutate({ ...response.data });
+        history.push("/polls");
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      setErrorMessage(
+        error.response
+          ? error.response.data
+          : "Could not complete the registration"
+      );
+    }
   };
-  const classes = useStyles();
 
   return (
     <Container className={classes.container} maxWidth="xs">
@@ -98,6 +118,11 @@ export const RegisterPage = () => {
               type="password"
             />
           </Grid>
+          {errorMessage && (
+            <Grid item className={classes.error}>
+              {errorMessage}
+            </Grid>
+          )}
           <Grid item>
             <ThemeButton type="submit">
               {isSubmitting ? <ThemeCircularProgress /> : "Registrer"}
@@ -117,5 +142,8 @@ export const RegisterPage = () => {
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(3),
+  },
+  error: {
+    color: theme.palette.error.main,
   },
 }));

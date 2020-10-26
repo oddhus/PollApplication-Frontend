@@ -5,9 +5,10 @@ import { PollItem } from "./PollItem";
 export function PollList({
   data,
   setOpenDeleteAlert,
-  setSelectedPollResult,
+  setSelectedPollId,
   setSelectedPollQuestion,
   setOpenResults,
+  setPollToDelete,
   setStatusMessage,
   setStatus,
   setOpenAlertDialog,
@@ -19,9 +20,10 @@ export function PollList({
           key={poll.id}
           setOpenDeleteAlert={setOpenDeleteAlert}
           poll={poll}
-          setSelectedPollResult={setSelectedPollResult}
+          setSelectedPollId={setSelectedPollId}
           setSelectedPollQuestion={setSelectedPollQuestion}
           setOpenResults={setOpenResults}
+          setPollToDelete={setPollToDelete}
           setStatusMessage={setStatusMessage}
           setStatus={setStatus}
           setOpenAlertDialog={setOpenAlertDialog}

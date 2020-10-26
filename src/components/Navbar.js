@@ -18,8 +18,8 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useHistory } from "react-router-dom";
-import useUser from "../data/use-user";
-import { logout } from "../mock/auth";
+import useUser from "../queries/use-user";
+import axios from "axios";
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -102,7 +102,7 @@ export const Navbar = () => {
   const [value, setValue] = useState(0);
   const history = useHistory();
 
-  const { user, mutate, loading } = useUser();
+  const { user, mutate, loggedOut } = useUser();
 
   const guestRoutes = [
     { name: "Login", link: "/login", activeIndex: 0 },
@@ -123,7 +123,7 @@ export const Navbar = () => {
 
   let routes = [];
 
-  if (loading || !user) {
+  if (loggedOut) {
     routes = guestRoutes;
   } else if (user && !user.admin) {
     routes = userRoutes;
@@ -131,8 +131,8 @@ export const Navbar = () => {
     routes = adminRoutes;
   }
 
-  const onLogout = () => {
-    logout();
+  const onLogout = async () => {
+    await axios.post("/auth/logout", {});
     mutate(null);
     history.replace("/");
   };
@@ -142,6 +142,13 @@ export const Navbar = () => {
     const selectedRoute = routes.find((route) => route.link === pathname);
     setValue(!selectedRoute ? false : selectedRoute.activeIndex);
   }, [routes]);
+
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    if (loggedOut && !guestRoutes.find((route) => route.link === pathname)) {
+      history.replace("/");
+    }
+  }, [loggedOut, history, guestRoutes]);
 
   const tabs = (
     <React.Fragment>
@@ -159,7 +166,7 @@ export const Navbar = () => {
           />
         ))}
       </Tabs>
-      {!loading && user && (
+      {!loggedOut && (
         <Button className={classes.button} onClick={onLogout}>
           Logout
         </Button>
@@ -197,7 +204,7 @@ export const Navbar = () => {
             </ListItem>
           ))}
         </List>
-        {!loading && user && (
+        {!loggedOut && (
           <Button
             className={classes.button}
             onClick={onLogout}
