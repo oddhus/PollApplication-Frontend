@@ -246,7 +246,7 @@ class CreateEditPollPage extends Component {
             <Grid item>
               <TextField
                 className={classes.textInput}
-                id="title"
+                id="pollName"
                 label="Title"
                 onChange={this.handleInputChange}
                 inputProps={{ value: this.state.pollName }}

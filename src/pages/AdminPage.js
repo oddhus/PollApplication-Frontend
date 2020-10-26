@@ -4,7 +4,6 @@ import PaginateButtons from "../components/AdminPage/PaginationButtons";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { TextField } from "@material-ui/core/";
-import dummyUsers from "../data/dummyUsers.json";
 import dummyPolls from "../data/dummyPolls.json";
 import {
   Typography,
@@ -25,6 +24,7 @@ import {
   categorizePolls,
   filterCategory,
 } from "../utils/categorizePolls";
+import axios from "axios";
 
 const USER_TITLES = "Username, User nr";
 const POLL_TITLES =
@@ -33,7 +33,7 @@ const USER_ATTRIBUTES = ["username", "id"];
 const POLL_ATTRIBUTES = [
   "id",
   "question",
-  "duration",
+  "pollDuration",
   "startTime",
   "visibilityType",
   "owner",
@@ -49,12 +49,14 @@ class AdminPage extends Component {
       lastElement: 10,
       currentPage: 1,
       openResults: false,
-      data: dummyPolls,
-      originalData: [],
+      data: [],
+      originalPolls: [],
+      originalUsers: [],
       questionFilter: "",
       ownerFilter: "",
       usernameFilter: "",
       radioBtnsValue: "all",
+      selectedPollId: null,
     };
     this.onClickView = this.onClickView.bind(this);
     this.setOpenResults = this.setOpenResults.bind(this);
@@ -80,8 +82,8 @@ class AdminPage extends Component {
       tabValue: newValue,
       firstElement: 0,
       lastElement: 10,
-      data: newValue === 1 ? dummyPolls : dummyUsers,
-      originalData: newValue === 1 ? dummyPolls : dummyUsers,
+      data:
+        newValue === 1 ? this.state.originalPolls : this.state.originalUsers,
       questionFilter: "",
       ownerFilter: "",
       radioBtnsValue: "all",
@@ -103,8 +105,10 @@ class AdminPage extends Component {
     if (dataset.length > 0 && this.state.tabValue === 1) {
       let newDataset = [];
       for (const obj of dataset) {
-        if (obj["duration"] !== undefined && !isNaN(obj["duration"])) {
-          obj["duration"] = getDaysHoursMinFroSec(parseInt(obj["duration"]));
+        if (obj["pollDuration"] !== undefined && !isNaN(obj["pollDuration"])) {
+          obj["pollDuration"] = getDaysHoursMinFroSec(
+            parseInt(obj["pollDuration"])
+          );
           newDataset.push(obj);
         }
       }
@@ -113,13 +117,15 @@ class AdminPage extends Component {
   }
 
   componentDidMount() {
-    //FETCH DATA
-    if (this.state.tabValue === 1) {
-      this.setState({
-        data: categorizePolls(this.fixTime(this.state.data)),
-        originalData: categorizePolls(this.fixTime(this.state.data)),
-      });
-    }
+    Promise.all([axios.get("/polls/admin"), axios.get("/users")]).then(
+      ([pollResult, userResult]) => {
+        this.setState({
+          originalPolls: categorizePolls(this.fixTime(pollResult.data)),
+          originalUsers: userResult.data,
+          data: this.state.tabValue === 1 ? categorizePolls(this.fixTime(pollResult.data)) : userResult.data
+        })
+      }
+    )
   }
 
   onClickEdit(object) {
@@ -127,7 +133,7 @@ class AdminPage extends Component {
       // EDIT USER
     } else {
       let objToEdit = { ...object };
-      let stringArray = objToEdit["duration"].split(" ");
+      let stringArray = objToEdit["pollDuration"].split(" ");
       let dd = stringArray[0];
       let hh = stringArray[2];
       let mm = stringArray[4];
@@ -141,7 +147,7 @@ class AdminPage extends Component {
 
   onClickView(param) {
     this.setState({
-      selectedPollVotes: [{ yes: "200", no: "400" }],
+      selectedPollId: param,
     });
     this.setOpenResults(true);
   }
@@ -160,22 +166,20 @@ class AdminPage extends Component {
         questionFilter: keyWord,
       },
       () => {
-        this.applyFilters();
+        this.applyPollFilters();
       }
     );
   }
 
   setOwnerFilter(ownerName) {
-    if (this.state.tabValue === 1) {
       this.setState(
         {
           ownerFilter: ownerName,
         },
         () => {
-          this.applyFilters();
+          this.applyPollFilters();
         }
       );
-    }
   }
 
   handleRadioBtnChange = (e) => {
@@ -184,13 +188,13 @@ class AdminPage extends Component {
         radioBtnsValue: e.target.value,
       },
       () => {
-        this.applyFilters();
+        this.applyPollFilters();
       }
     );
   };
 
-  applyFilters() {
-    let dataToShow = [...this.state.originalData];
+  applyPollFilters() {
+    let dataToShow = [...this.state.originalPolls];
     dataToShow = filterList(dataToShow, this.state.questionFilter, "question");
     dataToShow = filterList(dataToShow, this.state.ownerFilter, "owner");
     dataToShow =
@@ -209,7 +213,7 @@ class AdminPage extends Component {
   }
 
   setUsernameFilter(username) {
-    let dataToShow = [...this.state.originalData];
+    let dataToShow = [...this.state.originalusers];
     this.setState(
       {
         data: filterList(dataToShow, username, "username"),
@@ -243,7 +247,7 @@ class AdminPage extends Component {
           setOpen={this.setOpenResults}
           header={this.state.selectedPollQuestion}
         >
-          <ResultChart data={this.state.selectedPollVotes} />
+          <ResultChart id={this.state.selectedPollId} />
         </ResultModal>
 
         {/* 1/100 - THINGY */}
