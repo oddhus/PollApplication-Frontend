@@ -72,8 +72,9 @@ export const AccountPage = () => {
         setOpenStatus(true);
         setEditPassword(false);
         setEditEmail(false);
+      } else {
+        throw new Error();
       }
-      throw new Error();
     } catch (error) {
       setStatusMessage("Failed to update your settings");
       setIsSuccess("error");
