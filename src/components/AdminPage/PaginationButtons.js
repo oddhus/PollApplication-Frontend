@@ -1,15 +1,14 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 
 /**
  * ADAPTED FROM: https://www.digitalocean.com/community/tutorials/how-to-build-custom-pagination-with-react
  */
 
-const LEFT_PAGE = 'LEFT';
-const RIGHT_PAGE = 'RIGHT';
+const LEFT_PAGE = "LEFT";
+const RIGHT_PAGE = "RIGHT";
 
 const range = (from, to, step = 1) => {
   let i = from;
@@ -23,17 +22,17 @@ const range = (from, to, step = 1) => {
   return range;
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   pagination: {
-    color: '#ffffff',
-    display: 'flex',
+    color: "#ffffff",
+    display: "flex",
   },
   button: {
-    backgroundColor: '#ffffff',
-    color: '#445565',
+    backgroundColor: "#ffffff",
+    color: "#445565",
   },
   buttonActive: {
-    backgroundColor: '#e3e7eb',
+    backgroundColor: "#e3e7eb",
   },
 });
 
@@ -46,54 +45,52 @@ class PaginateButtons extends Component {
       pageNeighbours: 0,
     };
 
-    const {totalPages = null, pageNeighbours = 0} = props;
-    this.state.totalPages = typeof totalPages === 'number' ? totalPages : 0;
+    const { totalPages = null, pageNeighbours = 0 } = props;
+    this.state.totalPages = typeof totalPages === "number" ? totalPages : 0;
     this.pageNeighbours = Math.max(0, Math.min(pageNeighbours, 2));
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
-    this.setState({totalPages: nextProps.totalPages})
+    this.setState({ totalPages: nextProps.totalPages });
   }
 
   componentDidMount() {
-    this.setState({currentPage: 1});
-    this.props.onRef(this)
+    this.setState({ currentPage: 1 });
+    this.props.onRef(this);
   }
 
   goToStart = () => {
-    this.setState({currentPage: 1})
+    this.setState({ currentPage: 1 });
   };
 
-  gotoPage = page => {
-    const {onPageChanged = f => f} = this.props;
+  gotoPage = (page) => {
+    const { onPageChanged = (f) => f } = this.props;
 
-    this.setState({currentPage: page}, () => onPageChanged(page));
+    this.setState({ currentPage: page }, () => onPageChanged(page));
   };
 
-  handleClick = page => evt => {
+  handleClick = (page) => (evt) => {
     evt.preventDefault();
     this.gotoPage(page);
   };
 
-  handleMoveLeft = evt => {
+  handleMoveLeft = (evt) => {
     evt.preventDefault();
-    let newPage = this.props.currentPage - (this.pageNeighbours * 2) - 1;
+    let newPage = this.props.currentPage - this.pageNeighbours * 2 - 1;
     if (newPage <= 0) {
-      this.gotoPage(1)
-    }
-    else {
-      this.gotoPage(newPage)
+      this.gotoPage(1);
+    } else {
+      this.gotoPage(newPage);
     }
   };
 
-  handleMoveRight = evt => {
+  handleMoveRight = (evt) => {
     evt.preventDefault();
-    let newPage = this.props.currentPage + (this.pageNeighbours * 2) + 1;
+    let newPage = this.props.currentPage + this.pageNeighbours * 2 + 1;
     if (newPage >= this.state.totalPages) {
-      this.gotoPage(this.state.totalPages)
-    }
-    else {
-      this.gotoPage(newPage)
+      this.gotoPage(this.state.totalPages);
+    } else {
+      this.gotoPage(newPage);
     }
   };
 
@@ -108,18 +105,17 @@ class PaginateButtons extends Component {
    * {...x} => represents page neighbours
    */
   fetchPageNumbers = () => {
-    const {totalPages, currentPage} = this.state;
+    const { totalPages, currentPage } = this.state;
     const pageNeighbours = this.pageNeighbours;
 
     /**
      * totalNumbers: the total page numbers to show on the control
      * totalBlocks: totalNumbers + 2 to cover for the left(<) and right(>) controls
      */
-    const totalNumbers = (this.pageNeighbours * 2) + 3;
+    const totalNumbers = this.pageNeighbours * 2 + 3;
     const totalBlocks = totalNumbers + 2;
 
     if (totalPages > totalBlocks) {
-
       const startPage = Math.max(1, currentPage - pageNeighbours);
       const endPage = Math.min(totalPages, currentPage + pageNeighbours);
 
@@ -131,26 +127,26 @@ class PaginateButtons extends Component {
        * spillOffset: number of hidden pages either to the left or to the right
        */
       const hasLeftSpill = startPage > 1;
-      const hasRightSpill = (totalPages - endPage) > 0;
+      const hasRightSpill = totalPages - endPage > 0;
       const spillOffset = totalNumbers - (pages.length + 1);
 
       switch (true) {
         // handle:  << {5 6} [7] {8 9} >>
-        case (hasLeftSpill && !hasRightSpill): {
+        case hasLeftSpill && !hasRightSpill: {
           const extraPages = range(startPage - spillOffset, startPage - 1);
           pages = [LEFT_PAGE, ...extraPages, ...pages];
           break;
         }
 
         // handle:  {1 2} [3] {4 5 6} >>
-        case (!hasLeftSpill && hasRightSpill): {
+        case !hasLeftSpill && hasRightSpill: {
           const extraPages = range(endPage + 1, endPage + spillOffset);
           pages = [...pages, ...extraPages, RIGHT_PAGE];
           break;
         }
 
         // handle: << {5 6 7} [8] {9 10}
-        case (hasLeftSpill && hasRightSpill):
+        case hasLeftSpill && hasRightSpill:
         default: {
           pages = [LEFT_PAGE, ...pages, RIGHT_PAGE];
           break;
@@ -158,16 +154,14 @@ class PaginateButtons extends Component {
       }
 
       return [...pages];
-
     }
 
     return range(1, totalPages);
-
   };
 
   render() {
     const pages = this.fetchPageNumbers();
-    const {classes, currentPage} = this.props;
+    const { classes, currentPage } = this.props;
 
     return (
       <div className={classes.root}>
@@ -177,9 +171,10 @@ class PaginateButtons extends Component {
               return (
                 <li key={index} className={classes.pageItem}>
                   <Button
-                    variant={'contained'}
+                    variant={"contained"}
                     className={classes.button}
-                    onClick={this.handleMoveLeft}>
+                    onClick={this.handleMoveLeft}
+                  >
                     &laquo;
                   </Button>
                 </li>
@@ -188,9 +183,10 @@ class PaginateButtons extends Component {
               return (
                 <li key={index} className={classes.pageItem}>
                   <Button
-                    variant={'contained'}
+                    variant={"contained"}
                     className={classes.button}
-                    onClick={this.handleMoveRight}>
+                    onClick={this.handleMoveRight}
+                  >
                     &raquo;
                   </Button>
                 </li>
@@ -199,11 +195,17 @@ class PaginateButtons extends Component {
             return (
               <li
                 key={index}
-                className={currentPage === page ? classes.activeItem : classes.pageItem}>
+                className={
+                  currentPage === page ? classes.activeItem : classes.pageItem
+                }
+              >
                 <Button
-                  variant={'contained'}
-                  className={currentPage === page ? classes.buttonActive : classes.button}
-                  onClick={this.handleClick(page)}>
+                  variant={"contained"}
+                  className={
+                    currentPage === page ? classes.buttonActive : classes.button
+                  }
+                  onClick={this.handleClick(page)}
+                >
                   {page}
                 </Button>
               </li>
@@ -212,14 +214,13 @@ class PaginateButtons extends Component {
         </ul>
       </div>
     );
-
   }
 }
 
 PaginateButtons.propTypes = {
   pageNeighbours: PropTypes.number,
   totalPages: PropTypes.number,
-  onPageChanged: PropTypes.func
+  onPageChanged: PropTypes.func,
 };
 
 export default withStyles(styles)(PaginateButtons);
