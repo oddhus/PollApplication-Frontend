@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 export function PollItem({
   poll,
   setOpenDeleteAlert,
-  setSelectedPollResult,
+  setSelectedPollId,
   setSelectedPollQuestion,
   setOpenResults,
   setPollToDelete,
@@ -106,21 +106,10 @@ export function PollItem({
     history.push({ pathname: `/polls/${id}`, state: poll });
   };
 
-  const onDisplayResults = async (id, question) => {
-    setIsLoading(true);
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve({ ok: true, data: { yes: 5, no: 1 } }), 1000);
-    });
-    if (response.ok) {
-      setSelectedPollResult([response.data]);
-      setSelectedPollQuestion(question);
-      setOpenResults(true);
-    } else {
-      setStatusMessage("Could not retrieve results. Please try again later");
-      setStatus("error");
-      setOpenAlertDialog(true);
-    }
-    setIsLoading(false);
+  const onDisplayResults = async () => {
+    setSelectedPollId(poll.id);
+    setSelectedPollQuestion(poll.question);
+    setOpenResults(true);
   };
 
   return (
@@ -215,7 +204,7 @@ export function PollItem({
               <Grid item className={classes.buttonContainer}>
                 <ThemeButton
                   size={xs ? "small" : "medium"}
-                  onClick={() => onDisplayResults(poll.id, poll.question)}
+                  onClick={() => onDisplayResults()}
                 >
                   {isLoading ? <ThemeCircularProgress /> : "Results"}
                 </ThemeButton>

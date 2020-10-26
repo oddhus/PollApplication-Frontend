@@ -51,7 +51,7 @@ export function UserPollsPage() {
   const [pollToDelete, setPollToDelete] = useState(null);
   const [openResults, setOpenResults] = useState(false);
   const [selectedPollQuestion, setSelectedPollQuestion] = useState(null);
-  const [selectedPollResults, setSelectedPollResult] = useState([]);
+  const [selectedPollId, setSelectedPollId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { user } = useUser();
@@ -125,7 +125,7 @@ export function UserPollsPage() {
         setOpen={setOpenResults}
         header={selectedPollQuestion}
       >
-        <ResultChart data={selectedPollResults} />
+        <ResultChart id={selectedPollId} />
       </ResultModal>
       <StatusBar
         open={openAlertDialog}
@@ -171,7 +171,7 @@ export function UserPollsPage() {
             <PollList
               data={filteredPolls}
               setOpenDeleteAlert={setOpenDeleteAlert}
-              setSelectedPollResult={setSelectedPollResult}
+              setSelectedPollId={setSelectedPollId}
               setSelectedPollQuestion={setSelectedPollQuestion}
               setOpenResults={setOpenResults}
               setPollToDelete={setPollToDelete}

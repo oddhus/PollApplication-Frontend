@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
 import { ResultChart } from "../components/ResultChart";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
-import usePollResults from "../queries/use-poll";
+import usePollResults from "../queries/use-pollresults";
 
 const useStyles = makeStyles((theme) => ({
   chartContainer: {
@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
 export const ResultPage = (props) => {
   const { pollId } = useParams();
   const classes = useStyles();
-  const { results, loading } = usePollResults(pollId);
 
   return (
     <Grid container justify="center" className={classes.chartContainer}>
@@ -24,11 +23,7 @@ export const ResultPage = (props) => {
           <Typography variant="h3">{props.location.query.question}</Typography>
         </Grid>
         <Grid item>
-          {loading ? (
-            <ThemeCircularProgress />
-          ) : (
-            <ResultChart data={[results]} />
-          )}
+          <ResultChart id={pollId} />
         </Grid>
       </Grid>
     </Grid>

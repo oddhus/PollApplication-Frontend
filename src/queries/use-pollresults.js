@@ -8,9 +8,7 @@ const getPollResults = async (url) => {
       return response.data;
     }
   } catch (err) {
-    const error = new Error("Not authorized!");
-    error.status = err.response.status;
-    throw error;
+    throw new Error("Could not get poll result");
   }
 };
 
