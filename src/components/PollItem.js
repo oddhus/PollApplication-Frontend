@@ -120,8 +120,12 @@ export function PollItem({
             <Grid
               item
               container
-              component={Link}
-              to={{ pathname: `/result/${poll.id}`, query: poll }}
+              component={poll.category !== 0 ? Link : undefined}
+              to={
+                poll.category !== 0
+                  ? { pathname: `/result/${poll.id}`, query: poll }
+                  : undefined
+              }
               className={classes.linkContainer}
             >
               <Grid item>
