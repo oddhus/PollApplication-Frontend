@@ -3,7 +3,7 @@ import Table from "../components/AdminPage/Table";
 import PaginateButtons from "../components/AdminPage/PaginationButtons";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { TextField } from "@material-ui/core/";
+import { TextField, withStyles } from "@material-ui/core/";
 import dummyPolls from "../data/dummyPolls.json";
 import {
   Typography,
@@ -11,6 +11,7 @@ import {
   Radio,
   FormControlLabel,
   Grid,
+  CircularProgress,
 } from "@material-ui/core";
 import {
   getDaysHoursMinFroSec,
@@ -39,6 +40,15 @@ const POLL_ATTRIBUTES = [
   "owner",
 ];
 
+const styles = (theme) => ({
+  loadingCircle: {
+    margin: "0 42%",
+    [theme.breakpoints.down(450)]: {
+      margin: "0 30%",
+    },
+  },
+});
+
 class AdminPage extends Component {
   constructor(props) {
     super(props);
@@ -57,6 +67,7 @@ class AdminPage extends Component {
       usernameFilter: "",
       radioBtnsValue: "all",
       selectedPollId: null,
+      loading: true,
     };
     this.onClickView = this.onClickView.bind(this);
     this.setOpenResults = this.setOpenResults.bind(this);
@@ -120,12 +131,16 @@ class AdminPage extends Component {
     Promise.all([axios.get("/polls/admin"), axios.get("/users")]).then(
       ([pollResult, userResult]) => {
         this.setState({
+          loading: false,
           originalPolls: categorizePolls(this.fixTime(pollResult.data)),
           originalUsers: userResult.data,
-          data: this.state.tabValue === 1 ? categorizePolls(this.fixTime(pollResult.data)) : userResult.data
-        })
+          data:
+            this.state.tabValue === 1
+              ? categorizePolls(this.fixTime(pollResult.data))
+              : userResult.data,
+        });
       }
-    )
+    );
   }
 
   onClickEdit(object) {
@@ -172,14 +187,14 @@ class AdminPage extends Component {
   }
 
   setOwnerFilter(ownerName) {
-      this.setState(
-        {
-          ownerFilter: ownerName,
-        },
-        () => {
-          this.applyPollFilters();
-        }
-      );
+    this.setState(
+      {
+        ownerFilter: ownerName,
+      },
+      () => {
+        this.applyPollFilters();
+      }
+    );
   }
 
   handleRadioBtnChange = (e) => {
@@ -227,6 +242,7 @@ class AdminPage extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
         {/* TABS */}
@@ -240,7 +256,6 @@ class AdminPage extends Component {
           <Tab label="Users" />
           <Tab label="Polls" />
         </Tabs>
-
         {/* POLL RESULT POPUP */}
         <ResultModal
           open={this.state.openResults}
@@ -249,7 +264,6 @@ class AdminPage extends Component {
         >
           <ResultChart id={this.state.selectedPollId} />
         </ResultModal>
-
         {/* 1/100 - THINGY */}
         <Typography>
           Showing{" "}
@@ -258,7 +272,6 @@ class AdminPage extends Component {
             : this.state.lastElement}{" "}
           / {this.state.data.length}
         </Typography>
-
         {/* TEXT FILTERS */}
         <Grid container direction="row" justify="space-between">
           <Grid item>
@@ -287,7 +300,6 @@ class AdminPage extends Component {
             ></TextField>
           </Grid>
         </Grid>
-
         {/* RADIO BUTTON FILTERS FOR POLL */}
         {this.state.tabValue === 1 && (
           <RadioGroup
@@ -305,30 +317,37 @@ class AdminPage extends Component {
             <FormControlLabel value="2" control={<Radio />} label="Finished" />
           </RadioGroup>
         )}
-
         {/* THE DATA TABLE */}
-        <Table
-          coloumnTitles={this.state.tabValue === 0 ? USER_TITLES : POLL_TITLES}
-          data={this.getList()}
-          attributes={
-            this.state.tabValue === 0 ? USER_ATTRIBUTES : POLL_ATTRIBUTES
-          }
-          onClickEdit={this.onClickEdit}
-          onClickView={this.onClickView}
-          onClickDelete={this.onClickDelete}
-        />
-        <div hidden={this.state.prPage > this.state.data.length}>
-          <PaginateButtons
-            onRef={(ref) => (this.paginateButtons = ref)}
-            currentPage={this.state.currentPage}
-            totalPages={this.getNumberOfPages()}
-            pageNeighbours={2}
-            onPageChanged={this.onPageChanged}
-          />
-        </div>
+        {this.state.loading ? (
+          <CircularProgress className={classes.loadingCircle} size={"6rem"} />
+        ) : (
+          <div>
+            <Table
+              coloumnTitles={
+                this.state.tabValue === 0 ? USER_TITLES : POLL_TITLES
+              }
+              data={this.getList()}
+              attributes={
+                this.state.tabValue === 0 ? USER_ATTRIBUTES : POLL_ATTRIBUTES
+              }
+              onClickEdit={this.onClickEdit}
+              onClickView={this.onClickView}
+              onClickDelete={this.onClickDelete}
+            />
+            <div hidden={this.state.prPage > this.state.data.length}>
+              <PaginateButtons
+                onRef={(ref) => (this.paginateButtons = ref)}
+                currentPage={this.state.currentPage}
+                totalPages={this.getNumberOfPages()}
+                pageNeighbours={2}
+                onPageChanged={this.onPageChanged}
+              />
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 }
 
-export default withRouter(AdminPage);
+export default withStyles(styles)(withRouter(AdminPage));
