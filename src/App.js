@@ -3,7 +3,6 @@ import { Switch, BrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Container } from "@material-ui/core";
 import {
-  AdminAppRoutes,
   AuthenticatedAppRoutes,
   UnauthenticatedAppRoutes,
 } from "./routes/routes";
@@ -19,12 +18,11 @@ export const App = () => {
       <Container maxWidth={"md"}>
         <Switch>
           {!loading && user ? (
-            <AuthenticatedAppRoutes />
+            AuthenticatedAppRoutes(user.admin)
           ) : (
             <UnauthenticatedAppRoutes />
           )}
         </Switch>
-        <Switch>{user && user.admin ? <AdminAppRoutes /> : null}</Switch>
       </Container>
     </BrowserRouter>
   );

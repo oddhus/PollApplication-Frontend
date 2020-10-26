@@ -28,7 +28,8 @@ export const UnauthenticatedAppRoutes = () => {
   );
 };
 
-export const AuthenticatedAppRoutes = () => {
+export const AuthenticatedAppRoutes = (isAdmin) => {
+  console.log(isAdmin)
   return (
     <React.Fragment>
       <Switch>
@@ -40,18 +41,10 @@ export const AuthenticatedAppRoutes = () => {
         <Route path="/create" component={CreateEditPollPage} />
         <Route path="/public" component={PublicPollsPage} />
         <Route path="/account" component={AccountPage} />
+        {
+          isAdmin &&  <Route path="/admin" component={AdminPage} />
+        }
         <Route component={NoMatch} />
-      </Switch>
-    </React.Fragment>
-  );
-};
-
-export const AdminAppRoutes = () => {
-  return (
-    <React.Fragment>
-      <Switch>
-      <Route path="/admin" component={AdminPage} />
-      {/* <Route component={NoMatch} /> */}
       </Switch>
     </React.Fragment>
   );
