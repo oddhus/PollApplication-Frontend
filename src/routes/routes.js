@@ -5,17 +5,19 @@ import { UserPollsPage } from "../pages/UserPollsPage";
 import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { AccountPage } from "../pages/AccountPage";
-import { AdminPage } from "../pages/AdminPage";
 import { PublicPollsPage } from "../pages/PublicPollsPage";
 import { VotePage } from "../pages/VotePage";
 import { ResultPage } from "../pages/ResultPage";
 import { NoMatch } from "../pages/NoMatch"
 import { Switch } from "react-router-dom";
-import  CreateEditPollPage  from "../pages/CreateEditPollPage";
+import CreateEditPollPage from "../pages/CreateEditPollPage";
+import AdminPage from "../pages/AdminPage";
+
 
 export const UnauthenticatedAppRoutes = () => {
   return (
     <React.Fragment>
+
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route path="/vote/:pollId" component={VotePage} />
@@ -42,10 +44,11 @@ export const AuthenticatedAppRoutes = (isAdmin) => {
         <Route path="/public" component={PublicPollsPage} />
         <Route path="/account" component={AccountPage} />
         {
-          isAdmin &&  <Route path="/admin" component={AdminPage} />
+          isAdmin && <Route path="/admin" component={AdminPage} />
         }
         <Route component={NoMatch} />
       </Switch>
     </React.Fragment>
   );
 };
+
