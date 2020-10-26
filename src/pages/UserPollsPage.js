@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function UserPollsPage() {
+export function UserPollsPage(props) {
   const theme = useTheme();
   const classes = useStyles();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -66,6 +66,18 @@ export function UserPollsPage() {
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  useEffect(() => {
+    if (
+      props.history.location.state &&
+      props.history.location.state.addedPoll
+    ) {
+      mutate((polls) => [...polls, props.history.location.state.addedPoll]);
+      setStatusMessage("Poll created!");
+      setStatus("success");
+      setOpenAlertDialog(true);
+    }
+  }, [props.history.location.state]);
 
   const onDelete = async () => {
     setIsDeleting(true);

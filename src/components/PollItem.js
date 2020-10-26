@@ -135,7 +135,7 @@ export function PollItem({
                   color="textSecondary"
                   noWrap
                 >
-                  {poll.pollName}
+                  {poll.question}
                 </Typography>
               </Grid>
               {poll.category === 2 && (
@@ -157,7 +157,7 @@ export function PollItem({
                 color="textSecondary"
                 noWrap
               >
-                {poll.question}
+                Poll id: {poll.id}
               </Typography>
             </Grid>
           </Grid>
