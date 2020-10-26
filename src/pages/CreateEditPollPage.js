@@ -13,8 +13,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { DurationPicker } from "../components/DurationPicker";
 import { withRouter } from "react-router-dom";
 import {
-  getDaysFromMinutes,
-  getHoursFromMinutes,
+  getDaysFromSeconds,
+  getHoursFromSeconds,
+  getMinFromSeconds,
 } from "../utils/calculateTime";
 import axios from "axios";
 import { StatusBar } from "../components/StatusBar";
@@ -159,8 +160,8 @@ class CreateEditPollPage extends Component {
    * Returns the total amount of minutes from the 'DD,HH,MM' inputs
    */
   calculateDuration() {
-    let daysInMin = this.state.days * 24 * 60;
-    let hoursInMin = this.state.hours * 60;
+    let daysInMin = this.state.days * 24 * 60 * 60;
+    let hoursInMin = this.state.hours * 60 * 60;
     return daysInMin + hoursInMin + this.state.minutes;
   }
 
@@ -188,10 +189,12 @@ class CreateEditPollPage extends Component {
       let state = this.props.location.state;
       if (this.props.location.state !== undefined) {
         let duration = this.props.location.state.duration;
-        state.days = getDaysFromMinutes(duration);
-        duration = duration - state.days * 60 * 24;
-        state.hours = getHoursFromMinutes(duration);
-        state.minutes = duration - state.hours * 60;
+        state.days = getDaysFromSeconds(duration);
+        duration = duration - state.days * 60 * 60 * 24;
+        state.hours = getHoursFromSeconds(duration);
+        console.log(duration - state.hours * 60 * 60)
+        duration = duration - state.hours * 60 * 60 ;
+        state.minutes = getMinFromSeconds(duration)
         state.setDuration = true;
       }
       this.setState(state);
