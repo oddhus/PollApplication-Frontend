@@ -3,8 +3,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
 import { ResultChart } from "../components/ResultChart";
-import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
-import usePollResults from "../queries/use-pollresults";
 
 const useStyles = makeStyles((theme) => ({
   chartContainer: {
