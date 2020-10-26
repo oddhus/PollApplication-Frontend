@@ -53,7 +53,7 @@ class PaginateButtons extends Component {
 
   componentDidMount() {
     this.setState({currentPage: 1});
-    /* this.props.onRef(this) */
+    this.props.onRef(this)
   }
 
   goToStart = () => {
@@ -73,7 +73,7 @@ class PaginateButtons extends Component {
 
   handleMoveLeft = evt => {
     evt.preventDefault();
-    let newPage = this.state.currentPage - (this.pageNeighbours * 2) - 1;
+    let newPage = this.props.currentPage - (this.pageNeighbours * 2) - 1;
     if (newPage <= 0) {
       this.gotoPage(1)
     }
@@ -84,7 +84,7 @@ class PaginateButtons extends Component {
 
   handleMoveRight = evt => {
     evt.preventDefault();
-    let newPage = this.state.currentPage + (this.pageNeighbours * 2) + 1;
+    let newPage = this.props.currentPage + (this.pageNeighbours * 2) + 1;
     if (newPage >= this.state.totalPages) {
       this.gotoPage(this.state.totalPages)
     }
@@ -162,9 +162,9 @@ class PaginateButtons extends Component {
   };
 
   render() {
-    const {currentPage} = this.state;
+/*     const {currentPage} = this.state; */
     const pages = this.fetchPageNumbers();
-    const {classes} = this.props;
+    const {classes, currentPage} = this.props;
 
     return (
       <div className={classes.root}>

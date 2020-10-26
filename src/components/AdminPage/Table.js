@@ -54,14 +54,14 @@ const styles = theme => ({
 });
 
 
-function setupTableBody(classes, data, onClickView, onClickEdit, onClickDelete) {
-  let i = 0;
-  return data.map(row => (
+function setupTableBody(classes, data, attributes, onClickView, onClickEdit, onClickDelete) {
+  let i = 0; 
+  return data.map(object => (
     <PopupState variant="popover" popupId="popup-popover">
       {(popupState) => (
-        <TableRow {...bindToggle(popupState)} className={classes.row} key={row.id}>
-          {Object.keys(row).slice(1).map(name => (
-            <CustomTableCell key={i++}>{row[name]}</CustomTableCell>
+        <TableRow {...bindToggle(popupState)} className={classes.row} key={object.id}>
+          {attributes.map(name => (
+            <CustomTableCell key={i++}>{object[name]}</CustomTableCell>
           ))}
           <Popover
             {...bindPopover(popupState)}
@@ -75,12 +75,12 @@ function setupTableBody(classes, data, onClickView, onClickEdit, onClickDelete) 
             }}
           >
             <Box p={2} className={classes.popOver}>
-              <Typography className={classes.pollName}>{row.username === undefined ? row.pollName : row.username}</Typography>
-              <Typography className={classes.pollName}>{row.id}</Typography>
+              <Typography className={classes.pollName}>{object.username === undefined ? object.pollName : object.username}</Typography>
+              <Typography className={classes.pollName}>{object.id}</Typography>
 
-              {row.pollName ? <Button onClick={() => onClickView(row.id)} className={classes.viewBtn} variant="contained" color="primary">View</Button> : null}
-              <Button onClick={() => onClickEdit(row.id)} variant="contained" color="secondary">Edit</Button>
-              <Button onClick={() => onClickDelete(row.id)} className={classes.deleteBtn} variant="contained">Delete</Button>
+              {object.pollName ? <Button onClick={() => onClickView(object.id)} className={classes.viewBtn} variant="contained" color="primary">View</Button> : null}
+              <Button onClick={() => onClickEdit(object)} variant="contained" color="secondary">Edit</Button>
+              <Button onClick={() => onClickDelete(object.id)} className={classes.deleteBtn} variant="contained">Delete</Button>
             </Box>
           </Popover>
         </TableRow>
@@ -90,7 +90,7 @@ function setupTableBody(classes, data, onClickView, onClickEdit, onClickDelete) 
 }
 
 function CustomizableTable(props) {
-  const { classes, coloumnTitles, data, onClickView, onClickEdit, onClickDelete } = props;
+  const { classes, coloumnTitles, data, attributes, onClickView, onClickEdit, onClickDelete } = props;
 
   let rowNames = coloumnTitles.split(', ').map(columnTitle =>
     <CustomTableCell key={columnTitle}>{columnTitle}</CustomTableCell>);
@@ -104,7 +104,7 @@ function CustomizableTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {setupTableBody(classes, data, onClickView, onClickEdit, onClickDelete)}
+          {setupTableBody(classes, data, attributes, onClickView, onClickEdit, onClickDelete)}
         </TableBody>
       </Table>
     </Paper>
