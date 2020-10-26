@@ -15,7 +15,7 @@ export function categorizePolls(polls) {
       poll.category = 0;
       return poll;
     } else if (
-      moment(poll.startTime).add(poll.duration, "seconds").isAfter(moment())
+      moment(poll.startTime).add(poll.pollDuration, "seconds").isAfter(moment())
     ) {
       poll.category = 1;
       return poll;

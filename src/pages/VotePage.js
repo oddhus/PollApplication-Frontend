@@ -1,77 +1,107 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Typography, Button } from '@material-ui/core/';
-import { getDaysHoursMinFromMin } from '../utils/calculateTime'
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Paper, Typography, Button } from "@material-ui/core/";
+import { getDaysHoursMinFromMin } from "../utils/calculateTime";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { StatusBar } from "../components/StatusBar";
+import moment from "moment";
+import { DateTime } from "luxon";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   paper: {
     margin: theme.spacing(3),
-    paddingTop: theme.spacing(2)
+    paddingTop: theme.spacing(2),
   },
   pollInfo: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: theme.spacing(3)
+    display: "flex",
+    justifyContent: "space-between",
+    padding: theme.spacing(3),
   },
   title: {
     marginTop: theme.spacing(5),
   },
   btnContainer: {
-    marginTop: theme.spacing(5)
+    marginTop: theme.spacing(5),
   },
   btn: {
-    width: '15%',
-    margin: theme.spacing(2)
-  }
+    width: "15%",
+    margin: theme.spacing(2),
+  },
 }));
 
 function getData(props) {
-  return { pollOwner: 'Hans', duration: getDaysHoursMinFromMin(127325), question: 'Pinaple on pizza?' } //SWAP WITH this.props.location.state
-
+  return props.location.state;
 }
 
 export const VotePage = (props) => {
   const classes = useStyles();
-  const data = getData(props)
+  const data = getData(props);
+  console.log(data);
+  const history = useHistory();
+  const [openStatus, setOpenStatus] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
 
-  function sendVote(vote) {
-    let job = {
-      pollId: props.match.params.pollId,
-      vote: vote
+  async function sendVote(vote) {
+    const pollId = props.match.params.pollId;
+    try {
+      const response = await axios.post(`/votes/${pollId}`, { vote });
+      console.log(response);
+      if (response.status === 200) {
+        history.replace({
+          pathname: `/result/${pollId}`,
+          state: data,
+        });
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      setStatusMessage(
+        !!error.response ? error.response.message : "Could not cast vote"
+      );
+      setOpenStatus(true);
     }
   }
 
   return (
     <div className={classes.root}>
-      <Paper
-        className={classes.paper}
-        elevation={3}>
+      <StatusBar open={openStatus} setOpen={setOpenStatus} severity="error">
+        {statusMessage}
+      </StatusBar>
+      <Paper className={classes.paper} elevation={3}>
         <div className={classes.pollInfo}>
-          <Typography>{data.pollOwner + '\'s poll'}</Typography>
-          <Typography>{'Time remaining: ' + data.duration}</Typography>
+          {/* <Typography>{data.pollOwner + "'s poll"}</Typography> */}
+          <Typography>
+            {"Time remaining: " +
+              moment(data.startTime).add(data.duration).fromNow(true)}
+          </Typography>
         </div>
-        <Typography variant='h4' className={classes.title}>{data.question}</Typography>
+        <Typography variant="h4" className={classes.title}>
+          {data.question}
+        </Typography>
 
         <div className={classes.btnContainer}>
           <Button
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             className={classes.btn}
-            onClick={(() => sendVote('YES'))}>
+            onClick={() => sendVote("YES")}
+          >
             Yes
-              </Button>
+          </Button>
           <Button
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             className={classes.btn}
-            onClick={(() => sendVote('NO'))}>
+            onClick={() => sendVote("NO")}
+          >
             no
-            </Button>
+          </Button>
         </div>
       </Paper>
     </div>
-  )
-}
+  );
+};

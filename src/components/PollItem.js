@@ -123,7 +123,7 @@ export function PollItem({
               component={poll.category !== 0 ? Link : undefined}
               to={
                 poll.category !== 0
-                  ? { pathname: `/result/${poll.id}`, query: poll }
+                  ? { pathname: `/result/${poll.id}`, state: poll }
                   : undefined
               }
               className={classes.linkContainer}
@@ -146,7 +146,7 @@ export function PollItem({
                     className={classes.finishedInfo}
                   >
                     Finished{" "}
-                    {moment(poll.startTime).add(poll.duration).fromNow()}
+                    {moment(poll.startTime).add(poll.pollDuration).fromNow()}
                   </Typography>
                 </Grid>
               )}
