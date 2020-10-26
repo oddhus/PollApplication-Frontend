@@ -17,9 +17,6 @@ export const LoginPage = () => {
   const onSubmit = async (data) => {
     console.log(data);
     login();
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 10000);
-    });
   };
   const classes = useStyles();
 
@@ -37,7 +34,7 @@ export const LoginPage = () => {
             <TextField
               label="Username"
               name="username"
-              inputRef={register({ required: "Du må gi et brukernavn!" })}
+              inputRef={register({ required: "You have to give a username." })}
               error={!!errors.username}
               helperText={errors.username ? errors.username.message : ""}
             />
@@ -46,14 +43,14 @@ export const LoginPage = () => {
             <TextField
               label="Password"
               name="password"
-              inputRef={register({ required: "Du må gi et passord!" })}
+              inputRef={register({ required: "You have to give a password." })}
               error={!!errors.password}
               helperText={errors.password ? errors.password.message : ""}
               type="password"
             />
           </Grid>
           <Grid item>
-            <ThemeButton>
+            <ThemeButton type="submit">
               {isSubmitting ? <ThemeCircularProgress /> : "Log in"}
             </ThemeButton>
           </Grid>

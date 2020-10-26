@@ -196,7 +196,6 @@ export const AccountPage = () => {
         setOpen={setOpenAlertDialog}
         title={"Confirm delete"}
         button={"Delete"}
-        buttonClass={classes.deleteButton}
         onClick={onDelete}
       >
         This will permanently delete your account
