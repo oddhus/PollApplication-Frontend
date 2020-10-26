@@ -11,7 +11,7 @@ import { getDaysHoursMinFroSec, getSecondsFromDdHhMm } from "../utils/calculateT
 import { ResultModal } from '../components/ResultModal'
 import { ResultChart } from '../components/ResultChart'
 import { withRouter } from "react-router-dom";
-import { filterList, categorizePolls, filterCategory, filterUsers } from '../utils/categorizePolls'
+import { filterList, categorizePolls, filterCategory } from '../utils/categorizePolls'
 
 const USER_TITLES = "Username, User nr"
 const POLL_TITLES = "Id, Question, Duration, Start-time, Visibility Type, Owner"
@@ -60,7 +60,9 @@ class AdminPage extends Component {
       lastElement: 10,
       data: newValue === 1 ? dummyPolls : dummyUsers,
       originalData: newValue === 1 ? dummyPolls : dummyUsers,
-      questionFilter: ''
+      questionFilter: '',
+      ownerFilter: '',
+      radioBtnsValue: 'all',
     });
   };
 
@@ -126,44 +128,43 @@ class AdminPage extends Component {
   }
 
   setQuestionFilter(keyWord) {
-    let dataToShow = [...this.state.originalData]
-    dataToShow = filterList(dataToShow, keyWord, 'question')
-    dataToShow = filterList(dataToShow, this.state.ownerFilter, 'owner')
-    dataToShow = this.state.radioBtnsValue === "all" ? dataToShow : filterCategory(dataToShow, parseInt(this.state.radioBtnsValue))
     this.setState({
-      data: dataToShow,
       questionFilter: keyWord
     },
       () => {
-        this.onPageChanged(1)
-        this.paginateButtons.goToStart()
+        this.applyFilters()
       }
     )
   }
 
   setOwnerFilter(ownerName) {
-    let dataToShow = [...this.state.originalData]
-    dataToShow = filterList(dataToShow, ownerName, 'owner')
-    dataToShow = this.state.radioBtnsValue === "all" ? dataToShow : filterCategory(dataToShow, parseInt(this.state.radioBtnsValue))
     if (this.state.tabValue === 1) {
       this.setState({
-        data: dataToShow,
         ownerFilter: ownerName
       },
         () => {
-          this.onPageChanged(1)
-          this.paginateButtons.goToStart()
+          this.applyFilters()
         }
       )
     }
   }
 
   handleRadioBtnChange = (e) => {
-    let dataToShow = e.target.value === "all" ? this.state.originalData : filterCategory(this.state.originalData, parseInt(e.target.value))
-    dataToShow = filterList(dataToShow, this.state.questionFilter, 'question')
-    dataToShow = filterList(dataToShow, this.state.ownerFilter, 'owner')
     this.setState({
       radioBtnsValue: e.target.value,
+    },
+      () => {
+        this.applyFilters()
+      }
+    )
+  }
+
+  applyFilters() {
+    let dataToShow = [...this.state.originalData]
+    dataToShow = filterList(dataToShow, this.state.questionFilter, 'question')
+    dataToShow = filterList(dataToShow, this.state.ownerFilter, 'owner')
+    dataToShow = this.state.radioBtnsValue === "all" ? dataToShow : filterCategory(dataToShow, parseInt(this.state.radioBtnsValue))
+    this.setState({
       data: dataToShow
     },
       () => {
@@ -215,7 +216,7 @@ class AdminPage extends Component {
         <Typography>
           Showing {this.state.lastElement > this.state.data.length ? this.state.data.length : this.state.lastElement} / {this.state.data.length}
         </Typography>
-        
+
         {/* TEXT FILTERS */}
         <Grid
           container
@@ -249,7 +250,7 @@ class AdminPage extends Component {
             ></TextField>
           </Grid>
         </Grid>
-        
+
         {/* RADIO BUTTON FILTERS FOR POLL */}
         {this.state.tabValue === 1 && (
           <RadioGroup row value={this.state.radioBtnsValue} onChange={this.handleRadioBtnChange}>
@@ -259,7 +260,7 @@ class AdminPage extends Component {
             <FormControlLabel value="2" control={<Radio />} label="Finished" />
           </RadioGroup>
         )}
-        
+
         {/* THE DATA TABLE */}
         < Table
           coloumnTitles={this.state.tabValue === 0 ? USER_TITLES : POLL_TITLES}

@@ -4,6 +4,10 @@ import {withStyles} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 
+/**
+ * ADAPTED FROM: https://www.digitalocean.com/community/tutorials/how-to-build-custom-pagination-with-react
+ */
+
 const LEFT_PAGE = 'LEFT';
 const RIGHT_PAGE = 'RIGHT';
 
@@ -131,21 +135,21 @@ class PaginateButtons extends Component {
       const spillOffset = totalNumbers - (pages.length + 1);
 
       switch (true) {
-        // handle: (1) < {5 6} [7] {8 9} (10)
+        // handle:  << {5 6} [7] {8 9} >>
         case (hasLeftSpill && !hasRightSpill): {
           const extraPages = range(startPage - spillOffset, startPage - 1);
           pages = [LEFT_PAGE, ...extraPages, ...pages];
           break;
         }
 
-        // handle: (1) {2 3} [4] {5 6} > (10)
+        // handle:  {1 2} [3] {4 5 6} >>
         case (!hasLeftSpill && hasRightSpill): {
           const extraPages = range(endPage + 1, endPage + spillOffset);
           pages = [...pages, ...extraPages, RIGHT_PAGE];
           break;
         }
 
-        // handle: (1) < {4 5} [6] {7 8} > (10)
+        // handle: << {5 6 7} [8] {9 10}
         case (hasLeftSpill && hasRightSpill):
         default: {
           pages = [LEFT_PAGE, ...pages, RIGHT_PAGE];
@@ -162,7 +166,6 @@ class PaginateButtons extends Component {
   };
 
   render() {
-/*     const {currentPage} = this.state; */
     const pages = this.fetchPageNumbers();
     const {classes, currentPage} = this.props;
 
