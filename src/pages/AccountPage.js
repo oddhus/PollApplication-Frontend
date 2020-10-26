@@ -14,7 +14,8 @@ import { grey } from "@material-ui/core/colors";
 import { StatusBar } from "../components/StatusBar";
 import { AlertDialog } from "../components/AlertDialog";
 import { useHistory } from "react-router-dom";
-import useUser from "../data/use-user";
+import useUser from "../queries/use-user";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   headerContainer: {
@@ -39,7 +40,7 @@ export const AccountPage = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const history = useHistory();
-  const { user, loading } = useUser();
+  const { user, loading, mutate } = useUser();
 
   const {
     errors,
@@ -58,18 +59,23 @@ export const AccountPage = () => {
     }
   }, [user, reset]);
 
-  const onSubmit = async (data) => {
-    //Just a delay when testing. To be replaced with request to server
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
-    console.log(data);
-    if (response) {
-      setStatusMessage(`${data.password ? "Password" : "Email"} updated!`);
-      setOpenStatus(true);
-      setEditPassword(false);
-      setEditEmail(false);
-    } else {
+  const onSubmit = async ({ email, newPassword, oldPassword }) => {
+    try {
+      const response = await axios.patch(`/users/${user.id}`, {
+        username: email,
+        newPassword,
+        oldPassword,
+      });
+      if (response.data) {
+        mutate({ ...user, ...(email && { username: email }) });
+        setStatusMessage(`${newPassword ? "Password" : "Email"} updated!`);
+        setOpenStatus(true);
+        setEditPassword(false);
+        setEditEmail(false);
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
       setStatusMessage("Failed to update your settings");
       setIsSuccess("error");
       setOpenStatus(true);
@@ -77,15 +83,16 @@ export const AccountPage = () => {
   };
 
   const onDelete = async () => {
-    //Just a delay when testing. To be replaced with request to server
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
-
-    if (response) {
-      setOpenAlertDialog(false);
-      history.push("/");
-    } else {
+    try {
+      const response = await axios.delete(`/users/${user.id}`);
+      if (response.data) {
+        mutate(null);
+        setOpenAlertDialog(false);
+        history.push("/");
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
       setStatusMessage("Failed to delete your account");
       setIsSuccess("error");
       setOpenStatus(true);

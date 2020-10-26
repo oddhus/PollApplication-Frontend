@@ -1,24 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import { ThemeButton } from "../components/ThemeButton";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { useForm } from "react-hook-form";
 import { TextField, Container, Grid, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link as RouterLink } from "react-router-dom";
-import { login } from "../mock/auth";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+import axios from "axios";
+import useUser from "../queries/use-user";
 
 export const LoginPage = () => {
+  const classes = useStyles();
   const {
     register,
     handleSubmit,
     errors,
     formState: { isSubmitting },
   } = useForm();
-  const onSubmit = async (data) => {
-    console.log(data);
-    login();
+  const history = useHistory();
+  const { mutate } = useUser();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const onSubmit = async ({ username, password }) => {
+    try {
+      const response = await axios.post("/auth/signin", { username, password });
+      if (response.status === 200) {
+        mutate({ ...response.data });
+        history.push("/polls");
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      setErrorMessage(
+        error.response && error.response.data.error === "Unauthorized"
+          ? "Wrong username or password"
+          : "Could not log in. Please try again later"
+      );
+    }
   };
-  const classes = useStyles();
 
   return (
     <Container className={classes.container} maxWidth="xs">
@@ -49,6 +67,11 @@ export const LoginPage = () => {
               type="password"
             />
           </Grid>
+          {errorMessage && (
+            <Grid item className={classes.error}>
+              {errorMessage}
+            </Grid>
+          )}
           <Grid item>
             <ThemeButton type="submit">
               {isSubmitting ? <ThemeCircularProgress /> : "Log in"}
@@ -80,5 +103,8 @@ export const LoginPage = () => {
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(3),
+  },
+  error: {
+    color: theme.palette.error.main,
   },
 }));

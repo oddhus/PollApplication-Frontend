@@ -12,17 +12,22 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { AlertDialog } from "../components/AlertDialog";
-import moment from "moment";
-import { categorizePolls, filterPolls } from "../utils/categorizePolls";
+import { filterCategory, filterPolls } from "../utils/categorizePolls";
 import { StatusBar } from "../components/StatusBar";
 import { ResultModal } from "../components/ResultModal";
 import { ResultChart } from "../components/ResultChart";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { PollList } from "../components/PollList";
+import useMyPolls from "../queries/use-mypolls";
+import useUser from "../queries/use-user";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: 20,
+  },
+  notFound: {
+    paddingTop: theme.spacing(3),
   },
   searchBarContainer: {
     paddingLeft: theme.spacing(1),
@@ -31,49 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let DUMMY_DATA2 = [];
-for (let index = 0; index < 100; index++) {
-  DUMMY_DATA2[index] = {
-    id: index,
-    name: "Another Not activated",
-    question: "Use the keyword gruppe 5?",
-    startTime: undefined,
-    duration: 10000,
-  };
-}
-
-const DUMMY_DATA = [
-  {
-    id: 123,
-    name: "My awesome poll",
-    question: "Pineapple pizza?",
-    startTime: moment().subtract(2, "days").get(),
-    duration: 1000,
-  },
-  {
-    id: 1234,
-    name: "My awesome poll",
-    question: "Do you prefer React?",
-    startTime: moment(),
-    duration: 10000,
-  },
-  {
-    id: 12345,
-    name: "Not activated",
-    question: "Do you prefer Vue?",
-    startTime: undefined,
-    duration: 10000,
-  },
-  {
-    id: 123456,
-    name: "Another Not activated",
-    question: "Use the keyword gruppe 5?",
-    startTime: undefined,
-    duration: 10000,
-  },
-];
-
-export function UserPollsPage() {
+export function UserPollsPage(props) {
   const theme = useTheme();
   const classes = useStyles();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -85,45 +48,58 @@ export function UserPollsPage() {
   const [status, setStatus] = useState("success");
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+  const [pollToDelete, setPollToDelete] = useState(null);
   const [openResults, setOpenResults] = useState(false);
   const [selectedPollQuestion, setSelectedPollQuestion] = useState(null);
-  const [selectedPollResults, setSelectedPollResult] = useState([]);
+  const [selectedPollId, setSelectedPollId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // const [offset, setOffset] = useState(0);
-  // const [pageNumber, setPageNumber] = useState(1);
-  // const [pollsPerPage, setPollsPerPage] = useState(5);
-  // const [pageCount, setPageCount] = useState(0);
-  // const [currentPages, setCurrentPages] = useState([]);
-
-  const data = DUMMY_DATA;
+  const { user } = useUser();
+  const { polls, loading, mutate } = useMyPolls(user.id);
 
   useEffect(() => {
-    setFilteredPolls(filterPolls(categorizePolls(data, tabValue), keyword));
-  }, [tabValue, data, keyword]);
-
-  // useEffect(() => {
-  //   setPageCount(Math.ceil(data.length / pollsPerPage));
-  // }, [data, pollsPerPage]);
+    if (polls) {
+      setFilteredPolls(filterPolls(filterCategory(polls, tabValue), keyword));
+    }
+  }, [tabValue, polls, keyword, loading]);
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  const onDelete = async (id) => {
-    setIsDeleting(true);
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
-    if (response.ok) {
-      setStatusMessage("Poll deleted!");
+  useEffect(() => {
+    if (
+      props.history.location.state &&
+      props.history.location.state.addedPoll
+    ) {
+      mutate((polls) => [...polls, props.history.location.state.addedPoll]);
+      setStatusMessage("Poll created!");
       setStatus("success");
-    } else {
+      setOpenAlertDialog(true);
+    }
+  }, [props.history.location.state]);
+
+  const onDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await axios.delete(`/polls/${pollToDelete}`);
+      if (response.data) {
+        mutate((polls) => {
+          const index = polls.findIndex((poll) => poll.id === pollToDelete);
+          return [...polls.slice(index)];
+        });
+        setStatusMessage("Poll deleted!");
+        setStatus("success");
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
       setStatusMessage("Could not delete the poll. Please try again later");
       setStatus("error");
     }
     setOpenDeleteAlert(false);
     setOpenAlertDialog(true);
+    setPollToDelete(null);
     setIsDeleting(false);
   };
 
@@ -161,7 +137,7 @@ export function UserPollsPage() {
         setOpen={setOpenResults}
         header={selectedPollQuestion}
       >
-        <ResultChart data={selectedPollResults} />
+        <ResultChart id={selectedPollId} />
       </ResultModal>
       <StatusBar
         open={openAlertDialog}
@@ -196,16 +172,21 @@ export function UserPollsPage() {
       </Paper>
       <Grid container direction="column" className={classes.container}>
         <Grid item>{searchBar}</Grid>
-        {!data ? (
+        {loading ? (
           <ThemeCircularProgress />
+        ) : filteredPolls.length === 0 ? (
+          <Grid item container justify="center" className={classes.notFound}>
+            <Typography variant="h5">Found no polls...</Typography>
+          </Grid>
         ) : (
           <Grid item>
             <PollList
               data={filteredPolls}
               setOpenDeleteAlert={setOpenDeleteAlert}
-              setSelectedPollResult={setSelectedPollResult}
+              setSelectedPollId={setSelectedPollId}
               setSelectedPollQuestion={setSelectedPollQuestion}
               setOpenResults={setOpenResults}
+              setPollToDelete={setPollToDelete}
               setStatusMessage={setStatusMessage}
               setStatus={setStatus}
               setOpenAlertDialog={setOpenAlertDialog}

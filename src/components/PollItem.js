@@ -11,8 +11,11 @@ import {
 import { DangerButton } from "../components/DangerButton";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { ThemeButton } from "../components/ThemeButton";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import moment from "moment";
+import axios from "axios";
+import useUser from "../queries/use-user";
+import useMyPolls from "../queries/use-mypolls";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -30,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: 0,
       paddingLeft: 10,
     },
+  },
+  linkContainer: {
+    textDecoration: "none",
   },
   pollContainer: {
     marginBottom: theme.spacing(2),
@@ -52,9 +58,10 @@ const useStyles = makeStyles((theme) => ({
 export function PollItem({
   poll,
   setOpenDeleteAlert,
-  setSelectedPollResult,
+  setSelectedPollId,
   setSelectedPollQuestion,
   setOpenResults,
+  setPollToDelete,
   setStatusMessage,
   setStatus,
   setOpenAlertDialog,
@@ -65,16 +72,30 @@ export function PollItem({
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
 
+  const { user } = useUser();
+  const { mutate } = useMyPolls(user.id);
+
   const onActivate = async (id) => {
     setIsLoading(true);
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
-    if (response.ok) {
-      setStatusMessage("Poll activated");
-      setStatus("success");
-    } else {
-      setStatusMessage("Could not activate the poll. Please try again later");
+    try {
+      const response = await axios.patch(`/polls/${id}`, {});
+      if (response.data) {
+        mutate((polls) =>
+          polls.map((poll) =>
+            poll.id === id ? { ...poll, category: 1 } : poll
+          )
+        );
+        setStatusMessage("Poll activated");
+        setStatus("success");
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      setStatusMessage(
+        error.response
+          ? error.response.data.error
+          : "Could not activate the poll. Please try again later"
+      );
       setStatus("error");
     }
     setOpenAlertDialog(true);
@@ -85,21 +106,10 @@ export function PollItem({
     history.push({ pathname: `/polls/${id}`, state: poll });
   };
 
-  const onDisplayResults = async (id, question) => {
-    setIsLoading(true);
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve({ ok: true, data: { yes: 5, no: 1 } }), 1000);
-    });
-    if (response.ok) {
-      setSelectedPollResult([response.data]);
-      setSelectedPollQuestion(question);
-      setOpenResults(true);
-    } else {
-      setStatusMessage("Could not retrieve results. Please try again later");
-      setStatus("error");
-      setOpenAlertDialog(true);
-    }
-    setIsLoading(false);
+  const onDisplayResults = async () => {
+    setSelectedPollId(poll.id);
+    setSelectedPollQuestion(poll.question);
+    setOpenResults(true);
   };
 
   return (
@@ -107,7 +117,17 @@ export function PollItem({
       <Paper>
         <Grid item container direction="row">
           <Grid item container direction="column" sm={6} md={8}>
-            <Grid item container>
+            <Grid
+              item
+              container
+              component={poll.category !== 0 ? Link : undefined}
+              to={
+                poll.category !== 0
+                  ? { pathname: `/result/${poll.id}`, query: poll }
+                  : undefined
+              }
+              className={classes.linkContainer}
+            >
               <Grid item>
                 <Typography
                   variant="h5"
@@ -115,7 +135,7 @@ export function PollItem({
                   color="textSecondary"
                   noWrap
                 >
-                  {poll.name}
+                  {poll.question}
                 </Typography>
               </Grid>
               {poll.category === 2 && (
@@ -137,7 +157,7 @@ export function PollItem({
                 color="textSecondary"
                 noWrap
               >
-                {poll.question}
+                Poll id: {poll.id}
               </Typography>
             </Grid>
           </Grid>
@@ -153,7 +173,10 @@ export function PollItem({
             <Grid item className={classes.buttonContainer}>
               <DangerButton
                 size={xs ? "small" : "medium"}
-                onClick={() => setOpenDeleteAlert(true)}
+                onClick={() => {
+                  setPollToDelete(poll.id);
+                  setOpenDeleteAlert(true);
+                }}
               >
                 Delete
               </DangerButton>
@@ -185,7 +208,7 @@ export function PollItem({
               <Grid item className={classes.buttonContainer}>
                 <ThemeButton
                   size={xs ? "small" : "medium"}
-                  onClick={() => onDisplayResults(poll.id, poll.question)}
+                  onClick={() => onDisplayResults()}
                 >
                   {isLoading ? <ThemeCircularProgress /> : "Results"}
                 </ThemeButton>
