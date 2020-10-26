@@ -9,16 +9,18 @@ export function getDaysHoursMinFromMin(time) {
 
 export function getDaysHoursMinFroSec(time) {
     let days = getDaysFromSeconds(time)
-    console.log('DAYS: ' + days)
     time = time - (days * 60 * 60 * 24)
-    console.log(time)
     let hours = getHoursFromSeconds(time)
-    console.log('HOURS: ' + hours)
     let minutes = getMinFromSeconds(time - (hours * 60 * 60))
-    console.log(time - (hours * 60 * 60))
     return days + " days " + hours + ' hours ' + minutes + " min";
 }
 
+export function getSecondsFromDdHhMm(dd, hh, mm){
+    let ddInS = dd * 24 * 60 * 60
+    let hhInS = hh * 60 * 60
+    let mmInS = mm * 60
+    return ddInS + hhInS + mmInS
+}
 
 export function getDaysFromMinutes(minutes) {
     return Math.floor(minutes / 24 / 60)
