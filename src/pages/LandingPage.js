@@ -10,6 +10,8 @@ import { useForm, Controller } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
+import axios from "axios";
+import usePollInfo from "../queries/use-pollinfo";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,28 +39,36 @@ export const LandingPage = () => {
   const history = useHistory();
   const [openStatus, setOpenStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
+  const [pollPin, setPollPin] = useState(null);
+
+  const { mutate } = usePollInfo(pollPin);
 
   const onSubmit = async (data) => {
-    //Just a delay when testing
-    const response = await new Promise((resolve) => {
-      setTimeout(() => resolve(false), 1000);
-    });
-
-    console.log(data);
-    if (response) {
-      history.push(`/vote/${data.pin}`);
-    } else {
-      setStatusMessage(!!response.text ? response.text : "");
+    setPollPin(data.pin);
+    try {
+      const response = await axios.get(`/polls/${data.pin}`);
+      if (response.data) {
+        mutate({ ...response.data });
+        history.push({
+          pathname: `/vote/${data.pin}`,
+          state: response.data,
+        });
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      setStatusMessage(
+        !!error.response ? error.response.message : "Could not find poll"
+      );
       setOpenStatus(true);
+      setPollPin(null);
     }
   };
 
   return (
     <div className={classes.root}>
       <StatusBar open={openStatus} setOpen={setOpenStatus} severity="error">
-        {statusMessage.length !== 0
-          ? statusMessage
-          : "Something went wrong, could not find poll"}
+        {statusMessage}
       </StatusBar>
       <Grid
         container
@@ -89,8 +99,8 @@ export const LandingPage = () => {
                     message: "Minimum pin code length is 6",
                   },
                   maxLength: {
-                    value: 6,
-                    message: "Maximum pin code length is 6",
+                    value: 8,
+                    message: "Maximum pin code length is 8",
                   },
                   pattern: {
                     value: /^[a-zA-Z0-9]*$/,

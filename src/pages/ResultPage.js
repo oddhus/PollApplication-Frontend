@@ -18,7 +18,7 @@ export const ResultPage = (props) => {
     <Grid container justify="center" className={classes.chartContainer}>
       <Grid item container direction="column" sm={6} spacing={2}>
         <Grid item container alignItems="center">
-          <Typography variant="h3">{props.location.query.question}</Typography>
+          <Typography variant="h3">{props.location.state.question}</Typography>
         </Grid>
         <Grid item>
           <ResultChart id={pollId} />
