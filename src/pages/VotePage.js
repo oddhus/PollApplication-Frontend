@@ -6,7 +6,6 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import moment from "moment";
-import { DateTime } from "luxon";
 
 const useStyles = makeStyles((theme) => ({
   root: {
