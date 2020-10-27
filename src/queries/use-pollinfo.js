@@ -13,7 +13,10 @@ const getPollInfo = async (url) => {
 };
 
 export default function usePollInfo(pin) {
-  const { data, mutate, error } = useSWR(`/polls/${pin}`, getPollInfo);
+  const { data, mutate, error } = useSWR(
+    pin ? `/polls/${pin}` : null,
+    getPollInfo
+  );
 
   const loading = !data && !error;
 

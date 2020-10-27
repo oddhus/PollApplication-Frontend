@@ -61,6 +61,7 @@ export const LandingPage = () => {
         !!error.response ? error.response.message : "Could not find poll"
       );
       setOpenStatus(true);
+      setPollPin(null);
     }
   };
 
