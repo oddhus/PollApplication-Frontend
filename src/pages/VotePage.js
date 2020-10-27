@@ -5,8 +5,7 @@ import { getDaysHoursMinFromMin } from "../utils/calculateTime";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
-import moment, { duration } from "moment";
-import { DateTime } from "luxon";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
