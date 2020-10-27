@@ -4,7 +4,6 @@ import PaginateButtons from "../components/AdminPage/PaginationButtons";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { TextField, withStyles } from "@material-ui/core/";
-import dummyPolls from "../data/dummyPolls.json";
 import {
   Typography,
   RadioGroup,
