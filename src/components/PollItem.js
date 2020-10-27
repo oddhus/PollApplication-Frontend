@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   pollContainer: {
     marginBottom: theme.spacing(2),
     [theme.breakpoints.up("sm")]: {
-      height: 60,
+      height: 65,
     },
   },
   title: {
@@ -138,6 +138,20 @@ export function PollItem({
                   {poll.question}
                 </Typography>
               </Grid>
+              {poll.category === 1 && (
+                <Grid item container sm={12} md={4} alignItems="center">
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    className={classes.finishedInfo}
+                  >
+                    Time remaining:{" "}
+                    {moment(poll.startTime)
+                      .add(poll.pollDuration, "seconds")
+                      .fromNow(true)}
+                  </Typography>
+                </Grid>
+              )}
               {poll.category === 2 && (
                 <Grid item container sm={12} md={4} alignItems="center">
                   <Typography
@@ -146,7 +160,9 @@ export function PollItem({
                     className={classes.finishedInfo}
                   >
                     Finished{" "}
-                    {moment(poll.startTime).add(poll.pollDuration).fromNow()}
+                    {moment(poll.startTime)
+                      .add(poll.pollDuration, "seconds")
+                      .fromNow()}
                   </Typography>
                 </Grid>
               )}
