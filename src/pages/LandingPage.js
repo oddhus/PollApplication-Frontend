@@ -42,7 +42,7 @@ export const LandingPage = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.get(`/polls/${data.pin}`);
-      if (response.status === 200) {
+      if (response.data) {
         history.push({
           pathname: `/vote/${data.pin}`,
           state: response.data,

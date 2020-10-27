@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Typography, Button } from "@material-ui/core/";
 import { getDaysHoursMinFromMin } from "../utils/calculateTime";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
-import moment from "moment";
+import moment, { duration } from "moment";
+import { DateTime } from "luxon";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,12 +43,44 @@ export const VotePage = (props) => {
   const history = useHistory();
   const [openStatus, setOpenStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
+  const [isActivated, setIsActivated] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(
+    moment(data.startTime).add(data.pollDuration, "seconds").fromNow()
+  );
+
+  useEffect(() => {
+    setIsActivated(
+      data.startTime &&
+        moment(data.startTime)
+          .add(data.pollDuration, "seconds")
+          .isAfter(moment())
+    );
+  }, [data]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isActivated) {
+        const pollEnding = moment(data.startTime).add(
+          data.pollDuration,
+          "seconds"
+        );
+        console.log(pollEnding.diff(moment(), "seconds") < 60);
+        if (pollEnding.diff(moment(), "seconds") > 60) {
+          setTimeRemaining(pollEnding.fromNow(true));
+        } else {
+          setTimeRemaining(pollEnding.diff(moment(), "seconds") + " seconds");
+        }
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [data.pollDuration, data.startTime, isActivated]);
 
   async function sendVote(vote) {
     const pollId = props.match.params.pollId;
     try {
       const response = await axios.post(`/votes/${pollId}`, { vote });
-      console.log(response);
       if (response.status === 200) {
         history.replace({
           pathname: `/result/${pollId}`,
@@ -58,7 +91,9 @@ export const VotePage = (props) => {
       }
     } catch (error) {
       setStatusMessage(
-        !!error.response ? error.response.message : "Could not cast vote"
+        error.response && error.response.data
+          ? error.response.data
+          : "Could not cast vote"
       );
       setOpenStatus(true);
     }
@@ -73,8 +108,11 @@ export const VotePage = (props) => {
         <div className={classes.pollInfo}>
           {/* <Typography>{data.pollOwner + "'s poll"}</Typography> */}
           <Typography>
-            {"Time remaining: " +
-              moment(data.startTime).add(data.duration).fromNow(true)}
+            {isActivated
+              ? "Time remaining: " + timeRemaining
+              : data.startTime
+              ? "Poll finished"
+              : "Poll not activated"}
           </Typography>
         </div>
         <Typography variant="h4" className={classes.title}>
@@ -86,6 +124,7 @@ export const VotePage = (props) => {
             variant="contained"
             color="primary"
             className={classes.btn}
+            disabled={!isActivated}
             onClick={() => sendVote("YES")}
           >
             Yes
@@ -94,6 +133,7 @@ export const VotePage = (props) => {
             variant="contained"
             color="primary"
             className={classes.btn}
+            disabled={!isActivated}
             onClick={() => sendVote("NO")}
           >
             no
