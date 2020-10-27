@@ -39,7 +39,6 @@ function getData(props) {
 export const VotePage = (props) => {
   const classes = useStyles();
   const data = getData(props);
-  console.log(data);
   const history = useHistory();
   const [openStatus, setOpenStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
