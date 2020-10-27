@@ -66,7 +66,6 @@ export const VotePage = (props) => {
           poll.pollDuration,
           "seconds"
         );
-        console.log(pollEnding.diff(moment(), "seconds") < 60);
         if (pollEnding.diff(moment(), "seconds") > 60) {
           setTimeRemaining(pollEnding.fromNow(true));
         } else {
