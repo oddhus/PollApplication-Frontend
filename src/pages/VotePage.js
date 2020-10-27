@@ -6,6 +6,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import moment from "moment";
+import usePollInfo from "../queries/use-pollinfo";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,20 +48,22 @@ export const VotePage = (props) => {
     moment(data.startTime).add(data.pollDuration, "seconds").fromNow()
   );
 
+  const { poll } = usePollInfo(data.id);
+
   useEffect(() => {
     setIsActivated(
-      data.startTime &&
-        moment(data.startTime)
-          .add(data.pollDuration, "seconds")
+      poll.startTime &&
+        moment(poll.startTime)
+          .add(poll.pollDuration, "seconds")
           .isAfter(moment())
     );
-  }, [data]);
+  }, [poll]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isActivated) {
-        const pollEnding = moment(data.startTime).add(
-          data.pollDuration,
+        const pollEnding = moment(poll.startTime).add(
+          poll.pollDuration,
           "seconds"
         );
         console.log(pollEnding.diff(moment(), "seconds") < 60);
@@ -74,7 +77,7 @@ export const VotePage = (props) => {
     return () => {
       clearInterval(interval);
     };
-  }, [data.pollDuration, data.startTime, isActivated]);
+  }, [poll.pollDuration, poll.startTime, isActivated]);
 
   async function sendVote(vote) {
     const pollId = props.match.params.pollId;
@@ -83,7 +86,7 @@ export const VotePage = (props) => {
       if (response.status === 200) {
         history.replace({
           pathname: `/result/${pollId}`,
-          state: data,
+          state: poll,
         });
       } else {
         throw new Error();
@@ -109,13 +112,13 @@ export const VotePage = (props) => {
           <Typography>
             {isActivated
               ? "Time remaining: " + timeRemaining
-              : data.startTime
+              : poll.startTime
               ? "Poll finished"
               : "Poll not activated"}
           </Typography>
         </div>
         <Typography variant="h4" className={classes.title}>
-          {data.question}
+          {poll.question}
         </Typography>
 
         <div className={classes.btnContainer}>

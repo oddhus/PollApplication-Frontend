@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import axios from "axios";
+import usePollInfo from "../queries/use-pollinfo";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -38,11 +39,16 @@ export const LandingPage = () => {
   const history = useHistory();
   const [openStatus, setOpenStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
+  const [pollPin, setPollPin] = useState(null);
+
+  const { mutate } = usePollInfo(pollPin);
 
   const onSubmit = async (data) => {
+    setPollPin(data.pin);
     try {
       const response = await axios.get(`/polls/${data.pin}`);
       if (response.data) {
+        mutate({ ...response.data });
         history.push({
           pathname: `/vote/${data.pin}`,
           state: response.data,
