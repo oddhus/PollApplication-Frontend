@@ -192,9 +192,8 @@ class CreateEditPollPage extends Component {
         state.days = getDaysFromSeconds(duration);
         duration = duration - state.days * 60 * 60 * 24;
         state.hours = getHoursFromSeconds(duration);
-        console.log(duration - state.hours * 60 * 60)
-        duration = duration - state.hours * 60 * 60 ;
-        state.minutes = getMinFromSeconds(duration)
+        duration = duration - state.hours * 60 * 60;
+        state.minutes = getMinFromSeconds(duration);
         state.setDuration = true;
       }
       this.setState(state);

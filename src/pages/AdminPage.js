@@ -27,6 +27,7 @@ import {
 import axios from "axios";
 import { AlertDialog } from "../components/AlertDialog";
 import _ from "lodash";
+import { EditUserDialog } from "../components/EditUserDialog";
 
 const USER_TITLES = "Username, roles";
 const POLL_TITLES =
@@ -76,6 +77,8 @@ class AdminPage extends Component {
       loading: true,
       alertDialogOpen: false,
       recourceToDelete: "",
+      selectedUser: { username: "TEST@TEST.TEST", isAdmin: true },
+      openEditUser: false,
     };
     this.onClickView = this.onClickView.bind(this);
     this.setOpenResults = this.setOpenResults.bind(this);
@@ -85,7 +88,9 @@ class AdminPage extends Component {
     this.changeDeleteAlertVisibility = this.changeDeleteAlertVisibility.bind(
       this
     );
+    this.onSave = this.onSave.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.setOpenEdituser = this.setOpenEdituser.bind(this);
   }
 
   onPageChanged = (page) => {
@@ -160,7 +165,14 @@ class AdminPage extends Component {
 
   onClickEdit(object) {
     if (this.state.tabValue === TYPE.USERS) {
-      // EDIT USER
+      this.setState(
+        {
+          selectedUser: object,
+        },
+        () => {
+          this.setOpenEdituser();
+        }
+      );
     } else {
       let objToEdit = { ...object };
       let stringArray = objToEdit["pollDuration"].split(" ");
@@ -205,9 +217,8 @@ class AdminPage extends Component {
       const response = await axios.delete(path + recourceToDelete.id);
       if (response.data) {
         this.changeDeleteAlertVisibility();
-        let newList = _.reject(toDeleteFrom, function (element) {
-          return element.id === recourceToDelete.id;
-        });
+        let newList = this.deleteFromListById(toDeleteFrom);
+        let newDataList = this.deleteFromListById(this.state.data);
         this.setState({
           originalUsers:
             this.state.tabValue === TYPE.USERS
@@ -217,6 +228,7 @@ class AdminPage extends Component {
             this.state.tabValue === TYPE.POLLS
               ? newList
               : this.state.originalPolls,
+          data: newDataList,
         });
       } else {
         throw new Error();
@@ -236,6 +248,15 @@ class AdminPage extends Component {
     this.setState({
       openResults: setOpen,
     });
+  }
+
+  setOpenEdituser() {
+    this.setState(
+      {
+        openEditUser: !this.state.openEditUser,
+      },
+      () => {}
+    );
   }
 
   setQuestionFilter(keyWord) {
@@ -304,6 +325,38 @@ class AdminPage extends Component {
     );
   }
 
+  async onSave(updatedUser) {
+    this.setState({
+      openEditUser: false,
+    });
+    try {
+      const response = await axios.patch(
+        "users/" + this.state.selectedUser.id,
+        updatedUser
+      );
+      if (response.status === 200) {
+        this.setState({
+          data: this.state.data.map((el) =>
+            el.id === updatedUser.id ? Object.assign(el, updatedUser) : el
+          ),
+          originalUsers: this.state.originalUsers.map((el) =>
+            el.id === updatedUser.id ? Object.assign(el, updatedUser) : el
+          ),
+        });
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  deleteFromListById(list) {
+    _.reject(list, function (element) {
+      return element.id === list.id;
+    });
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -316,8 +369,8 @@ class AdminPage extends Component {
           textColor="primary"
           centered
         >
-          <Tab label="Users" />
-          <Tab label="Polls" />
+          <Tab disabled={this.state.loading} label="Users" />
+          <Tab disabled={this.state.loading} label="Polls" />
         </Tabs>
         {/* POLL RESULT POPUP */}
         <ResultModal
@@ -381,7 +434,7 @@ class AdminPage extends Component {
           </RadioGroup>
         )}
 
-        {/* ALERT DIALOG */}
+        {/* CONFIRM DELETE DIALOG */}
         <AlertDialog
           open={this.state.alertDialogOpen}
           setOpen={this.changeDeleteAlertVisibility}
@@ -390,11 +443,19 @@ class AdminPage extends Component {
           onClick={this.handleDelete}
         >
           Are you sure you want to permanently delete "
-          {this.state.tabValue === TYPE.POLLS
+          {this.state.tabValue === TYPE.USERS
             ? this.state.recourceToDelete.username
             : this.state.recourceToDelete.question}
           " ?
         </AlertDialog>
+
+        {/* EDIT USER DIALOG */}
+        <EditUserDialog
+          open={this.state.openEditUser}
+          setOpen={this.setOpenEdituser}
+          user={this.state.selectedUser}
+          onSave={this.onSave}
+        ></EditUserDialog>
         {this.state.loading ? (
           <CircularProgress className={classes.loadingCircle} size={"6rem"} />
         ) : (
@@ -415,11 +476,9 @@ class AdminPage extends Component {
               onClickDelete={this.onDeleteClicked}
             />
             <Typography variant="h4" hidden={this.state.data.length > 0}>
-              {this.state.tabValue === TYPE.USERS ? (
-                'Could not find any users'
-              ) : (
-                'Could not find any polls'
-              )}
+              {this.state.tabValue === TYPE.USERS
+                ? "Could not find any users"
+                : "Could not find any polls"}
             </Typography>
             <div hidden={this.state.prPage > this.state.data.length}>
               <PaginateButtons
