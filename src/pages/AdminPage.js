@@ -25,11 +25,13 @@ import {
   filterCategory,
 } from "../utils/categorizePolls";
 import axios from "axios";
+import { AlertDialog } from "../components/AlertDialog";
+import _ from "lodash";
 
-const USER_TITLES = "Username, User nr";
+const USER_TITLES = "Username, roles";
 const POLL_TITLES =
   "Id, Question, Duration, Start-time, Visibility Type, Owner";
-const USER_ATTRIBUTES = ["username", "id"];
+const USER_ATTRIBUTES = ["username", "roles"];
 const POLL_ATTRIBUTES = [
   "id",
   "question",
@@ -38,6 +40,11 @@ const POLL_ATTRIBUTES = [
   "visibilityType",
   "owner",
 ];
+
+const TYPE = {
+  USERS: 0,
+  POLLS: 1,
+};
 
 const styles = (theme) => ({
   loadingCircle: {
@@ -67,11 +74,18 @@ class AdminPage extends Component {
       radioBtnsValue: "all",
       selectedPollId: null,
       loading: true,
+      alertDialogOpen: false,
+      recourceToDelete: "",
     };
     this.onClickView = this.onClickView.bind(this);
     this.setOpenResults = this.setOpenResults.bind(this);
     this.onClickEdit = this.onClickEdit.bind(this);
     this.onPageChanged = this.onPageChanged.bind(this);
+    this.onDeleteClicked = this.onDeleteClicked.bind(this);
+    this.changeDeleteAlertVisibility = this.changeDeleteAlertVisibility.bind(
+      this
+    );
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   onPageChanged = (page) => {
@@ -112,7 +126,7 @@ class AdminPage extends Component {
   }
 
   fixTime(dataset) {
-    if (dataset.length > 0 && this.state.tabValue === 1) {
+    if (dataset.length > 0 && this.state.tabValue === TYPE.POLLS) {
       let newDataset = [];
       for (const obj of dataset) {
         if (obj["pollDuration"] !== undefined && !isNaN(obj["pollDuration"])) {
@@ -129,21 +143,23 @@ class AdminPage extends Component {
   componentDidMount() {
     Promise.all([axios.get("/polls/admin"), axios.get("/users")]).then(
       ([pollResult, userResult]) => {
+        let polls =
+          pollResult.data.length > 0
+            ? categorizePolls(this.fixTime(pollResult.data))
+            : [];
+        let users = userResult.data.length > 0 ? userResult.data : [];
         this.setState({
           loading: false,
-          originalPolls: categorizePolls(this.fixTime(pollResult.data)),
-          originalUsers: userResult.data,
-          data:
-            this.state.tabValue === 1
-              ? categorizePolls(this.fixTime(pollResult.data))
-              : userResult.data,
+          originalPolls: polls,
+          originalUsers: users,
+          data: this.state.tabValue === TYPE.POLLS ? polls : users,
         });
       }
     );
   }
 
   onClickEdit(object) {
-    if (this.state.tabValue === 0) {
+    if (this.state.tabValue === TYPE.USERS) {
       // EDIT USER
     } else {
       let objToEdit = { ...object };
@@ -166,7 +182,55 @@ class AdminPage extends Component {
     this.setOpenResults(true);
   }
 
-  onClickDelete(param) {}
+  onDeleteClicked(param) {
+    let found = this.state.data.find((element) => element.id === param);
+    this.setState(
+      {
+        recourceToDelete: found,
+      },
+      () => {
+        this.changeDeleteAlertVisibility();
+      }
+    );
+  }
+
+  async handleDelete() {
+    let path = this.state.tabValue === TYPE.USERS ? "/users/" : "/polls/";
+    const recourceToDelete = this.state.recourceToDelete;
+    const toDeleteFrom =
+      this.state.tabValue === TYPE.USERS
+        ? this.state.originalUsers
+        : this.state.originalPolls;
+    try {
+      const response = await axios.delete(path + recourceToDelete.id);
+      if (response.data) {
+        this.changeDeleteAlertVisibility();
+        let newList = _.reject(toDeleteFrom, function (element) {
+          return element.id === recourceToDelete.id;
+        });
+        this.setState({
+          originalUsers:
+            this.state.tabValue === TYPE.USERS
+              ? newList
+              : this.state.originalUsers,
+          originalPolls:
+            this.state.tabValue === TYPE.POLLS
+              ? newList
+              : this.state.originalPolls,
+        });
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  changeDeleteAlertVisibility() {
+    this.setState({
+      alertDialogOpen: !this.state.alertDialogOpen,
+    });
+  }
 
   setOpenResults(setOpen) {
     this.setState({
@@ -227,7 +291,7 @@ class AdminPage extends Component {
   }
 
   setUsernameFilter(username) {
-    let dataToShow = [...this.state.originalusers];
+    let dataToShow = [...this.state.originalUsers];
     this.setState(
       {
         data: filterList(dataToShow, username, "username"),
@@ -274,7 +338,7 @@ class AdminPage extends Component {
         {/* TEXT FILTERS */}
         <Grid container direction="row" justify="space-between">
           <Grid item>
-            {this.state.tabValue === 1 ? (
+            {this.state.tabValue === TYPE.POLLS ? (
               <TextField
                 fullWidth
                 placeholder="Question"
@@ -290,7 +354,7 @@ class AdminPage extends Component {
               ></TextField>
             )}
           </Grid>
-          <Grid hidden={this.state.tabValue === 0} item>
+          <Grid hidden={this.state.tabValue === TYPE.USERS} item>
             <TextField
               fullWidth
               placeholder="Owner"
@@ -300,7 +364,7 @@ class AdminPage extends Component {
           </Grid>
         </Grid>
         {/* RADIO BUTTON FILTERS FOR POLL */}
-        {this.state.tabValue === 1 && (
+        {this.state.tabValue === TYPE.POLLS && (
           <RadioGroup
             row
             value={this.state.radioBtnsValue}
@@ -316,23 +380,47 @@ class AdminPage extends Component {
             <FormControlLabel value="2" control={<Radio />} label="Finished" />
           </RadioGroup>
         )}
-        {/* THE DATA TABLE */}
+
+        {/* ALERT DIALOG */}
+        <AlertDialog
+          open={this.state.alertDialogOpen}
+          setOpen={this.changeDeleteAlertVisibility}
+          title={"Confirm delete"}
+          button={"Delete"}
+          onClick={this.handleDelete}
+        >
+          Are you sure you want to permanently delete "
+          {this.state.tabValue === TYPE.POLLS
+            ? this.state.recourceToDelete.username
+            : this.state.recourceToDelete.question}
+          " ?
+        </AlertDialog>
         {this.state.loading ? (
           <CircularProgress className={classes.loadingCircle} size={"6rem"} />
         ) : (
           <div>
+            {/* THE DATA TABLE */}
             <Table
               coloumnTitles={
-                this.state.tabValue === 0 ? USER_TITLES : POLL_TITLES
+                this.state.tabValue === TYPE.USERS ? USER_TITLES : POLL_TITLES
               }
               data={this.getList()}
               attributes={
-                this.state.tabValue === 0 ? USER_ATTRIBUTES : POLL_ATTRIBUTES
+                this.state.tabValue === TYPE.USERS
+                  ? USER_ATTRIBUTES
+                  : POLL_ATTRIBUTES
               }
               onClickEdit={this.onClickEdit}
               onClickView={this.onClickView}
-              onClickDelete={this.onClickDelete}
+              onClickDelete={this.onDeleteClicked}
             />
+            <Typography variant="h4" hidden={this.state.data.length > 0}>
+              {this.state.tabValue === TYPE.USERS ? (
+                'Could not find any users'
+              ) : (
+                'Could not find any polls'
+              )}
+            </Typography>
             <div hidden={this.state.prPage > this.state.data.length}>
               <PaginateButtons
                 onRef={(ref) => (this.paginateButtons = ref)}
