@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import moment from "moment";
 import usePollInfo from "../queries/use-pollinfo";
+import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,20 +49,22 @@ export const VotePage = (props) => {
     moment(data.startTime).add(data.pollDuration, "seconds").fromNow()
   );
 
-  const { poll } = usePollInfo(data.id);
+  const { poll, loading } = usePollInfo(data.id);
 
   useEffect(() => {
-    setIsActivated(
-      poll.startTime &&
-        moment(poll.startTime)
-          .add(poll.pollDuration, "seconds")
-          .isAfter(moment())
-    );
+    if (poll) {
+      setIsActivated(
+        poll.startTime &&
+          moment(poll.startTime)
+            .add(poll.pollDuration, "seconds")
+            .isAfter(moment())
+      );
+    }
   }, [poll]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (isActivated) {
+      if (isActivated && poll.pollDuration) {
         const pollEnding = moment(poll.startTime).add(
           poll.pollDuration,
           "seconds"
@@ -76,7 +79,7 @@ export const VotePage = (props) => {
     return () => {
       clearInterval(interval);
     };
-  }, [poll.pollDuration, poll.startTime, isActivated]);
+  }, [poll, isActivated]);
 
   async function sendVote(vote) {
     const pollId = props.match.params.pollId;
@@ -106,20 +109,25 @@ export const VotePage = (props) => {
         {statusMessage}
       </StatusBar>
       <Paper className={classes.paper} elevation={3}>
-        <div className={classes.pollInfo}>
-          {/* <Typography>{data.pollOwner + "'s poll"}</Typography> */}
-          <Typography>
-            {isActivated
-              ? "Time remaining: " + timeRemaining
-              : poll.startTime
-              ? "Poll finished"
-              : "Poll not activated"}
-          </Typography>
-        </div>
-        <Typography variant="h4" className={classes.title}>
-          {poll.question}
-        </Typography>
-
+        {loading ? (
+          <ThemeCircularProgress />
+        ) : (
+          <React.Fragment>
+            <div className={classes.pollInfo}>
+              <Typography>{data.pollOwner + "'s poll"}</Typography>
+              <Typography>
+                {isActivated
+                  ? "Time remaining: " + timeRemaining
+                  : poll.startTime
+                  ? "Poll finished"
+                  : "Poll not activated"}
+              </Typography>
+            </div>
+            <Typography variant="h4" className={classes.title}>
+              {poll.question}
+            </Typography>
+          </React.Fragment>
+        )}
         <div className={classes.btnContainer}>
           <Button
             variant="contained"
