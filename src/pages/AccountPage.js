@@ -6,16 +6,19 @@ import {
   Box,
   Button,
   CircularProgress,
+  TextField,
 } from "@material-ui/core";
 import { EditPassword } from "../components/AccountPage/EditPassword";
 import { EditEmail } from "../components/AccountPage/EditEmail";
-import { useForm } from "react-hook-form";
+import { DeviceList } from "../components/AccountPage/DeviceList";
+import { Controller, useForm } from "react-hook-form";
 import { grey } from "@material-ui/core/colors";
 import { StatusBar } from "../components/StatusBar";
 import { AlertDialog } from "../components/AlertDialog";
 import { useHistory } from "react-router-dom";
 import useUser from "../queries/use-user";
 import axios from "axios";
+import useUserDevices from "../queries/use-userdevices";
 
 const useStyles = makeStyles((theme) => ({
   headerContainer: {
@@ -35,11 +38,13 @@ export const AccountPage = () => {
   const classes = useStyles();
   const [editEmail, setEditEmail] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
+  const [editDevices, setEditDevices] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
   const [isSuccess, setIsSuccess] = useState("success");
   const [statusMessage, setStatusMessage] = useState("");
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const history = useHistory();
+
   const { user, loading, mutate } = useUser();
 
   const {
@@ -51,6 +56,15 @@ export const AccountPage = () => {
     formState: { isSubmitting },
   } = useForm();
 
+  const {
+    errors: errors2,
+    register,
+    handleSubmit: handlesubmit2,
+    formState: { isSubmitting: isSubmitting2 },
+  } = useForm();
+
+  const { mutate: mutateDevices } = useUserDevices();
+
   useEffect(() => {
     if (user) {
       reset({
@@ -58,6 +72,26 @@ export const AccountPage = () => {
       });
     }
   }, [user, reset]);
+
+  const onAddDevice = async (data) => {
+    console.log(data);
+    try {
+      const response = await axios.post(`/voting-device/add`, {
+        displayName: data.displayName,
+      });
+      if (response.data) {
+        mutateDevices((devices) => [...devices, response.data]);
+        setStatusMessage(`Device added!`);
+        setOpenStatus(true);
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      setStatusMessage("Failed to add device");
+      setIsSuccess("error");
+      setOpenStatus(true);
+    }
+  };
 
   const onSubmit = async ({ email, newPassword, oldPassword }) => {
     try {
@@ -171,6 +205,63 @@ export const AccountPage = () => {
     </Grid>
   );
 
+  const accountDevices = (
+    <Grid item container direction="column" spacing={2}>
+      <Grid item container>
+        <Box borderBottom={1} className={classes.headerContainer}>
+          <Typography variant="subtitle1">Devices</Typography>
+        </Box>
+      </Grid>
+      <Grid item container>
+        <DeviceList />
+      </Grid>
+      <Grid item container direction="row" spacing={1}>
+        {editDevices && (
+          <Grid item>
+            <Controller
+              as={TextField}
+              rules={{
+                required: "Device name is required",
+              }}
+              control={control}
+              defaultValue=""
+              variant="outlined"
+              size="small"
+              id="displayName"
+              label="Display Name"
+              name="displayName"
+              error={!!errors2.email}
+              helperText={errors2.email ? errors2.email.message : ""}
+            />
+          </Grid>
+        )}
+        <Grid item>
+          <Button
+            onClick={() => {
+              setEditDevices(!editDevices);
+            }}
+            variant="outlined"
+          >
+            {isSubmitting2 ? (
+              <CircularProgress size={20} />
+            ) : editDevices ? (
+              "Cancel"
+            ) : (
+              "Add device"
+            )}
+          </Button>
+        </Grid>
+        {editDevices && (
+          <Grid item>
+            <Button variant="outlined" type="submit" color="primary">
+              {isSubmitting ? <CircularProgress size={20} /> : "Add"}
+            </Button>
+          </Grid>
+        )}
+      </Grid>
+    </Grid>
+  );
+
   const accountDelete = (
     <Grid
       item
@@ -221,6 +312,7 @@ export const AccountPage = () => {
             {accountEmail}
             {accountPassword}
           </form>
+          <form onSubmit={handlesubmit2(onAddDevice)}>{accountDevices}</form>
           {accountDelete}
         </Grid>
       </Grid>
