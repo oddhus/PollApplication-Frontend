@@ -4,14 +4,7 @@ import PaginateButtons from "../components/AdminPage/PaginationButtons";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { TextField, withStyles } from "@material-ui/core/";
-import {
-  Typography,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  Grid,
-  CircularProgress,
-} from "@material-ui/core";
+import { Typography, Grid, CircularProgress } from "@material-ui/core";
 import {
   getDaysHoursMinFroSec,
   getSecondsFromDdHhMm,
@@ -28,6 +21,8 @@ import axios from "axios";
 import { AlertDialog } from "../components/AlertDialog";
 import _ from "lodash";
 import { EditUserDialog } from "../components/EditUserDialog";
+import { PollActiveFilterButtons } from "../components/AdminPage/PollActiveFilterButtons";
+import { StatusBar } from "../components/StatusBar";
 
 const USER_TITLES = "Username, roles";
 const POLL_TITLES =
@@ -77,8 +72,11 @@ class AdminPage extends Component {
       loading: true,
       alertDialogOpen: false,
       recourceToDelete: "",
-      selectedUser: { username: "TEST@TEST.TEST", isAdmin: true },
+      selectedUser: {},
       openEditUser: false,
+      openStatusMessage: false,
+      statusMessage: "",
+      statusType: "success",
     };
     this.onClickView = this.onClickView.bind(this);
     this.setOpenResults = this.setOpenResults.bind(this);
@@ -146,8 +144,8 @@ class AdminPage extends Component {
   }
 
   componentDidMount() {
-    Promise.all([axios.get("/polls/admin"), axios.get("/users")]).then(
-      ([pollResult, userResult]) => {
+    Promise.all([axios.get("/polls/admin"), axios.get("/users")])
+      .then(([pollResult, userResult]) => {
         let polls =
           pollResult.data.length > 0
             ? categorizePolls(this.fixTime(pollResult.data))
@@ -159,8 +157,16 @@ class AdminPage extends Component {
           originalUsers: users,
           data: this.state.tabValue === TYPE.POLLS ? polls : users,
         });
-      }
-    );
+      })
+      .catch((e) => {
+        this.setState({
+          loading: false,
+          openStatusMessage: true,
+          statusMessage:
+            "Error fetching users and polls. Error: " + e.response.status,
+          statusType: "error",
+        });
+      });
   }
 
   onClickEdit(object) {
@@ -229,12 +235,23 @@ class AdminPage extends Component {
               ? newList
               : this.state.originalPolls,
           data: newDataList,
+          openStatusMessage: true,
+          statusMessage: path.slice(1, -2) + " sucsesfully deleted",
+          statusType: "success",
         });
       } else {
         throw new Error();
       }
     } catch (error) {
-      console.log(error);
+      this.setState({
+        openStatusMessage: true,
+        statusMessage:
+          "Could not delete " +
+          path.slice(1, -2) +
+          " Error " +
+          error.response.status,
+        statusType: "error",
+      });
     }
   }
 
@@ -292,6 +309,10 @@ class AdminPage extends Component {
     );
   };
 
+  setOpenStatusMessage(status) {
+    this.setState({ openStatusMessage: status });
+  }
+
   applyPollFilters() {
     let dataToShow = [...this.state.originalPolls];
     dataToShow = filterList(dataToShow, this.state.questionFilter, "question");
@@ -342,12 +363,24 @@ class AdminPage extends Component {
           originalUsers: this.state.originalUsers.map((el) =>
             el.id === updatedUser.id ? Object.assign(el, updatedUser) : el
           ),
+          openStatusMessage: true,
+          statusMessage:
+            this.state.selectedUser.username + " sucsessfuly updated!",
+          statusType: "success",
         });
       } else {
         throw new Error();
       }
     } catch (error) {
-      console.log(error);
+      this.setState({
+        openStatusMessage: true,
+        statusMessage:
+          "Could not update " +
+          this.state.selectedUser.username +
+          " Error " +
+          error.response.status,
+        statusType: "error",
+      });
     }
   }
 
@@ -372,6 +405,15 @@ class AdminPage extends Component {
           <Tab disabled={this.state.loading} label="Users" />
           <Tab disabled={this.state.loading} label="Polls" />
         </Tabs>
+
+        <StatusBar
+          open={this.state.openStatusMessage}
+          setOpen={this.setOpenStatusMessage.bind(this)}
+          severity={this.state.statusType}
+        >
+          {this.state.statusMessage}
+        </StatusBar>
+
         {/* POLL RESULT POPUP */}
         <ResultModal
           open={this.state.openResults}
@@ -418,22 +460,11 @@ class AdminPage extends Component {
         </Grid>
         {/* RADIO BUTTON FILTERS FOR POLL */}
         {this.state.tabValue === TYPE.POLLS && (
-          <RadioGroup
-            row
-            value={this.state.radioBtnsValue}
-            onChange={this.handleRadioBtnChange}
-          >
-            <FormControlLabel value="all" control={<Radio />} label="All" />
-            <FormControlLabel
-              value="0"
-              control={<Radio />}
-              label="Not started"
-            />
-            <FormControlLabel value="1" control={<Radio />} label="Ongoing" />
-            <FormControlLabel value="2" control={<Radio />} label="Finished" />
-          </RadioGroup>
+          <PollActiveFilterButtons
+            btnsValue={this.state.radioBtnsValue}
+            handleRadioBtnChange={this.handleRadioBtnChange}
+          />
         )}
-
         {/* CONFIRM DELETE DIALOG */}
         <AlertDialog
           open={this.state.alertDialogOpen}
