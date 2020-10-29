@@ -16,7 +16,6 @@ export const getUserDevices = async (url) => {
 
 export default function useUserDevices() {
   const { data, mutate, error } = useSWR("/voting-device", getUserDevices);
-  console.log(data);
 
   const loading = !data && !error;
 

@@ -12,7 +12,6 @@ import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import axios from "axios";
 import usePollInfo from "../queries/use-pollinfo";
-import useUser from "../queries/use-user";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -51,7 +50,6 @@ export const GuestLoginPage = (props) => {
       const guestresponse = await axios.post("auth/signup/guest", {
         displayName,
       });
-      await new Promise((res) => setTimeout(res, 500));
       if (guestresponse.data && getPin(props)) {
         const pollresponse = await axios.get(`/polls/${getPin(props)}`);
         if (pollresponse.data) {

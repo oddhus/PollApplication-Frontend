@@ -8,10 +8,11 @@ import {
   CircularProgress,
   TextField,
 } from "@material-ui/core";
+import { AddDevice } from "../components/AccountPage/AddDevice";
 import { EditPassword } from "../components/AccountPage/EditPassword";
 import { EditEmail } from "../components/AccountPage/EditEmail";
 import { DeviceList } from "../components/AccountPage/DeviceList";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { grey } from "@material-ui/core/colors";
 import { StatusBar } from "../components/StatusBar";
 import { AlertDialog } from "../components/AlertDialog";
@@ -56,13 +57,6 @@ export const AccountPage = () => {
     formState: { isSubmitting },
   } = useForm();
 
-  const {
-    errors: errors2,
-    register,
-    handleSubmit: handlesubmit2,
-    formState: { isSubmitting: isSubmitting2 },
-  } = useForm();
-
   const { mutate: mutateDevices } = useUserDevices();
 
   useEffect(() => {
@@ -74,6 +68,7 @@ export const AccountPage = () => {
   }, [user, reset]);
 
   const onAddDevice = async (data) => {
+    console.log("hi");
     console.log(data);
     try {
       const response = await axios.post(`/voting-device/add`, {
@@ -206,58 +201,31 @@ export const AccountPage = () => {
   );
 
   const accountDevices = (
-    <Grid item container direction="column" spacing={2}>
+    <Grid
+      item
+      container
+      direction="column"
+      spacing={2}
+      style={{ paddingLeft: 0 }}
+    >
       <Grid item container>
         <Box borderBottom={1} className={classes.headerContainer}>
           <Typography variant="subtitle1">Devices</Typography>
         </Box>
       </Grid>
       <Grid item container>
-        <DeviceList />
+        <DeviceList
+          setStatusMessage={setStatusMessage}
+          setIsSuccess={setIsSuccess}
+          setOpenStatus={setOpenStatus}
+        />
       </Grid>
-      <Grid item container direction="row" spacing={1}>
-        {editDevices && (
-          <Grid item>
-            <Controller
-              as={TextField}
-              rules={{
-                required: "Device name is required",
-              }}
-              control={control}
-              defaultValue=""
-              variant="outlined"
-              size="small"
-              id="displayName"
-              label="Display Name"
-              name="displayName"
-              error={!!errors2.email}
-              helperText={errors2.email ? errors2.email.message : ""}
-            />
-          </Grid>
-        )}
-        <Grid item>
-          <Button
-            onClick={() => {
-              setEditDevices(!editDevices);
-            }}
-            variant="outlined"
-          >
-            {isSubmitting2 ? (
-              <CircularProgress size={20} />
-            ) : editDevices ? (
-              "Cancel"
-            ) : (
-              "Add device"
-            )}
-          </Button>
-        </Grid>
-        {editDevices && (
-          <Grid item>
-            <Button variant="outlined" type="submit" color="primary">
-              {isSubmitting ? <CircularProgress size={20} /> : "Add"}
-            </Button>
-          </Grid>
-        )}
+      <Grid item container>
+        <AddDevice
+          setStatusMessage={setStatusMessage}
+          setIsSuccess={setIsSuccess}
+          setOpenStatus={setOpenStatus}
+        />
       </Grid>
     </Grid>
   );
@@ -302,7 +270,15 @@ export const AccountPage = () => {
         {statusMessage}
       </StatusBar>
       <Grid container justify="center">
-        <Grid container item direction="column" spacing={3} xs={12} sm={6}>
+        <Grid
+          container
+          item
+          direction="column"
+          spacing={3}
+          xs={12}
+          sm={9}
+          md={6}
+        >
           <Grid item style={{ paddingLeft: 0 }}>
             <Box borderBottom={1} className={classes.headerContainer}>
               <Typography variant="h4">My account</Typography>
@@ -312,7 +288,7 @@ export const AccountPage = () => {
             {accountEmail}
             {accountPassword}
           </form>
-          <form onSubmit={handlesubmit2(onAddDevice)}>{accountDevices}</form>
+          {accountDevices}
           {accountDelete}
         </Grid>
       </Grid>
