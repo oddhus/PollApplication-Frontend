@@ -71,5 +71,5 @@ AlertDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  onSAve: PropTypes.function.isRequired,
+  onSAve: PropTypes.func.isRequired,
 };
