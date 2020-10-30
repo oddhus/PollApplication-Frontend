@@ -5,7 +5,6 @@ import { UserPollsPage } from "../pages/UserPollsPage";
 import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { AccountPage } from "../pages/AccountPage";
-import { AdminPage } from "../pages/AdminPage";
 import { PublicPollsPage } from "../pages/PublicPollsPage";
 import { GuestLoginPage } from "../pages/GuestLoginPage";
 import { VotePage } from "../pages/VotePage";
@@ -13,6 +12,7 @@ import { ResultPage } from "../pages/ResultPage";
 import { NoMatch } from "../pages/NoMatch";
 import { Switch } from "react-router-dom";
 import CreateEditPollPage from "../pages/CreateEditPollPage";
+import AdminPage from "../pages/AdminPage";
 
 export const UnauthenticatedAppRoutes = () => {
   return (

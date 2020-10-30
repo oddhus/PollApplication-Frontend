@@ -30,14 +30,16 @@ export function filterCategory(polls, category) {
   return polls.filter((poll) => poll.category === category);
 }
 
-export function filterPolls(polls, keyword) {
+export function filterList(list, keyword, attribute) {
   if (keyword.length === 0) {
-    return polls;
+    return list;
   }
 
-  return polls.filter(
-    (poll) =>
-      poll.name.toLowerCase().includes(keyword.toLowerCase()) ||
-      poll.question.toLowerCase().includes(keyword)
+  return list.filter(
+    (list) =>
+      list[attribute].toLowerCase().includes(keyword.toLowerCase())
   );
 }
+
+
+
