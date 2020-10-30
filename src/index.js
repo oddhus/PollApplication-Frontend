@@ -6,7 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "./theme/theme";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:8080"; //"https://pollapplication-dat250-group5.herokuapp.com";
+axios.defaults.baseURL = "https://pollapplication-dat250-group5.herokuapp.com";
 axios.defaults.withCredentials = true;
 
 ReactDOM.render(
