@@ -46,7 +46,7 @@ export const AuthenticatedAppRoutes = (user) => {
         {user.guest && (
           <Route exact path="/register" component={RegisterPage} />
         )}
-        {user.isAdmin && <Route path="/admin" component={AdminPage} />}
+        {user.admin && <Route path="/admin" component={AdminPage} />}
         <Route component={NoMatch} />
       </Switch>
     </React.Fragment>
