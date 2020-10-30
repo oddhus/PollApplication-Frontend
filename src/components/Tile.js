@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(2),
     fontSize: 70,
     padding: 0,
     position: "absolute",
@@ -62,7 +62,6 @@ export function Tile(props) {
 }
 
 Tile.propTypes = {
-  classes: PropTypes.object.isRequired,
   icon: PropTypes.object.isRequired,
   color: PropTypes.string,
   backgroundColor: PropTypes.string,

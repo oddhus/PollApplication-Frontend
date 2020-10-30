@@ -77,7 +77,7 @@ export function UserPollsPage(props) {
       setStatus("success");
       setOpenAlertDialog(true);
     }
-  }, [props.history.location.state]);
+  }, [props.history.location.state, mutate]);
 
   const onDelete = async () => {
     setIsDeleting(true);
