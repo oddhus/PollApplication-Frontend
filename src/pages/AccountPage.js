@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   CircularProgress,
-  TextField,
 } from "@material-ui/core";
 import { AddDevice } from "../components/AccountPage/AddDevice";
 import { EditPassword } from "../components/AccountPage/EditPassword";
@@ -19,7 +18,6 @@ import { AlertDialog } from "../components/AlertDialog";
 import { useHistory } from "react-router-dom";
 import useUser from "../queries/use-user";
 import axios from "axios";
-import useUserDevices from "../queries/use-userdevices";
 
 const useStyles = makeStyles((theme) => ({
   headerContainer: {
@@ -39,7 +37,6 @@ export const AccountPage = () => {
   const classes = useStyles();
   const [editEmail, setEditEmail] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
-  const [editDevices, setEditDevices] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
   const [isSuccess, setIsSuccess] = useState("success");
   const [statusMessage, setStatusMessage] = useState("");
@@ -57,8 +54,6 @@ export const AccountPage = () => {
     formState: { isSubmitting },
   } = useForm();
 
-  const { mutate: mutateDevices } = useUserDevices();
-
   useEffect(() => {
     if (user) {
       reset({
@@ -66,27 +61,6 @@ export const AccountPage = () => {
       });
     }
   }, [user, reset]);
-
-  const onAddDevice = async (data) => {
-    console.log("hi");
-    console.log(data);
-    try {
-      const response = await axios.post(`/voting-device/add`, {
-        displayName: data.displayName,
-      });
-      if (response.data) {
-        mutateDevices((devices) => [...devices, response.data]);
-        setStatusMessage(`Device added!`);
-        setOpenStatus(true);
-      } else {
-        throw new Error();
-      }
-    } catch (error) {
-      setStatusMessage("Failed to add device");
-      setIsSuccess("error");
-      setOpenStatus(true);
-    }
-  };
 
   const onSubmit = async ({ email, newPassword, oldPassword }) => {
     try {

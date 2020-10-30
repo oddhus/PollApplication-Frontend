@@ -11,7 +11,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import axios from "axios";
-import usePollInfo from "../queries/use-pollinfo";
 import useUser from "../queries/use-user";
 
 const useStyles = makeStyles(() => ({
@@ -41,7 +40,7 @@ export const LandingPage = () => {
   const [openStatus, setOpenStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
 
-  const { user, loggedOut } = useUser();
+  const { loggedOut } = useUser();
 
   const onSubmit = async (data) => {
     if (loggedOut) {

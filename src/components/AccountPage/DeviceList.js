@@ -2,7 +2,7 @@ import React from "react";
 import { DeviceItem } from "./DeviceItem";
 import useUserDevices from "../../queries/use-userdevices";
 import { ThemeCircularProgress } from "../ThemeCircularProgress";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 export const DeviceList = ({
   setStatusMessage,

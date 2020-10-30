@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Typography, Button } from "@material-ui/core/";
-import { getDaysHoursMinFromMin } from "../utils/calculateTime";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
