@@ -65,6 +65,7 @@ export const PublicPollItem = ({ poll }) => {
       >
         <ResultChart id={poll.id} />
       </ResultModal>
+
       <Grid item className={classes.pollContainer}>
         <Paper>
           <Grid item container direction="row">
@@ -81,25 +82,18 @@ export const PublicPollItem = ({ poll }) => {
                 className={classes.linkContainer}
               >
                 <Grid item>
-                  <Typography
-                    variant="h5"
-                    className={classes.title}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {poll.question}
-                  </Typography>
+                  <PollQuestion poll={poll} classes={useStyles()} />
                 </Grid>
-                <StatusPoll poll={poll} classes={useStyles()} />
               </Grid>
               <Grid item>
-                <Typography
-                  className={classes.question}
-                  color="textSecondary"
-                  noWrap
-                >
-                  Poll id: {poll.id}
-                </Typography>
+                <Grid item container direction="row" alignItems="center">
+                  <Grid item>
+                    <PollId poll={poll} classes={useStyles()} />
+                  </Grid>
+                  <Grid item>
+                    <StatusPoll poll={poll} classes={useStyles()} />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
             <Grid
@@ -123,5 +117,26 @@ export const PublicPollItem = ({ poll }) => {
         </Paper>
       </Grid>
     </React.Fragment>
+  );
+};
+
+export const PollQuestion = ({ poll, classes }) => {
+  return (
+    <Typography
+      variant="h5"
+      className={classes.title}
+      color="textSecondary"
+      noWrap
+    >
+      {poll.question}
+    </Typography>
+  );
+};
+
+export const PollId = ({ poll, classes }) => {
+  return (
+    <Typography className={classes.question} color="textSecondary" noWrap>
+      Poll id: {poll.id}
+    </Typography>
   );
 };
