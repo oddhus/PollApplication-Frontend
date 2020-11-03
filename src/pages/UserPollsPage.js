@@ -54,12 +54,14 @@ export function UserPollsPage(props) {
   const [selectedPollId, setSelectedPollId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { user } = useUser();
-  const { polls, loading, mutate } = useMyPolls(user.id);
+  const { user, loggedOut } = useUser();
+  const { polls, loading, mutate } = useMyPolls(loggedOut ? null : user.id);
 
   useEffect(() => {
     if (polls) {
-      setFilteredPolls(filterList(filterCategory(polls, tabValue), keyword, 'question'));
+      setFilteredPolls(
+        filterList(filterCategory(polls, tabValue), keyword, "question")
+      );
     }
   }, [tabValue, polls, keyword, loading]);
 
@@ -74,6 +76,19 @@ export function UserPollsPage(props) {
     ) {
       mutate((polls) => [...polls, props.history.location.state.addedPoll]);
       setStatusMessage("Poll created!");
+      setStatus("success");
+      setOpenAlertDialog(true);
+    } else if (
+      props.history.location.state &&
+      props.history.location.state.updatedPoll
+    ) {
+      const updatedPoll = props.history.location.state.updatedPoll;
+      mutate((polls) => {
+        return polls.map((poll) =>
+          poll.id === updatedPoll.id ? updatedPoll : poll
+        );
+      });
+      setStatusMessage("Poll updated!");
       setStatus("success");
       setOpenAlertDialog(true);
     }

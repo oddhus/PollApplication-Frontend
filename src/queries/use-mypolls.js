@@ -16,7 +16,10 @@ const getPolls = async (url) => {
 };
 
 export default function useMyPolls(id) {
-  const { data, mutate, error } = useSWR("polls/owner/" + id, getPolls);
+  const { data, mutate, error } = useSWR(
+    id ? "polls/owner/" + id : null,
+    getPolls
+  );
 
   const loading = !data && !error;
 

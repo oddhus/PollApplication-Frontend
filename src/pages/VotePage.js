@@ -7,6 +7,7 @@ import { StatusBar } from "../components/StatusBar";
 import moment from "moment";
 import usePollInfo from "../queries/use-pollinfo";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
+import { guestCookieExists, guestCookieId } from "../utils/cookieUtils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,10 +81,14 @@ export const VotePage = (props) => {
     };
   }, [poll, isActivated]);
 
-  async function sendVote(vote) {
+  async function sendVote(answer) {
     const pollId = props.match.params.pollId;
+    let vote = { vote: answer };
+    if (guestCookieExists()) {
+      vote.id = guestCookieId();
+    }
     try {
-      const response = await axios.post(`/votes/${pollId}`, { vote });
+      const response = await axios.post(`/votes/${pollId}`, vote);
       if (response.status === 200) {
         history.replace({
           pathname: `/result/${pollId}`,
@@ -93,6 +98,7 @@ export const VotePage = (props) => {
         throw new Error();
       }
     } catch (error) {
+      console.log(error.response);
       setStatusMessage(
         error.response && error.response.data
           ? error.response.data
@@ -113,7 +119,7 @@ export const VotePage = (props) => {
         ) : (
           <React.Fragment>
             <div className={classes.pollInfo}>
-              <Typography>{data.pollOwner + "'s poll"}</Typography>
+              <Typography>{data.owner + "'s poll"}</Typography>
               <Typography>
                 {isActivated
                   ? "Time remaining: " + timeRemaining

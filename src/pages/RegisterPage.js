@@ -7,6 +7,7 @@ import { Link as RouterLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import useUser from "../queries/use-user";
+import { guestCookieDelete, guestCookieExists } from "../utils/cookieUtils";
 
 export const RegisterPage = () => {
   const classes = useStyles();
@@ -24,11 +25,14 @@ export const RegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const { mutate } = useUser();
 
-  const onSubmit = async ({ username, email, firstPassword }) => {
+  const onSubmit = async ({ displayName, email, firstPassword }) => {
+    if (guestCookieExists()) {
+      guestCookieDelete();
+    }
     try {
       const response = await axios.post("/auth/signup", {
-        displayName: username,
-        username: email,
+        displayName,
+        email,
         password: firstPassword,
       });
       if (response.status === 200) {
@@ -59,10 +63,10 @@ export const RegisterPage = () => {
           <Grid item>
             <TextField
               label="Username"
-              name="username"
+              name="displayName"
               inputRef={register({ required: "You have to give a username." })}
-              error={!!errors.username}
-              helperText={errors.username ? errors.username.message : ""}
+              error={!!errors.displayName}
+              helperText={errors.displayName ? errors.displayName.message : ""}
             />
           </Grid>
           <Grid item>
