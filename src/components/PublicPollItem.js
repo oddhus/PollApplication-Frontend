@@ -48,17 +48,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const PublicPollItem = ({ poll }) => {
   const [openResults, setOpenResults] = useState(false);
-  if (poll.startTime == null) {
-    poll.category = 0;
-  } else if (
-    moment(poll.startTime)
-      .add(poll.pollDuration, "seconds")
-      .isBefore(moment.now())
-  ) {
-    poll.category = 1;
-  } else {
-    poll.category = 2;
-  }
 
   function onDisplayResults() {
     console.log("Results");
