@@ -1,6 +1,7 @@
 import React from "react";
 import usePublicPolls from "../queries/use-public-polls";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
+import { PublicPollItem } from "../components/PublicPollItem";
 
 export const PublicPollsPage = () => {
   const { polls, loading } = usePublicPolls();
@@ -10,11 +11,7 @@ export const PublicPollsPage = () => {
       {loading ? (
         <ThemeCircularProgress />
       ) : (
-        polls.map((poll) => (
-          <div>
-            Pollname: {poll.pollName} Question: {poll.question}
-          </div>
-        ))
+        polls.map((poll) => <PublicPollItem poll={poll} />)
       )}
     </div>
   );
