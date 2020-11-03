@@ -9,7 +9,9 @@ export const PublicPollsPage = () => {
   const [categorizedPolls, setCategorizedPolls] = useState([]);
 
   useEffect(() => {
-    setCategorizedPolls(categorizePolls(polls));
+    if (polls) {
+      setCategorizedPolls(categorizePolls(polls));
+    }
   }, [polls]);
 
   return (
