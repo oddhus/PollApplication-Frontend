@@ -7,7 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import axios from "axios";
 import useUser from "../queries/use-user";
-import { guestCookieDelete, guestCookieExists } from "../utils/cookieUtils";
 
 export const LoginPage = () => {
   const classes = useStyles();
@@ -21,12 +20,9 @@ export const LoginPage = () => {
   const { mutate } = useUser();
   const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit = async ({ email, password }) => {
-    if (guestCookieExists()) {
-      guestCookieDelete();
-    }
+  const onSubmit = async ({ username, password }) => {
     try {
-      const response = await axios.post("/auth/signin", { email, password });
+      const response = await axios.post("/auth/signin", { username, password });
       if (response.status === 200) {
         mutate({ ...response.data });
         history.push("/polls");
@@ -34,9 +30,8 @@ export const LoginPage = () => {
         throw new Error();
       }
     } catch (error) {
-      console.log(error.response);
       setErrorMessage(
-        error.response && error.response.data === "Bad credentials"
+        error.response && error.response.data.error === "Unauthorized"
           ? "Wrong username or password"
           : "Could not log in. Please try again later"
       );
@@ -55,11 +50,11 @@ export const LoginPage = () => {
         >
           <Grid item>
             <TextField
-              label="Email"
-              name="email"
-              inputRef={register({ required: "You have to give a email." })}
-              error={!!errors.email}
-              helperText={errors.email ? errors.email.message : ""}
+              label="Username"
+              name="username"
+              inputRef={register({ required: "You have to give a username." })}
+              error={!!errors.username}
+              helperText={errors.username ? errors.username.message : ""}
             />
           </Grid>
           <Grid item>

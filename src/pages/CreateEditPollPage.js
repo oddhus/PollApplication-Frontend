@@ -60,7 +60,7 @@ const initialState = {
   pollName: "",
   question: "",
   setDuration: false,
-  visibilityType: "PUBLIC",
+  isPrivate: false,
   days: "",
   hours: "",
   minutes: "",
@@ -83,7 +83,8 @@ class CreateEditPollPage extends Component {
   };
 
   handleVisibilityChange = (e) => {
-    this.setState({ visibilityType: e.target.name });
+    let value = e.target.name === "setPublic" ? false : true;
+    this.setState({ isPrivate: value });
   };
 
   handleAddEmail = () => {
@@ -119,50 +120,40 @@ class CreateEditPollPage extends Component {
   handleSaveClicked = async () => {
     this.setState({ isLoading: true });
     const job = {
-      poll: {
-        name: this.state.pollName,
-        question: this.state.question,
-        pollDuration: this.calculateDuration(),
-        visibilityType: this.state.visibilityType,
-      },
-      emails: this.state.emailAdresses,
+      name: this.state.pollName,
+      question: this.state.question,
+      pollDuration: this.calculateDuration(),
+      visibilityType: this.state.isPrivate === true ? "PRIVATE" : "PUBLIC",
+      //emailAdresses: this.state.emailAdresses
     };
     const location = this.props.match.params.pollId
-      ? `/polls/${this.props.match.params.pollId}`
+      ? "/polls/edit/this.props.match.params.pollId"
       : "/polls";
-    try {
-      let response;
-      if (location === "/polls") {
-        response = await axios.post(location, job);
-      } else {
-        response = await axios.put(location, job);
-      }
-      console.log(response);
-      if (response.status === 200) {
-        this.setState({ isLoading: false });
-        this.props.history.push({
-          pathname: "/polls",
-          state: {
-            addedPoll: location === "/polls" ? response.data : undefined,
-            updatedPoll: location === "/polls" ? undefined : response.data,
-          },
+    if (this.props.match.params.pollId) {
+    } else {
+      try {
+        const response = await axios.post(location, job);
+        if (response.status === 200) {
+          this.setState({ isLoading: false });
+          this.props.history.push({
+            pathname: "/polls",
+            state: { addedPoll: response.data },
+          });
+        } else {
+          throw new Error();
+        }
+      } catch (error) {
+        this.setState({
+          openStatusMessage: true,
+          statusMessage: "Could not create poll",
         });
-      } else {
-        throw new Error();
+        this.setState({ isLoading: false });
       }
-    } catch (error) {
-      this.setState({
-        openStatusMessage: true,
-        statusMessage: "Could not create poll",
-      });
-      this.setState({ isLoading: false });
     }
   };
 
   setOpenStatusMessage(status) {
-    if (this) {
-      this.setState({ openStatusMessage: status || false });
-    }
+    this.setState({ openStatusMessage: status });
   }
 
   /**
@@ -190,32 +181,20 @@ class CreateEditPollPage extends Component {
     this.setState({ emailAdresses: emailAdresses });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.location.pathname.includes("/polls") &&
-      window.location.pathname === "/create"
-    ) {
-      this.resetState();
-    }
-  }
-
   componentDidMount() {
     // Seutp the correct state corresponding to if an existing poll should be edited or if a new one should be created.
     if (this.props.location.state === undefined) {
       this.resetState();
     } else {
       let state = this.props.location.state;
-      if (state) {
-        let duration = this.props.location.state.pollDuration;
+      if (this.props.location.state !== undefined) {
+        let duration = this.props.location.state.duration;
         state.days = getDaysFromSeconds(duration);
         duration = duration - state.days * 60 * 60 * 24;
         state.hours = getHoursFromSeconds(duration);
         duration = duration - state.hours * 60 * 60;
         state.minutes = getMinFromSeconds(duration);
         state.setDuration = true;
-      }
-      if (state && state.allowedVoters) {
-        state.emailAdresses = state.allowedVoters;
       }
       this.setState(state);
     }
@@ -311,8 +290,8 @@ class CreateEditPollPage extends Component {
                 control={
                   <Checkbox
                     color="primary"
-                    name="PUBLIC"
-                    checked={this.state.visibilityType === "PUBLIC"}
+                    name="setPublic"
+                    checked={!this.state.isPrivate}
                     onChange={this.handleVisibilityChange}
                   />
                 }
@@ -322,8 +301,8 @@ class CreateEditPollPage extends Component {
                 control={
                   <Checkbox
                     color="primary"
-                    name="PRIVATE"
-                    checked={this.state.visibilityType === "PRIVATE"}
+                    name="setPrivate"
+                    checked={this.state.isPrivate}
                     onChange={this.handleVisibilityChange}
                   />
                 }
@@ -331,7 +310,7 @@ class CreateEditPollPage extends Component {
               />
             </div>
 
-            <div hidden={this.state.visibilityType === "PUBLIC"}>
+            <div hidden={!this.state.isPrivate}>
               <TextField
                 id="email"
                 label="Example@email.com"

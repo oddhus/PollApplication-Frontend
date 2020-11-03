@@ -23,6 +23,7 @@ export function AlertDialog({
     setOpen(false);
   };
 
+  
   return (
     <div>
       <Dialog
@@ -57,5 +58,5 @@ AlertDialog.propTypes = {
   title: PropTypes.string.isRequired,
   button: PropTypes.string,
   onClick: PropTypes.func,
-  components: PropTypes.array,
+  components: PropTypes.array
 };

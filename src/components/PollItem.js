@@ -72,8 +72,8 @@ export function PollItem({
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user, loggedOut } = useUser();
-  const { mutate } = useMyPolls(loggedOut ? null : user.id);
+  const { user } = useUser();
+  const { mutate } = useMyPolls(user.id);
 
   const onActivate = async (id) => {
     setIsLoading(true);

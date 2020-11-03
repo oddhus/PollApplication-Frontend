@@ -65,16 +65,13 @@ export const AccountPage = () => {
   const onSubmit = async ({ email, newPassword, oldPassword }) => {
     try {
       const response = await axios.patch(`/users/${user.id}`, {
-        email,
+        username: email,
         newPassword,
         oldPassword,
       });
-      if (response.data && email) {
-        await axios.post("/auth/logout", {});
-        mutate(null);
-        history.replace("/");
-      } else if (response.data && newPassword) {
-        setStatusMessage("Password updated!");
+      if (response.data) {
+        mutate({ ...user, ...(email && { username: email }) });
+        setStatusMessage(`${newPassword ? "Password" : "Email"} updated!`);
         setOpenStatus(true);
         setEditPassword(false);
         setEditEmail(false);
@@ -92,7 +89,6 @@ export const AccountPage = () => {
     try {
       const response = await axios.delete(`/users/${user.id}`);
       if (response.data) {
-        await axios.post("/auth/logout", {});
         mutate(null);
         setOpenAlertDialog(false);
         history.push("/");
@@ -122,11 +118,6 @@ export const AccountPage = () => {
           <Typography variant="body1">{user.email}</Typography>
         )}
       </Grid>
-      {editEmail && (
-        <Typography variant="body1" color="error" style={{ paddingLeft: 10 }}>
-          Warning: You must sign in again after changing your email
-        </Typography>
-      )}
       <Grid item container spacing={1}>
         <Grid item>
           <Button
