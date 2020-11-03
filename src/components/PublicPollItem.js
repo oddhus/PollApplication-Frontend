@@ -4,7 +4,6 @@ import { Grid, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { ThemeButton } from "./ThemeButton";
-import { ThemeCircularProgress } from "./ThemeCircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import { ResultChart } from "./ResultChart";
 import { ResultModal } from "./ResultModal";
@@ -49,6 +48,18 @@ const useStyles = makeStyles((theme) => ({
 
 export const PublicPollItem = ({ poll }) => {
   const [openResults, setOpenResults] = useState(false);
+  if (poll.startTime == null) {
+    poll.category = 0;
+  } else if (
+    moment(poll.startTime)
+      .add(poll.pollDuration, "seconds")
+      .isBefore(moment.now())
+  ) {
+    poll.category = 1;
+  } else {
+    poll.category = 2;
+  }
+
   function onDisplayResults() {
     console.log("Results");
     setOpenResults(true);
@@ -89,34 +100,42 @@ export const PublicPollItem = ({ poll }) => {
                     {poll.question}
                   </Typography>
                 </Grid>
-                {poll.category === 1 && (
-                  <Grid item container sm={12} md={4} alignItems="center">
+                <Grid item>
+                  {poll.category === 0 && (
                     <Typography
                       variant="body2"
                       color="textSecondary"
                       className={classes.finishedInfo}
                     >
-                      Time remaining:{" "}
+                      Status: Not started.
+                    </Typography>
+                  )}
+                  {poll.category === 1 && (
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      className={classes.finishedInfo}
+                    >
+                      Status:{" "}
                       {moment(poll.startTime)
                         .add(poll.pollDuration, "seconds")
-                        .fromNow(true)}
+                        .fromNow(true)}{" "}
+                      until finished.
                     </Typography>
-                  </Grid>
-                )}
-                {poll.category === 2 && (
-                  <Grid item container sm={12} md={4} alignItems="center">
+                  )}
+                  {poll.category === 2 && (
                     <Typography
                       variant="body2"
                       color="textSecondary"
                       className={classes.finishedInfo}
                     >
-                      Finished{" "}
+                      Status: Finished{" "}
                       {moment(poll.startTime)
                         .add(poll.pollDuration, "seconds")
                         .fromNow()}
                     </Typography>
-                  </Grid>
-                )}
+                  )}
+                </Grid>
               </Grid>
               <Grid item>
                 <Typography
