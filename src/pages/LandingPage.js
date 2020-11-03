@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import axios from "axios";
 import useUser from "../queries/use-user";
+import { guestCookieExists } from "../utils/cookieUtils";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -51,7 +52,7 @@ export const LandingPage = () => {
     } else {
       try {
         const response = await axios.get(`/polls/${data.pin}`);
-        if (response.data) {
+        if (response.data && !guestCookieExists()) {
           history.push({
             pathname: `/vote/${data.pin}`,
             state: response.data,

@@ -19,7 +19,7 @@ export const DeviceList = ({
         <DeviceItem
           id={device.id}
           displayName={device.displayName}
-          uuid={device.username}
+          uuid={device.id}
           key={device.id}
           setStatusMessage={setStatusMessage}
           setIsSuccess={setIsSuccess}
