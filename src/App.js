@@ -1,15 +1,27 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { Switch, BrowserRouter } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Container } from "@material-ui/core";
-import { AppRoutes } from "./routes/routes";
+import {
+  AuthenticatedAppRoutes,
+  UnauthenticatedAppRoutes,
+} from "./routes/routes";
+import useUser from "./queries/use-user";
 
 export const App = () => {
+  const { user, loading } = useUser();
+
   return (
     <BrowserRouter>
       <Navbar />
       <Container maxWidth={"md"}>
-        <AppRoutes />
+        <Switch>
+          {!loading && user ? (
+            AuthenticatedAppRoutes(user)
+          ) : (
+            <UnauthenticatedAppRoutes />
+          )}
+        </Switch>
       </Container>
     </BrowserRouter>
   );

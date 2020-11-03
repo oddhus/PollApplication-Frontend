@@ -13,25 +13,40 @@ import { NoMatch } from "../pages/NoMatch";
 import { Switch } from "react-router-dom";
 import CreateEditPollPage from "../pages/CreateEditPollPage";
 import AdminPage from "../pages/AdminPage";
-import ProtectedRoute from "./ProtectedRoute";
-import AdminRoute from "./ProtectedRoute";
 
-export const AppRoutes = () => {
+export const UnauthenticatedAppRoutes = () => {
   return (
     <React.Fragment>
       <Switch>
         <Route exact path="/" component={LandingPage} />
-        <Route exact path="/login" component={LoginPage} />
-        <Route exact path="/register" component={RegisterPage} />
-        <Route path="/guest" component={GuestLoginPage} />
         <Route path="/vote/:pollId" component={VotePage} />
         <Route path="/result/:pollId" component={ResultPage} />
-        <ProtectedRoute exact path="/polls" component={UserPollsPage} />
-        <ProtectedRoute path="/polls/:pollId" component={CreateEditPollPage} />
-        <ProtectedRoute path="/create" component={CreateEditPollPage} />
+        <Route path="/guest" component={GuestLoginPage} />
+        <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/register" component={RegisterPage} />
+        <Route component={NoMatch} />
+      </Switch>
+    </React.Fragment>
+  );
+};
+
+export const AuthenticatedAppRoutes = (user) => {
+  return (
+    <React.Fragment>
+      <Switch>
+        <Route exact path="/" component={LandingPage} />
+        <Route exact path="/polls" component={UserPollsPage} />
+        <Route path="/polls/:pollId" component={CreateEditPollPage} />
+        <Route path="/vote/:pollId" component={VotePage} />
+        <Route path="/result/:pollId" component={ResultPage} />
+        <Route path="/create" component={CreateEditPollPage} />
         <Route path="/public" component={PublicPollsPage} />
-        <ProtectedRoute path="/account" component={AccountPage} />
-        <AdminRoute path="/admin" component={AdminPage} />
+        <Route path="/account" component={AccountPage} />
+        {user.guest && <Route exact path="/login" component={LoginPage} />}
+        {user.guest && (
+          <Route exact path="/register" component={RegisterPage} />
+        )}
+        {user.admin && <Route path="/admin" component={AdminPage} />}
         <Route component={NoMatch} />
       </Switch>
     </React.Fragment>
