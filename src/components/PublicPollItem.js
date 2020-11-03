@@ -55,7 +55,6 @@ export const PublicPollItem = ({ poll }) => {
   }
 
   const classes = useStyles();
-  let isLoading = false;
   return (
     <React.Fragment>
       <ResultModal
@@ -141,7 +140,7 @@ export const PublicPollItem = ({ poll }) => {
               {poll.category !== 0 && (
                 <Grid item className={classes.buttonContainer}>
                   <ThemeButton onClick={() => onDisplayResults()}>
-                    {isLoading ? <ThemeCircularProgress /> : "Results"}
+                    Results
                   </ThemeButton>
                 </Grid>
               )}

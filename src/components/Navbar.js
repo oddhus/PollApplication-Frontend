@@ -107,6 +107,7 @@ export const Navbar = () => {
   const guestRoutes = [
     { name: "Login", link: "/login", activeIndex: 0 },
     { name: "Register", link: "/register", activeIndex: 1 },
+    { name: "Public", link: "/public", activeIndex: 2 },
   ];
 
   const userRoutes = [
@@ -142,13 +143,6 @@ export const Navbar = () => {
     const selectedRoute = routes.find((route) => route.link === pathname);
     setValue(!selectedRoute ? false : selectedRoute.activeIndex);
   }, [routes]);
-
-  useEffect(() => {
-    const pathname = window.location.pathname;
-    if (loggedOut && !guestRoutes.find((route) => route.link === pathname)) {
-      history.replace("/");
-    }
-  }, [loggedOut, history, guestRoutes]);
 
   const tabs = (
     <React.Fragment>

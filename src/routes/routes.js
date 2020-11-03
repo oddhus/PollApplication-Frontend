@@ -17,7 +17,7 @@ export const UnauthenticatedAppRoutes = () => {
   return (
     <React.Fragment>
       <Switch>
-        <Route exact path="/" component={PublicPollsPage} />
+        <Route exact path="/" component={LandingPage} />
         <Route path="/vote/:pollId" component={VotePage} />
         <Route path="/result/:pollId" component={ResultPage} />
         <Route exact path="/login" component={LoginPage} />
