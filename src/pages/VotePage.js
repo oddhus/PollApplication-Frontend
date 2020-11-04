@@ -8,7 +8,6 @@ import moment from "moment";
 import usePollInfo from "../queries/use-pollinfo";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
 import { guestCookieExists, guestCookieId } from "../utils/cookieUtils";
-import { ThemeButton } from "../components/ThemeButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,7 +96,7 @@ export const VotePage = (props) => {
     try {
       const response = await axios.post(`/votes/${pollId}`, vote);
       if (response.status === 200) {
-        history.replace({
+        history.push({
           pathname: `/result/${pollId}`,
           state: poll,
         });
@@ -116,7 +115,7 @@ export const VotePage = (props) => {
 
   const viewResult = () => {
     const pollId = props.match.params.pollId;
-    history.replace({
+    history.push({
       pathname: `/result/${pollId}`,
       state: poll,
     });
