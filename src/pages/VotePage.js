@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Typography, Button, Grid } from "@material-ui/core/";
+import {
+  Paper,
+  Typography,
+  Button,
+  Grid,
+  useTheme,
+  useMediaQuery,
+} from "@material-ui/core/";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
@@ -33,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     width: "15%",
     margin: theme.spacing(2),
+    [theme.breakpoints.down("xs")]: {
+      width: "35%",
+      margin: theme.spacing(1),
+    },
   },
   resultBtnContainer: {
     paddingTop: theme.spacing(2),
@@ -48,6 +59,8 @@ export const VotePage = (props) => {
   const classes = useStyles();
   const data = getData(props);
   const history = useHistory();
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const [openStatus, setOpenStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [isActivated, setIsActivated] = useState(false);
@@ -141,7 +154,7 @@ export const VotePage = (props) => {
                   : "Poll not activated"}
               </Typography>
             </div>
-            <Typography variant="h4" className={classes.title}>
+            <Typography variant={sm ? "h5" : "h4"} className={classes.title}>
               {poll.question}
             </Typography>
           </React.Fragment>
