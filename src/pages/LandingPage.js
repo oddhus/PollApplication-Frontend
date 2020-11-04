@@ -44,28 +44,27 @@ export const LandingPage = () => {
   const { loggedOut } = useUser();
 
   const onSubmit = async (data) => {
-    if (loggedOut) {
-      history.push({
-        pathname: `/guest`,
-        state: data.pin,
-      });
-    } else {
-      try {
-        const response = await axios.get(`/polls/${data.pin}`);
-        if (response.data && !guestCookieExists()) {
-          history.push({
-            pathname: `/vote/${data.pin}`,
-            state: response.data,
-          });
-        } else {
-          throw new Error();
-        }
-      } catch (error) {
-        setStatusMessage(
-          !!error.response ? error.response.data.error : "Could not find poll"
-        );
-        setOpenStatus(true);
+    try {
+      const response = await axios.get(`/polls/${data.pin}`);
+      if (response.data && loggedOut && !guestCookieExists()) {
+        history.push({
+          pathname: `/guest`,
+          state: data.pin,
+        });
+      } else if (response.data) {
+        history.push({
+          pathname: `/vote/${data.pin}`,
+          state: response.data,
+        });
+      } else {
+        throw new Error();
       }
+    } catch (error) {
+      console.log(error.response);
+      setStatusMessage(
+        !!error.response ? error.response.data : "Could not find poll"
+      );
+      setOpenStatus(true);
     }
   };
 
