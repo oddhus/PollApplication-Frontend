@@ -212,9 +212,7 @@ class CreateEditPollPage extends Component {
         duration = duration - state.hours * 60 * 60;
         state.minutes = getMinFromSeconds(duration);
         state.setDuration = true;
-      }
-      if (state && state.allowedVoters) {
-        state.emailAdresses = state.allowedVoters;
+        state.emailAdresses = state.allowedVoters || [];
       }
       this.setState(state);
     }
