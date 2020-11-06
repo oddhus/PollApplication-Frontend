@@ -26,10 +26,10 @@ export const AppRoutes = () => {
         <Route path="/guest" component={GuestLoginPage} />
         <Route path="/vote/:pollId" component={VotePage} />
         <Route path="/result/:pollId" component={ResultPage} />
+        <Route path="/public" component={PublicPollsPage} />
         <ProtectedRoute exact path="/polls" component={UserPollsPage} />
         <ProtectedRoute path="/polls/:pollId" component={CreateEditPollPage} />
         <ProtectedRoute path="/create" component={CreateEditPollPage} />
-        <Route path="/public" component={PublicPollsPage} />
         <ProtectedRoute path="/account" component={AccountPage} />
         <AdminRoute path="/admin" component={AdminPage} />
         <Route component={NoMatch} />
