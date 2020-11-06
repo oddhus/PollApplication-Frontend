@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import axios from "axios";
 import useUser from "../queries/use-user";
-import { guestCookieDelete, guestCookieExists } from "../utils/cookieUtils";
+import { guestInfoDelete, guestInfoExists } from "../utils/storageUtils";
 
 export const LoginPage = () => {
   const classes = useStyles();
@@ -25,8 +25,8 @@ export const LoginPage = () => {
     try {
       const response = await axios.post("/auth/signin", { email, password });
       if (response.status === 200) {
-        if (guestCookieExists()) {
-          guestCookieDelete();
+        if (guestInfoExists()) {
+          guestInfoDelete();
         }
         mutate({ ...response.data });
         history.push("/polls");
