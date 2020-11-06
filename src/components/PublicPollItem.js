@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
       height: 65,
     },
   },
+  status: {
+    marginBottom: 8,
+  },
   title: {
     color: "#323949",
     paddingLeft: 10,
@@ -50,7 +53,6 @@ export const PublicPollItem = ({ poll }) => {
   const [openResults, setOpenResults] = useState(false);
 
   function onDisplayResults() {
-    console.log("Results");
     setOpenResults(true);
   }
 
@@ -80,17 +82,17 @@ export const PublicPollItem = ({ poll }) => {
                 }
                 className={classes.linkContainer}
               >
-                <Grid item>
-                  <PollQuestion poll={poll} classes={useStyles()} />
+                <Grid item className={classes.title}>
+                  <PollQuestion poll={poll} />
                 </Grid>
               </Grid>
               <Grid item>
                 <Grid item container direction="row" alignItems="center">
-                  <Grid item>
-                    <PollId poll={poll} classes={useStyles()} />
+                  <Grid item className={classes.question}>
+                    <PollId poll={poll} />
                   </Grid>
-                  <Grid item>
-                    <StatusPoll poll={poll} classes={useStyles()} />
+                  <Grid item className={classes.status}>
+                    <StatusPoll poll={poll} classes={classes} />
                   </Grid>
                 </Grid>
               </Grid>
@@ -119,22 +121,17 @@ export const PublicPollItem = ({ poll }) => {
   );
 };
 
-export const PollQuestion = ({ poll, classes }) => {
+const PollQuestion = ({ poll }) => {
   return (
-    <Typography
-      variant="h5"
-      className={classes.title}
-      color="textSecondary"
-      noWrap
-    >
+    <Typography variant="h5" color="textSecondary">
       {poll.question}
     </Typography>
   );
 };
 
-export const PollId = ({ poll, classes }) => {
+const PollId = ({ poll }) => {
   return (
-    <Typography className={classes.question} color="textSecondary" noWrap>
+    <Typography color="textSecondary" noWrap>
       Poll id: {poll.id}
     </Typography>
   );

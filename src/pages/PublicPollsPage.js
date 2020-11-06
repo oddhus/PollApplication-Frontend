@@ -19,7 +19,9 @@ export const PublicPollsPage = () => {
       {loading ? (
         <ThemeCircularProgress />
       ) : (
-        categorizedPolls.map((poll) => <PublicPollItem poll={poll} />)
+        categorizedPolls.map((poll) => (
+          <PublicPollItem poll={poll} key={poll.id} />
+        ))
       )}
     </div>
   );

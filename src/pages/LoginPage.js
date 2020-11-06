@@ -22,12 +22,12 @@ export const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const onSubmit = async ({ email, password }) => {
-    if (guestCookieExists()) {
-      guestCookieDelete();
-    }
     try {
       const response = await axios.post("/auth/signin", { email, password });
       if (response.status === 200) {
+        if (guestCookieExists()) {
+          guestCookieDelete();
+        }
         mutate({ ...response.data });
         history.push("/polls");
       } else {

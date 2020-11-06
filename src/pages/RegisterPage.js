@@ -38,7 +38,6 @@ export const RegisterPage = () => {
         throw new Error();
       }
     } catch (error) {
-      console.log(error.response);
       setErrorMessage(
         error.response
           ? error.response.data
