@@ -24,11 +24,11 @@ export const RegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const { mutate } = useUser();
 
-  const onSubmit = async ({ username, email, firstPassword }) => {
+  const onSubmit = async ({ displayName, email, firstPassword }) => {
     try {
       const response = await axios.post("/auth/signup", {
-        displayName: username,
-        username: email,
+        displayName,
+        email,
         password: firstPassword,
       });
       if (response.status === 200) {
@@ -38,6 +38,7 @@ export const RegisterPage = () => {
         throw new Error();
       }
     } catch (error) {
+      console.log(error.response);
       setErrorMessage(
         error.response
           ? error.response.data
@@ -59,10 +60,10 @@ export const RegisterPage = () => {
           <Grid item>
             <TextField
               label="Username"
-              name="username"
+              name="displayName"
               inputRef={register({ required: "You have to give a username." })}
-              error={!!errors.username}
-              helperText={errors.username ? errors.username.message : ""}
+              error={!!errors.displayName}
+              helperText={errors.displayName ? errors.displayName.message : ""}
             />
           </Grid>
           <Grid item>

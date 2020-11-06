@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Typography, Button } from "@material-ui/core/";
+import {
+  Paper,
+  Typography,
+  Button,
+  Grid,
+  useTheme,
+  useMediaQuery,
+} from "@material-ui/core/";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import moment from "moment";
 import usePollInfo from "../queries/use-pollinfo";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
+import { guestCookieExists, guestCookieId } from "../utils/cookieUtils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     textAlign: "center",
   },
   paper: {
-    margin: theme.spacing(3),
     paddingTop: theme.spacing(2),
+    [theme.breakpoints.up("sm")]: {
+      margin: theme.spacing(3),
+    },
   },
   pollInfo: {
     display: "flex",
@@ -30,6 +40,14 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     width: "15%",
     margin: theme.spacing(2),
+    [theme.breakpoints.down("xs")]: {
+      width: "35%",
+      margin: theme.spacing(1),
+    },
+  },
+  resultBtnContainer: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -41,6 +59,8 @@ export const VotePage = (props) => {
   const classes = useStyles();
   const data = getData(props);
   const history = useHistory();
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const [openStatus, setOpenStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [isActivated, setIsActivated] = useState(false);
@@ -80,12 +100,16 @@ export const VotePage = (props) => {
     };
   }, [poll, isActivated]);
 
-  async function sendVote(vote) {
+  async function sendVote(answer) {
     const pollId = props.match.params.pollId;
+    let vote = { vote: answer };
+    if (guestCookieExists()) {
+      vote.id = guestCookieId();
+    }
     try {
-      const response = await axios.post(`/votes/${pollId}`, { vote });
+      const response = await axios.post(`/votes/${pollId}`, vote);
       if (response.status === 200) {
-        history.replace({
+        history.push({
           pathname: `/result/${pollId}`,
           state: poll,
         });
@@ -102,6 +126,14 @@ export const VotePage = (props) => {
     }
   }
 
+  const viewResult = () => {
+    const pollId = props.match.params.pollId;
+    history.push({
+      pathname: `/result/${pollId}`,
+      state: poll,
+    });
+  };
+
   return (
     <div className={classes.root}>
       <StatusBar open={openStatus} setOpen={setOpenStatus} severity="error">
@@ -113,8 +145,8 @@ export const VotePage = (props) => {
         ) : (
           <React.Fragment>
             <div className={classes.pollInfo}>
-              <Typography>{data.pollOwner + "'s poll"}</Typography>
-              <Typography>
+              <Typography noWrap>{data.owner + "'s poll"}</Typography>
+              <Typography noWrap>
                 {isActivated
                   ? "Time remaining: " + timeRemaining
                   : poll.startTime
@@ -122,7 +154,7 @@ export const VotePage = (props) => {
                   : "Poll not activated"}
               </Typography>
             </div>
-            <Typography variant="h4" className={classes.title}>
+            <Typography variant={sm ? "h5" : "h4"} className={classes.title}>
               {poll.question}
             </Typography>
           </React.Fragment>
@@ -147,6 +179,24 @@ export const VotePage = (props) => {
             no
           </Button>
         </div>
+        <Grid
+          container
+          justify="center"
+          alignContent="center"
+          spacing={2}
+          className={classes.resultBtnContainer}
+        >
+          <Grid item xs={10} sm={4}>
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              onClick={viewResult}
+            >
+              View result
+            </Button>
+          </Grid>
+        </Grid>
       </Paper>
     </div>
   );

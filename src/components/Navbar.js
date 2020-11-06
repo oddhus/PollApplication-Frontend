@@ -124,7 +124,7 @@ export const Navbar = () => {
 
   let routes = [];
 
-  if (loggedOut || user.guest) {
+  if (loggedOut) {
     routes = guestRoutes;
   } else if (user.admin) {
     routes = adminRoutes;

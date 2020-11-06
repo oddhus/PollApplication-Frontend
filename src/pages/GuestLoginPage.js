@@ -41,7 +41,7 @@ export const GuestLoginPage = (props) => {
 
   const onSubmit = async ({ displayName }) => {
     try {
-      const guestresponse = await axios.post("auth/signup/guest", {
+      const guestresponse = await axios.post("/guests/signup", {
         displayName,
       });
       if (guestresponse.data && getPin(props)) {
@@ -60,7 +60,7 @@ export const GuestLoginPage = (props) => {
       }
     } catch (error) {
       setStatusMessage(
-        !!error.response ? error.response.message : "Could not create guest"
+        !!error.response ? error.response.data : "Could not create guest"
       );
       setOpenStatus(true);
     }
