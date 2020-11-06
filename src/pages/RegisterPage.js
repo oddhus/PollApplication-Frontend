@@ -27,6 +27,7 @@ export const RegisterPage = () => {
   const onSubmit = async ({ username, email, firstPassword }) => {
     try {
       const response = await axios.post("/auth/signup", {
+        displayName: username,
         username: email,
         password: firstPassword,
       });

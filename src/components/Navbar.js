@@ -124,12 +124,12 @@ export const Navbar = () => {
 
   let routes = [];
 
-  if (loggedOut) {
+  if (loggedOut || user.guest) {
     routes = guestRoutes;
-  } else if (user && !user.admin) {
-    routes = userRoutes;
-  } else {
+  } else if (user.admin) {
     routes = adminRoutes;
+  } else {
+    routes = userRoutes;
   }
 
   const onLogout = async () => {
@@ -160,7 +160,7 @@ export const Navbar = () => {
           />
         ))}
       </Tabs>
-      {!loggedOut && (
+      {!loggedOut && !user.guest && (
         <Button className={classes.button} onClick={onLogout}>
           Logout
         </Button>
@@ -198,7 +198,7 @@ export const Navbar = () => {
             </ListItem>
           ))}
         </List>
-        {!loggedOut && (
+        {!loggedOut && !user.guest && (
           <Button
             className={classes.button}
             onClick={onLogout}

@@ -7,8 +7,10 @@ export const getMe = async (url) => {
     if (response.status === 200) {
       return {
         id: response.data.id,
+        displayName: response.data.displayName,
         email: response.data.username,
-        admin: response.data.isAdmin,
+        admin: response.data.roles.includes("ADMIN"),
+        guest: response.data.roles.includes("GUEST"),
         roles: response.data.roles,
       };
     }
@@ -20,11 +22,11 @@ export const getMe = async (url) => {
 };
 
 export default function useUser() {
-  const { data, mutate, error } = useSWR("/users/me", getMe, {
+  const { data, mutate, error } = useSWR("/voters/me", getMe, {
     refreshInterval: 0,
     shouldRetryOnError: false,
     revalidateOnFocus: true,
-    revalidateOnMount: false,
+    revalidateOnMount: true,
   });
 
   const loading = !data && !error;

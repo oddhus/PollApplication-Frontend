@@ -17,11 +17,13 @@ export function AlertDialog({
   button,
   onClick,
   isLoading,
+  components,
 }) {
   const handleClose = () => {
     setOpen(false);
   };
 
+  
   return (
     <div>
       <Dialog
@@ -36,6 +38,7 @@ export function AlertDialog({
             {children}
           </DialogContentText>
         </DialogContent>
+        {components}
         <DialogActions>
           <Button onClick={handleClose} variant="outlined">
             Cancel
@@ -55,4 +58,5 @@ AlertDialog.propTypes = {
   title: PropTypes.string.isRequired,
   button: PropTypes.string,
   onClick: PropTypes.func,
+  components: PropTypes.array
 };

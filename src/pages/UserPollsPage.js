@@ -12,7 +12,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { AlertDialog } from "../components/AlertDialog";
-import { filterCategory, filterPolls } from "../utils/categorizePolls";
+import { filterCategory, filterList } from "../utils/categorizePolls";
 import { StatusBar } from "../components/StatusBar";
 import { ResultModal } from "../components/ResultModal";
 import { ResultChart } from "../components/ResultChart";
@@ -59,7 +59,7 @@ export function UserPollsPage(props) {
 
   useEffect(() => {
     if (polls) {
-      setFilteredPolls(filterPolls(filterCategory(polls, tabValue), keyword));
+      setFilteredPolls(filterList(filterCategory(polls, tabValue), keyword, 'question'));
     }
   }, [tabValue, polls, keyword, loading]);
 
@@ -77,7 +77,7 @@ export function UserPollsPage(props) {
       setStatus("success");
       setOpenAlertDialog(true);
     }
-  }, [props.history.location.state]);
+  }, [props.history.location.state, mutate]);
 
   const onDelete = async () => {
     setIsDeleting(true);

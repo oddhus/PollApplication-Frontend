@@ -1,17 +1,11 @@
 import React, { useState } from "react";
-import {
-  Button,
-  CircularProgress,
-  Grid,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Button, CircularProgress, Grid, TextField } from "@material-ui/core";
 import { useForm, Controller } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import axios from "axios";
-import useUser from "../queries/use-user";
+import usePollInfo from "../queries/use-pollinfo";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -27,8 +21,11 @@ const useStyles = makeStyles(() => ({
     textAlign: "center",
   },
 }));
+const getPin = (props) => {
+  return props.location.state;
+};
 
-export const LandingPage = () => {
+export const GuestLoginPage = (props) => {
   const classes = useStyles();
   const {
     control,
@@ -40,31 +37,32 @@ export const LandingPage = () => {
   const [openStatus, setOpenStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
 
-  const { loggedOut } = useUser();
+  const { mutate } = usePollInfo(getPin(props));
 
-  const onSubmit = async (data) => {
-    if (loggedOut) {
-      history.push({
-        pathname: `/guest`,
-        state: data.pin,
+  const onSubmit = async ({ displayName }) => {
+    try {
+      const guestresponse = await axios.post("auth/signup/guest", {
+        displayName,
       });
-    } else {
-      try {
-        const response = await axios.get(`/polls/${data.pin}`);
-        if (response.data) {
+      if (guestresponse.data && getPin(props)) {
+        const pollresponse = await axios.get(`/polls/${getPin(props)}`);
+        if (pollresponse.data) {
+          mutate({ ...pollresponse.data });
           history.push({
-            pathname: `/vote/${data.pin}`,
-            state: response.data,
+            pathname: `/vote/${getPin(props)}`,
+            state: pollresponse.data,
           });
-        } else {
-          throw new Error();
         }
-      } catch (error) {
-        setStatusMessage(
-          !!error.response ? error.response.data.error : "Could not find poll"
-        );
-        setOpenStatus(true);
+      } else if (guestresponse.data) {
+        history.push("/");
+      } else {
+        throw new Error();
       }
+    } catch (error) {
+      setStatusMessage(
+        !!error.response ? error.response.message : "Could not create guest"
+      );
+      setOpenStatus(true);
     }
   };
 
@@ -81,12 +79,6 @@ export const LandingPage = () => {
         direction="column"
         spacing={2}
       >
-        <Grid item xs={12} sm={6}>
-          <Typography variant="subtitle1" className={classes.welcomeText}>
-            Welcome to Survey Service! To vote enter a pin below, or login in to
-            create your own poll!
-          </Typography>
-        </Grid>
         <Grid container item xs={10} sm={4} md={3} justify="center">
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -96,29 +88,18 @@ export const LandingPage = () => {
               <Controller
                 as={TextField}
                 rules={{
-                  required: "Pin code is required",
-                  minLength: {
-                    value: 6,
-                    message: "Minimum pin code length is 6",
-                  },
-                  maxLength: {
-                    value: 8,
-                    message: "Maximum pin code length is 8",
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z0-9]*$/,
-                    message: "Only chars and digits allowed",
-                  },
+                  required: "Name is required",
                 }}
                 control={control}
                 defaultValue=""
                 variant="standard"
                 margin="normal"
-                name="pin"
-                label="Pin Code"
-                id="pin"
-                error={!!errors.pin}
-                helperText={errors.pin ? errors.pin.message : ""}
+                name="displayName"
+                label="Username"
+                error={!!errors.displayName}
+                helperText={
+                  errors.displayName ? errors.displayName.message : ""
+                }
                 fullWidth
               />
             </Grid>
@@ -132,7 +113,7 @@ export const LandingPage = () => {
                 {isSubmitting ? (
                   <CircularProgress size={20} color="secondary" />
                 ) : (
-                  "Find"
+                  "Go to poll!"
                 )}
               </Button>
             </Grid>

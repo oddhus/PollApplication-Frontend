@@ -7,8 +7,10 @@ import {
   Button,
   CircularProgress,
 } from "@material-ui/core";
+import { AddDevice } from "../components/AccountPage/AddDevice";
 import { EditPassword } from "../components/AccountPage/EditPassword";
 import { EditEmail } from "../components/AccountPage/EditEmail";
+import { DeviceList } from "../components/AccountPage/DeviceList";
 import { useForm } from "react-hook-form";
 import { grey } from "@material-ui/core/colors";
 import { StatusBar } from "../components/StatusBar";
@@ -40,6 +42,7 @@ export const AccountPage = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const history = useHistory();
+
   const { user, loading, mutate } = useUser();
 
   const {
@@ -171,6 +174,36 @@ export const AccountPage = () => {
     </Grid>
   );
 
+  const accountDevices = (
+    <Grid
+      item
+      container
+      direction="column"
+      spacing={2}
+      style={{ paddingLeft: 0 }}
+    >
+      <Grid item container>
+        <Box borderBottom={1} className={classes.headerContainer}>
+          <Typography variant="subtitle1">Devices</Typography>
+        </Box>
+      </Grid>
+      <Grid item container>
+        <DeviceList
+          setStatusMessage={setStatusMessage}
+          setIsSuccess={setIsSuccess}
+          setOpenStatus={setOpenStatus}
+        />
+      </Grid>
+      <Grid item container>
+        <AddDevice
+          setStatusMessage={setStatusMessage}
+          setIsSuccess={setIsSuccess}
+          setOpenStatus={setOpenStatus}
+        />
+      </Grid>
+    </Grid>
+  );
+
   const accountDelete = (
     <Grid
       item
@@ -211,7 +244,15 @@ export const AccountPage = () => {
         {statusMessage}
       </StatusBar>
       <Grid container justify="center">
-        <Grid container item direction="column" spacing={3} xs={12} sm={6}>
+        <Grid
+          container
+          item
+          direction="column"
+          spacing={3}
+          xs={12}
+          sm={9}
+          md={6}
+        >
           <Grid item style={{ paddingLeft: 0 }}>
             <Box borderBottom={1} className={classes.headerContainer}>
               <Typography variant="h4">My account</Typography>
@@ -221,6 +262,7 @@ export const AccountPage = () => {
             {accountEmail}
             {accountPassword}
           </form>
+          {accountDevices}
           {accountDelete}
         </Grid>
       </Grid>

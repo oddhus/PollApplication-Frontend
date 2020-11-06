@@ -17,7 +17,7 @@ export const App = () => {
       <Container maxWidth={"md"}>
         <Switch>
           {!loading && user ? (
-            AuthenticatedAppRoutes(user.admin)
+            AuthenticatedAppRoutes(user)
           ) : (
             <UnauthenticatedAppRoutes />
           )}
