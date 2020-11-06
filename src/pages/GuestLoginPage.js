@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { StatusBar } from "../components/StatusBar";
 import axios from "axios";
 import usePollInfo from "../queries/use-pollinfo";
+import { saveGuestInfo } from "../utils/storageUtils";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,6 +46,7 @@ export const GuestLoginPage = (props) => {
         displayName,
       });
       if (guestresponse.data && getPin(props)) {
+        saveGuestInfo(guestresponse.data);
         const pollresponse = await axios.get(`/polls/${getPin(props)}`);
         if (pollresponse.data) {
           mutate({ ...pollresponse.data });

@@ -14,7 +14,7 @@ import { StatusBar } from "../components/StatusBar";
 import moment from "moment";
 import usePollInfo from "../queries/use-pollinfo";
 import { ThemeCircularProgress } from "../components/ThemeCircularProgress";
-import { guestCookieExists, guestCookieId } from "../utils/cookieUtils";
+import { guestInfoExists, guestId } from "../utils/storageUtils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,8 +103,8 @@ export const VotePage = (props) => {
   async function sendVote(answer) {
     const pollId = props.match.params.pollId;
     let vote = { vote: answer };
-    if (guestCookieExists()) {
-      vote.id = guestCookieId();
+    if (guestInfoExists()) {
+      vote.id = guestId();
     }
     try {
       const response = await axios.post(`/votes/${pollId}`, vote);
