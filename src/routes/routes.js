@@ -14,6 +14,7 @@ import { Switch } from "react-router-dom";
 import CreateEditPollPage from "../pages/CreateEditPollPage";
 import AdminPage from "../pages/AdminPage";
 
+
 export const UnauthenticatedAppRoutes = () => {
   return (
     <React.Fragment>
@@ -24,11 +25,13 @@ export const UnauthenticatedAppRoutes = () => {
         <Route path="/guest" component={GuestLoginPage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/register" component={RegisterPage} />
+        <Route path="/public" component={PublicPollsPage} />
         <Route component={NoMatch} />
       </Switch>
     </React.Fragment>
   );
 };
+
 
 export const AuthenticatedAppRoutes = (user) => {
   return (
@@ -42,6 +45,7 @@ export const AuthenticatedAppRoutes = (user) => {
         <Route path="/create" component={CreateEditPollPage} />
         <Route path="/public" component={PublicPollsPage} />
         <Route path="/account" component={AccountPage} />
+
         {user.guest && <Route exact path="/login" component={LoginPage} />}
         {user.guest && (
           <Route exact path="/register" component={RegisterPage} />

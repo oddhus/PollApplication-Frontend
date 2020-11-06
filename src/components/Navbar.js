@@ -107,6 +107,7 @@ export const Navbar = () => {
   const guestRoutes = [
     { name: "Login", link: "/login", activeIndex: 0 },
     { name: "Register", link: "/register", activeIndex: 1 },
+    { name: "Public", link: "/public", activeIndex: 2 },
   ];
 
   const userRoutes = [
