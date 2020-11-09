@@ -43,7 +43,7 @@ export function EditUserDialog({ open, setOpen, user, onSave }) {
     <AlertDialog
       open={open}
       setOpen={setOpen}
-      title={"Edit user: " + user.username}
+      title={"Edit user: " + user.email}
       button={"Save"}
       onClick={handleSubmit(onSubmit)}
       components={

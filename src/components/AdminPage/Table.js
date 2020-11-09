@@ -85,11 +85,11 @@ function setupTableBody(
           >
             <Box p={2} className={classes.popOver}>
               <Typography className={classes.pollName}>
-                {object.username === undefined
+                {object.email === undefined
                   ? object.pollName
-                  : object.username}
+                  : object.email}
               </Typography>
-              <Typography className={classes.pollName}>{object.id}</Typography>
+              <Typography className={classes.pollName}>{'ID: ' + object.id}</Typography>
 
               {object.pollName ? (
                 <Button
