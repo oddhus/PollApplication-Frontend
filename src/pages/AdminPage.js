@@ -27,7 +27,7 @@ import { StatusBar } from "../components/StatusBar";
 const USER_TITLES = "Username, roles";
 const POLL_TITLES =
   "Id, Question, Duration, Start-time, Visibility Type, Owner";
-const USER_ATTRIBUTES = ["username", "roles"];
+const USER_ATTRIBUTES = ["email", "roles"];
 const POLL_ATTRIBUTES = [
   "id",
   "question",
@@ -89,6 +89,7 @@ class AdminPage extends Component {
     this.onSave = this.onSave.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.setOpenEdituser = this.setOpenEdituser.bind(this);
+    this.deleteFromListById = this.deleteFromListById.bind(this)
   }
 
   onPageChanged = (page) => {
@@ -148,7 +149,7 @@ class AdminPage extends Component {
       .then(([pollResult, userResult]) => {
         let polls =
           pollResult.data.length > 0
-            ? categorizePolls(this.fixTime(pollResult.data))
+            ? (categorizePolls(pollResult.data), this.fixTime(pollResult.data))
             : [];
         let users = userResult.data.length > 0 ? userResult.data : [];
         this.setState({
@@ -336,7 +337,7 @@ class AdminPage extends Component {
     let dataToShow = [...this.state.originalUsers];
     this.setState(
       {
-        data: filterList(dataToShow, username, "username"),
+        data: filterList(dataToShow, username, "email"),
         usernameFilter: username,
       },
       () => {
@@ -365,7 +366,7 @@ class AdminPage extends Component {
           ),
           openStatusMessage: true,
           statusMessage:
-            this.state.selectedUser.username + " sucsessfuly updated!",
+            this.state.selectedUser.email + " sucsessfuly updated!",
           statusType: "success",
         });
       } else {
@@ -376,7 +377,7 @@ class AdminPage extends Component {
         openStatusMessage: true,
         statusMessage:
           "Could not update " +
-          this.state.selectedUser.username +
+          this.state.selectedUser.email +
           " Error " +
           error.response.status,
         statusType: "error",
@@ -385,9 +386,11 @@ class AdminPage extends Component {
   }
 
   deleteFromListById(list) {
-    _.reject(list, function (element) {
-      return element.id === list.id;
-    });
+    const state = this.state
+    return _.reject(list, function (element) {
+      return element.id === state.recourceToDelete.id;
+    })
+
   }
 
   render() {
@@ -475,7 +478,7 @@ class AdminPage extends Component {
         >
           Are you sure you want to permanently delete "
           {this.state.tabValue === TYPE.USERS
-            ? this.state.recourceToDelete.username
+            ? this.state.recourceToDelete.email
             : this.state.recourceToDelete.question}
           " ?
         </AlertDialog>
