@@ -74,7 +74,11 @@ export function UserPollsPage(props) {
       props.history.location.state &&
       props.history.location.state.addedPoll
     ) {
-      mutate((polls) => [...polls, props.history.location.state.addedPoll]);
+      mutate((polls) => {
+        if(polls){
+          return [...polls, props.history.location.state.addedPoll];
+        }
+      })
       setStatusMessage("Poll created!");
       setStatus("success");
       setOpenAlertDialog(true);
