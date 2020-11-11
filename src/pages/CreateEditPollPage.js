@@ -168,9 +168,10 @@ class CreateEditPollPage extends Component {
    * Returns the total amount of minutes from the 'DD,HH,MM' inputs
    */
   calculateDuration() {
-    let daysInMin = this.state.days * 24 * 60 * 60;
-    let hoursInMin = this.state.hours * 60 * 60;
-    return daysInMin + hoursInMin + this.state.minutes;
+    let daysInSec = this.state.days * 24 * 60 * 60;
+    let hoursInSec = this.state.hours * 60 * 60;
+    let minInSec = this.state.minutes * 60;
+    return daysInSec + hoursInSec + minInSec
   }
 
   resetState() {

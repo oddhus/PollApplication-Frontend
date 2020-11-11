@@ -33,7 +33,7 @@ export function EditUserDialog({ open, setOpen, user, onSave }) {
   useEffect(() => {
     if (user) {
       reset({
-        email: user.username,
+        email: user.email,
         id: user.id,
       });
     }
